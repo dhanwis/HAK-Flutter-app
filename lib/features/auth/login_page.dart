@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,25 +15,13 @@ class _LoginPageState extends State<LoginPage> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: width * 0.7),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Mobile Number',
-                  enabledBorder: _border(),
-                  focusedBorder: _border(),
-                ),
-              ),
-            ),
+          Image.asset(
+            'assets/images/girl.jpg',
+            height: height,
+            fit: BoxFit.cover,
           ),
-          Container(
-            color: Colors.pink,
-            width: width * 0.5,
-            height: 30,
-          )
         ],
       ),
     );
