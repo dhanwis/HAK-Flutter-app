@@ -1,10 +1,20 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
-import 'package:dil_hack_e_commerce/features/auth/login_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_proviedr.dart';
 import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor:Palette.backgroundColor
-      ),
-      home: SplashScreen(),
+      theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
+      home: const SplashScreen(),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dil_hack_e_commerce/features/auth/login_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/view/login_page.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';

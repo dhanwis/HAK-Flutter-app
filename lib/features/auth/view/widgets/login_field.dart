@@ -1,14 +1,11 @@
-
-
-
-
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class OtpTextField extends StatefulWidget {
+  final TextEditingController controller;
   final double width;
 
-  const OtpTextField({super.key, required this.width});
+  const OtpTextField({super.key, required this.width,required this.controller});
 
   @override
   State<OtpTextField> createState() => _OtpTextFieldState();
@@ -20,6 +17,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: widget.width * 0.7),
       child: TextFormField(
+        controller: widget.controller,
         decoration: InputDecoration(
           prefixIcon: const Icon(
             Icons.phone,
