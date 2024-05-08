@@ -7,8 +7,13 @@ import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_image.dart'
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/dil_hack_grey_logo.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_field.dart';
+import 'package:dil_hack_e_commerce/features/auth/view/widgets/powered_by.dart';
 import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_proviedr.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,6 +25,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController mobileNumberController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +35,40 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Stack(
           children: [
-            Column(
-              children: [
-                LoginImage(height: height, width: width),
-                const H50(),
-                OtpTextField(
-                  width: width,
-                  controller: mobileNumberController,
-                ),
-                const H30(),
-                LoginButton(
-                  label: 'Send OTP',
-                  width: width,
-                  callback: () {
-                    auth.loginCustomer(mobileNumberController.text, context);
-                  },
-                ),
-                const H50(),
-                const DilhackLogoGrey()
-              ],
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  LoginImage(height: height, width: width).animate().fade(),
+                  const H50(),
+                  OtpTextField(
+                    width: width,
+                    controller: mobileNumberController,
+                  ),
+                  const H30(),
+                  LoginButton(
+                    label: 'Send OTP',
+                    width: width,
+                    callback: () {
+                      if (_formKey.currentState!.validate()) {
+                        auth.loginCustomer(
+                            mobileNumberController.text, context);
+                      }
+                    },
+                  ),
+                  const H50(),
+                  const PoweredByText(),
+                  const DhanwisTechLogo()
+                ],
+              ),
             ),
-            LoadingAnimation(height: height ,isLoading: auth.isLoading,)
+            LoadingAnimation(
+              height: height,
+              isLoading: auth.isLoading,
+            )
           ],
         ),
       ),

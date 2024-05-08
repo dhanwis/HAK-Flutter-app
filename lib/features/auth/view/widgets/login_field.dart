@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/core/const/validator.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,10 @@ class _OtpTextFieldState extends State<OtpTextField> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: widget.width * 0.7),
       child: TextFormField(
+        validator: Validators.phoneValidator,
         controller: widget.controller,
         decoration: InputDecoration(
+          
           prefixIcon: const Icon(
             Icons.phone,
             color: Colors.grey,

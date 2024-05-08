@@ -28,8 +28,14 @@ class LoginProvider extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EnterOtpPage()));
-        log(response.toString());
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EnterOtpPage(),
+          ),
+        );
+        log(
+          response.toString(),
+        );
       }
     } catch (error) {
       log(
