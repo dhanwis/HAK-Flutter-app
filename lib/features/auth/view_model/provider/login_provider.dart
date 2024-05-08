@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class LoginProvider extends ChangeNotifier {
   final dioClient = Dio();
-
+  int id = 0;
   bool isLoading = false;
 
   loginCustomer(String mobileNumber, BuildContext context) async {
@@ -27,12 +27,21 @@ class LoginProvider extends ChangeNotifier {
           await dioClient.post(url, data: {'phone_number': mobileNumber});
 
       if (response.statusCode == 201) {
+        id = response.data['id'];
+        log(response.data['id'].toString());
+        isLoading = false;
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const EnterOtpPage(),
           ),
         );
+
+        ApiLinks apiLinks = ApiLinks();
+        apiLinks.setId = id;
+
+        log('id :$id');
         log(
           response.toString(),
         );
@@ -42,5 +51,12 @@ class LoginProvider extends ChangeNotifier {
         error.toString(),
       );
     }
+  }
+
+  submitOtp(int otp) async {
+    final response = await dioClient.post(
+        'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
+        data: {'otp': otp});
+    log(response.data);
   }
 }

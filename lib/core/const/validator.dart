@@ -39,7 +39,7 @@ class Validators {
   }
 
   static String? phoneValidator(String? value) {
-    if (value == null || value.isEmpty || value.length <= 10) {
+    if (value == null || value.isEmpty ) {
       return 'Please enter a valid phone number';
     }
 
