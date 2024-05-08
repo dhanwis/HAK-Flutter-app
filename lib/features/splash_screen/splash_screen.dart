@@ -28,20 +28,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // used flutter animate packages for image animation
-            Image.asset('assets/images/logo.png').animate().shimmer(
-                  color: Colors.amber,
-                  duration: const Duration(seconds: 2),
-                ),
+            DilhackLogo()
           ],
         ),
       ),
     );
+  }
+}
+
+class DilhackLogo extends StatelessWidget {
+  const DilhackLogo({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset('assets/images/logo.png').animate().shimmer(
+          color: Colors.amber,
+          duration: const Duration(seconds: 2),
+        );
   }
 }
