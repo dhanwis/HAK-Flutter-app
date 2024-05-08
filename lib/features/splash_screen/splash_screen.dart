@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
             // used flutter animate packages for image animation
             Image.asset('assets/images/logo.png').animate().shimmer(
                   color: Colors.amber,
-                  duration: const Duration(seconds: 3),
+                  duration: const Duration(seconds: 2),
                 ),
           ],
         ),
