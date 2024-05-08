@@ -1,19 +1,13 @@
-import 'dart:developer';
-
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/loading_dilhak.dart';
-
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_image.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/dil_hack_grey_logo.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_field.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/powered_by.dart';
-import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_proviedr.dart';
-import 'package:flutter/gestures.dart';
+import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
