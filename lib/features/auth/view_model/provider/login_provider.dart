@@ -53,10 +53,19 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  submitOtp(int otp) async {
-    final response = await dioClient.post(
+  submitOtp(String otp, BuildContext context) async {
+    try {
+      final response = await dioClient.patch(
         'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
-        data: {'otp': otp});
-    log(response.data);
+        data: {'otp': otp.toString()},
+      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(response.data)));
+      log(response.data);
+    } catch (e) {
+      log(
+        e.toString(),
+      );
+    }
   }
 }
