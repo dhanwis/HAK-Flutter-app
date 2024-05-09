@@ -20,7 +20,6 @@ class LoginProvider extends ChangeNotifier {
       );
       isLoading = true;
       notifyListeners();
-
       log('calling api');
       final response =
           // sending data to api
@@ -46,6 +45,12 @@ class LoginProvider extends ChangeNotifier {
           response.toString(),
         );
       }
+      if(response.statusCode ==500){
+        log('status 500');
+        log('response : ${response.data}');
+      }
+
+
     } catch (error) {
       log(
         error.toString(),
