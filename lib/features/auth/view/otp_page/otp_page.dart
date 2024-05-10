@@ -1,21 +1,22 @@
-
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/widgets/login_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class EnterOtpPage extends StatefulWidget {
-  const EnterOtpPage({super.key});
+  final String mobileNumber;
+  const EnterOtpPage({super.key, required this.mobileNumber});
 
   @override
   State<EnterOtpPage> createState() => _EnterOtpPageState();
 }
 
 class _EnterOtpPageState extends State<EnterOtpPage> {
-      String otp = '';
+  String otp = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +27,32 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              'OTP Verification',
+              style: GoogleFonts.aBeeZee(
+                  fontWeight: FontWeight.bold, fontSize: width * 0.07),
+            ),
+            H50(),
+            Text(
+              'Enter The Code from the sms we sent to',
+              style: GoogleFonts.aBeeZee(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            H30(),
+            Text(
+              widget.mobileNumber,
+              style: GoogleFonts.aBeeZee(
+                fontSize: width * 0.05,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            H50(),
             Pinput(
               onCompleted: (pin) {
                 otp = pin;
-                
               },
-              onSubmitted: (value){
+              onSubmitted: (value) {
                 otp = value;
               },
             ),
@@ -39,11 +60,12 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
             LoginButton(
               width: width,
               callback: () {
-
-                 authProvider.submitOtp(otp,context);
+                authProvider.submitOtp(otp, context);
               },
               label: 'Submit OTP',
-            )
+            ),
+            const H30(),
+            TextButton(onPressed: () {}, child: const Text('Resend OTP'))
           ],
         ),
       ),

@@ -1,9 +1,11 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'package:dil_hack_e_commerce/features/auth/view/otp_page/otp_page.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 
 class LoginProvider extends ChangeNotifier {
   final dioClient = Dio();
@@ -33,7 +35,9 @@ class LoginProvider extends ChangeNotifier {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const EnterOtpPage(),
+            builder: (context) => EnterOtpPage(
+              mobileNumber: mobileNumber,
+            ),
           ),
         );
 
@@ -45,12 +49,10 @@ class LoginProvider extends ChangeNotifier {
           response.toString(),
         );
       }
-      if(response.statusCode ==500){
+      if (response.statusCode == 500) {
         log('status 500');
         log('response : ${response.data}');
       }
-
-
     } catch (error) {
       log(
         error.toString(),
@@ -62,10 +64,20 @@ class LoginProvider extends ChangeNotifier {
     try {
       final response = await dioClient.patch(
         'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
-        data: {'otp': otp.toString()},
+        data: {"otp": otp},
+
       );
-     
-      log(response.data);
+      log(otp);
+      if(response.data ==200 || response.statusCode ==201){
+
+log(response.data['refresh']);
+log(response.data['access']);
+log(response.data['otp']);
+log(response.data['message']);
+
+      }
+
+
     } catch (e) {
       log(
         e.toString(),
