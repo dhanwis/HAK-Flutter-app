@@ -64,8 +64,7 @@ class LoginProvider extends ChangeNotifier {
         'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
         data: {'otp': otp.toString()},
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(response.data)));
+     
       log(response.data);
     } catch (e) {
       log(

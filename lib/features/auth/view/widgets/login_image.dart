@@ -28,7 +28,7 @@ class LoginImage extends StatelessWidget {
         ),
         child: Image.asset(
           'assets/images/shopping.jpeg',
-          height: height * 0.65,
+          height: height * 0.6,
           width: width,
           fit: BoxFit.cover,
         ),
