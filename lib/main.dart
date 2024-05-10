@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
       home: const SplashScreen(),
     );

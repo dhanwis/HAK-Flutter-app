@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
+import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/otp_page/otp_page.dart';
+import 'package:dil_hack_e_commerce/features/home_screen/home_screen.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +17,14 @@ class LoginProvider extends ChangeNotifier {
   loginCustomer(String mobileNumber, BuildContext context) async {
     try {
       final url = ApiLinks.createUser;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sending Otp'),
-        ),
-      );
+
+      IconSnackBar.show(
+          snackBarStyle:
+              const SnackBarStyle(backgroundColor: Palette.textFormBorder),
+          context,
+          label: 'Sending OTP to $mobileNumber',
+          snackBarType: SnackBarType.success);
+
       isLoading = true;
       notifyListeners();
       log('calling api');
@@ -65,19 +70,28 @@ class LoginProvider extends ChangeNotifier {
       final response = await dioClient.patch(
         'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
         data: {"otp": otp},
-
       );
       log(otp);
-      if(response.data ==200 || response.statusCode ==201){
+      if (response.data == 200 || response.statusCode == 201) {
+        IconSnackBar.show(
+            snackBarStyle:
+                const SnackBarStyle(backgroundColor: Palette.textFormBorder),
+            context,
+            label: 'Successfully Verified OTP',
+            snackBarType: SnackBarType.success);
 
-log(response.data['refresh']);
-log(response.data['access']);
-log(response.data['otp']);
-log(response.data['message']);
+             Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen()
+          ),
+        );
 
+        log(response.data['refresh']);
+        log(response.data['access']);
+        log(response.data['otp']);
+        log(response.data['message']);
       }
-
-
     } catch (e) {
       log(
         e.toString(),

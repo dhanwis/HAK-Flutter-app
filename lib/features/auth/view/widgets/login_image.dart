@@ -21,7 +21,6 @@ class LoginImage extends StatelessWidget {
       borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(400),
       ),
-      elevation: 10,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
           bottomRight: Radius.circular(400),
