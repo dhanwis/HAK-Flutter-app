@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:developer';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/otp_page/otp_page.dart';
@@ -8,9 +9,12 @@ import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginProvider extends ChangeNotifier {
+  final storage = const FlutterSecureStorage();
   final dioClient = Dio();
+  String accessToken ='';
   int id = 0;
   bool isLoading = false;
 
@@ -35,7 +39,11 @@ class LoginProvider extends ChangeNotifier {
       if (response.statusCode == 201) {
         id = response.data['id'];
         log(response.data['id'].toString());
-        isLoading = false;
+        log(isLoading.toString());
+        
+        isLoading = !isLoading;
+        notifyListeners();
+        log(isLoading.toString());
 
         Navigator.push(
           context,
@@ -80,11 +88,18 @@ class LoginProvider extends ChangeNotifier {
             label: 'Successfully Verified OTP',
             snackBarType: SnackBarType.success);
 
-             Navigator.push(
+        await storage.write(
+            key: 'refresh_token', value: response.data['refresh']);
+
+            accessToken =  storage.read(key: 'access_token').toString();
+
+
+        await storage.write(
+            key: 'access_token', value: response.data['access']);
+
+        Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen()
-          ),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
 
         log(response.data['refresh']);
