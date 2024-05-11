@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+    final String token;
+
+  const HomeScreen({super.key, required this.token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
   @override
   Widget build(BuildContext context) {
-    final pro = Provider.of<LoginProvider>(context);
     return  Scaffold(
       body: Center(
-        child: Text(pro.accessToken),
+        child: Text(widget.token),
       ),
     );
   }
