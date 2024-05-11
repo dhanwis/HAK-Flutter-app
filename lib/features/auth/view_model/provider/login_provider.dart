@@ -1,20 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
 import 'dart:developer';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/view/otp_page/otp_page.dart';
-import 'package:dil_hack_e_commerce/features/home_screen/home_screen.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
   final dioClient = Dio();
-  String accessToken ='';
+  String accessToken = '';
   int id = 0;
   bool isLoading = false;
 
@@ -40,7 +39,7 @@ class LoginProvider extends ChangeNotifier {
         id = response.data['id'];
         log(response.data['id'].toString());
         log(isLoading.toString());
-        
+
         isLoading = !isLoading;
         notifyListeners();
         log(isLoading.toString());
@@ -74,6 +73,7 @@ class LoginProvider extends ChangeNotifier {
   }
 
   submitOtp(String otp, BuildContext context) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
     try {
       final response = await dioClient.patch(
         'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
@@ -87,21 +87,10 @@ class LoginProvider extends ChangeNotifier {
             context,
             label: 'Successfully Verified OTP',
             snackBarType: SnackBarType.success);
-
-        await storage.write(
-            key: 'refresh_token', value: response.data['refresh']);
-
-            accessToken =  storage.read(key: 'access_token').toString();
-
-
-        await storage.write(
-            key: 'access_token', value: response.data['access']);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-
+        // await sharedPreferences.setString(
+        //     'access_token', response.data['access'].toString());
+        //     accessToken = await sharedPreferences.getString('access_token').toString();
+        log('access token: $accessToken');
         log(response.data['refresh']);
         log(response.data['access']);
         log(response.data['otp']);
