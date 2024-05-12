@@ -1,4 +1,4 @@
-final int id = 0;
+ int id = 0;
 
 class ApiLinks {
 // post

@@ -9,11 +9,33 @@ sealed class AuthState extends Equatable {
 
 final class AuthInitial extends AuthState {}
 
-class OtpLoadingState extends AuthBloc {}
+
+class OtpLoadingState extends AuthState {}
 
 class OtpSendedState extends AuthState {}
 
+class OtpSendingErrorState extends AuthState {}
+
+class OtpValidatingErrorState extends AuthState {}
+
+class WrongMobileNumberState extends AuthState{
+  
+}
+
+class OtpReceivedState extends AuthState {
+  final String mobileNumber;
+
+  const OtpReceivedState({required this.mobileNumber});
+}
+
 class OtpSubmittedState extends AuthState {}
 
-class OtpValidatedState extends AuthState {}
+class OtpValidationWaitingState extends AuthState {}
 
+class OtpValidatedState extends AuthState {
+  final String token;
+
+  const OtpValidatedState({required this.token});
+  @override
+  List<Object> get props => [token];
+}

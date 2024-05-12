@@ -7,8 +7,17 @@ sealed class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SendOtpEvent extends AuthState {}
+class SendOtpEvent extends AuthEvent {
+  final String mobileNumber;
 
-class SubmitOtpEvent extends AuthState {}
+  const SendOtpEvent({required this.mobileNumber});
 
-class ResendOtpEvent extends AuthState {}
+  @override
+  List<Object> get props => [mobileNumber];
+}
+
+class SubmitOtpEvent extends AuthEvent {}
+
+class ResendOtpEvent extends AuthEvent {}
+
+class ChangeMobileNumberEvent extends AuthEvent{}

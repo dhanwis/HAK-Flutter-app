@@ -1,21 +1,12 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
-import 'package:dil_hack_e_commerce/features/auth/view_model/provider/login_provider.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main(){
- 
+void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => LoginProvider(),
-        )
-      ],
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
@@ -24,10 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: true,
-      theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-      home: const SplashScreen(),
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: true,
+        theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
+        home: const SplashScreen(),
+      ),
     );
   }
 }
