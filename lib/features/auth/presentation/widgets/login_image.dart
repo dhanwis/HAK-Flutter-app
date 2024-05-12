@@ -1,8 +1,6 @@
-
-
-
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LoginImage extends StatelessWidget {
   const LoginImage({
@@ -27,12 +25,11 @@ class LoginImage extends StatelessWidget {
         ),
         child: Image.asset(
           'assets/images/shopping.jpeg',
-          height: height * 0.6,
+          height: height * 0.55,
           width: width,
           fit: BoxFit.cover,
-        ),
+        ).animate().fade(),
       ),
     );
   }
 }
-

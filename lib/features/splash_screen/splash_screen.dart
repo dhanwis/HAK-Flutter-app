@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dil_hack_e_commerce/features/auth/view/login_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -25,8 +25,6 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {

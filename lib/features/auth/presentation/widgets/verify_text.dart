@@ -16,7 +16,7 @@ class VerifyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0, top:30),
+      padding: const EdgeInsets.only(left: 40.0, top:30),
       child: Align(alignment: Alignment.centerLeft,
         child: Text(
           'Verify Your Mobile Number',

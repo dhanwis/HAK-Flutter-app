@@ -2,10 +2,10 @@
 
 import 'dart:developer';
 import 'package:dil_hack_e_commerce/core/const/snackbar.dart';
-import 'package:dil_hack_e_commerce/features/auth/view/otp_page/otp_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/otp_page.dart';
 import 'package:dil_hack_e_commerce/features/home_screen/home_screen.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
-import 'package:dil_hack_e_commerce/model/otp.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
