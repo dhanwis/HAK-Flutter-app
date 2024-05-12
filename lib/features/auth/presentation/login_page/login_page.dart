@@ -13,6 +13,7 @@ import 'package:dil_hack_e_commerce/features/auth/view/widgets/verify_text.dart'
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,11 +41,14 @@ class _LoginPageState extends State<LoginPage> {
               createRoute(
                 EnterOtpPage(mobileNumber: state.mobileNumber),
               ),
-
             );
           }
-          if(state is OtpSendingErrorState){
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('errro')));
+          if (state is OtpSendingErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              IconSnackBar.show(context,
+                  label: 'Some Error Occurred Try Again After Some Time',
+                  snackBarType: SnackBarType.fail),
+            );
           }
         },
         child: SingleChildScrollView(
@@ -78,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                     ),
-                    const H30(),
+                    const H50(),
                     const PoweredByText(),
                     const DhanwisTechLogo()
                   ],
