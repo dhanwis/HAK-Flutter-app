@@ -19,6 +19,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
       constraints: BoxConstraints(maxWidth: widget.width * 0.7),
       child: TextFormField(
         validator: Validators.phoneValidator,
+        keyboardType: TextInputType.phone,
         controller: widget.controller,
         decoration: InputDecoration(
           

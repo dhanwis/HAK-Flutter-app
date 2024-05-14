@@ -16,8 +16,14 @@ class SendOtpEvent extends AuthEvent {
   List<Object> get props => [mobileNumber];
 }
 
-class SubmitOtpEvent extends AuthEvent {}
+class SubmitOtpEvent extends AuthEvent {
+  final String otp;
+
+  const SubmitOtpEvent({required this.otp});
+  @override
+  List<Object> get props => [otp];
+}
 
 class ResendOtpEvent extends AuthEvent {}
 
-class ChangeMobileNumberEvent extends AuthEvent{}
+class ChangeMobileNumberEvent extends AuthEvent {}

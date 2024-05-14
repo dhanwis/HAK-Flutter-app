@@ -1,14 +1,12 @@
- int id = 0;
-
 class ApiLinks {
 // post
 
+  int _id = 0;
+
+  get id => _id;
   static String createUser = 'https://hak.pythonanywhere.com/auth/customer/';
 
   set setId(int id) {
-    submitOtp = 'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/';
+    _id = id;
   }
-
-  static String submitOtp =
-      'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/';
 }

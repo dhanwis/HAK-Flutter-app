@@ -11,9 +11,6 @@ class SnackBars{
         label: 'Successfully Verified OTP',
         snackBarType: SnackBarType.success);
   }
-
-
-
   static void otpSendBar(BuildContext context, String mobileNumber){
      IconSnackBar.show(
           snackBarStyle:

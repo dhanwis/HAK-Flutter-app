@@ -14,7 +14,14 @@ class OtpLoadingState extends AuthState {}
 
 class OtpSendedState extends AuthState {}
 
-class OtpSendingErrorState extends AuthState {}
+class OtpSendingErrorState extends AuthState {
+  final String msg;
+
+  OtpSendingErrorState({required this.msg});
+
+  @override
+  List<Object> get props => [msg];
+}
 
 class OtpValidatingErrorState extends AuthState {}
 
