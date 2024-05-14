@@ -6,7 +6,7 @@ class SnackBars{
   static void otpSuccessBar(BuildContext context) {
     IconSnackBar.show(
         snackBarStyle:
-            const SnackBarStyle(backgroundColor: Palette.textFormBorder),
+            const SnackBarStyle(backgroundColor: Palette.appTheme),
         context,
         label: 'Successfully Verified OTP',
         snackBarType: SnackBarType.success);
@@ -14,7 +14,7 @@ class SnackBars{
   static void otpSendBar(BuildContext context, String mobileNumber){
      IconSnackBar.show(
           snackBarStyle:
-              const SnackBarStyle(backgroundColor: Palette.textFormBorder),
+              const SnackBarStyle(backgroundColor: Palette.appTheme),
           context,
           label: 'Sending OTP to $mobileNumber',
           snackBarType: SnackBarType.success);

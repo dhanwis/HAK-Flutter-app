@@ -26,7 +26,7 @@ class LoginButton extends StatelessWidget {
               blurRadius: 10)
         ],
         borderRadius: BorderRadius.circular(20),
-        color: Palette.textFormBorder,
+        color: Palette.appTheme,
       ),
       child: GestureDetector(
         onTap: callback,

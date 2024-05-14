@@ -22,7 +22,7 @@ class VerifyText extends StatelessWidget {
           'Verify Your Mobile Number',
           style: GoogleFonts.aBeeZee(
               fontSize: width * 0.05,
-              color: Palette.textFormBorder,
+              color: Palette.appTheme,
               fontWeight: FontWeight.w800),
         ),
       ),

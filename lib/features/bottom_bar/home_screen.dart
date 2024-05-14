@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         currentIndex: currentIndex,
-        backgroundColor: Palette.textFormBorder,
+        backgroundColor: Palette.appTheme,
         selectedItemColor: Colors.black,
         snakeViewColor: Colors.pink.shade50,
         snakeShape: SnakeShape.rectangle,

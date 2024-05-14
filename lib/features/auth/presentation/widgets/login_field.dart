@@ -41,7 +41,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
       borderRadius: BorderRadius.circular(13),
       borderSide: const BorderSide(
         width: 3.0,
-        color: Palette.textFormBorder,
+        color: Palette.appTheme,
       ),
     );
   }
