@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/dil_hack_grey_logo.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/powered_by.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
@@ -49,15 +52,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // used flutter animate packages for image animation
-            DilhackLogo()
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: DilhackLogo(),
+          ),
+        ],
       ),
     );
   }
