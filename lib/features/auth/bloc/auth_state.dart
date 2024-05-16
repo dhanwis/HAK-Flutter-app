@@ -9,7 +9,6 @@ sealed class AuthState extends Equatable {
 
 final class AuthInitial extends AuthState {}
 
-
 class OtpLoadingState extends AuthState {}
 
 class OtpSendedState extends AuthState {}
@@ -17,7 +16,7 @@ class OtpSendedState extends AuthState {}
 class OtpSendingErrorState extends AuthState {
   final String msg;
 
-  OtpSendingErrorState({required this.msg});
+  const OtpSendingErrorState({required this.msg});
 
   @override
   List<Object> get props => [msg];
@@ -25,9 +24,7 @@ class OtpSendingErrorState extends AuthState {
 
 class OtpValidatingErrorState extends AuthState {}
 
-class WrongMobileNumberState extends AuthState{
-  
-}
+class WrongMobileNumberState extends AuthState {}
 
 class OtpReceivedState extends AuthState {
   final String mobileNumber;

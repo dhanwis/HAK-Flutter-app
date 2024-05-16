@@ -17,34 +17,28 @@ import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
-
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController mobileNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   void dispose() {
     mobileNumberController.dispose();
     super.dispose();
   }
-
   void _handleFormSubmit(AuthBloc authBloc) {
     if (_formKey.currentState!.validate()) {
       authBloc.add(SendOtpEvent(mobileNumber: mobileNumberController.text));
       SnackBars.otpSendBar(context, mobileNumberController.text);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -90,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
   Widget _buildForm(
       double height, double width, AuthBloc authBloc, bool loading) {
     return Form(
@@ -112,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
             width: width,
             callback: () => _handleFormSubmit(authBloc),
           ),
-          const H50(),
+          const H30(),
           const PoweredByText(),
           const DhanwisTechLogo(),
         ],

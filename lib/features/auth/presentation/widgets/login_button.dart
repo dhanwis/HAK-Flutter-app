@@ -15,17 +15,18 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       height: 60,
       width: width * 0.5,
       decoration: BoxDecoration(
         boxShadow: const [
           BoxShadow(
-              color: Color.fromARGB(255, 195, 144, 148),
+               color: Color.fromARGB(255, 195, 144, 148),
               offset: Offset(-10, 20),
               blurRadius: 10)
         ],
         borderRadius: BorderRadius.circular(20),
+        
         color: Palette.appTheme,
       ),
       child: GestureDetector(
