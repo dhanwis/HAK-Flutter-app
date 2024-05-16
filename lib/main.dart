@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: true,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home: const LoginPage(),
+        home: const SplashScreen(),
       ),
     );
   }
