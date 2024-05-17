@@ -24,62 +24,95 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: ListView(
-        padding: const EdgeInsets.only(top: 70),
+        padding: const EdgeInsets.only(top: 30),
         children: [
           const TopRow(),
           const H30(),
           SearchBar(width: width),
           const H30(),
           Categories(icons: icons),
-          Container(
-            decoration: const BoxDecoration(
-              // color: Color.fromARGB(100, 246, 191, 204),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
-            height: height * 0.74,
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisExtent: 300, crossAxisCount: 2),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.pink.shade100,
-                              Colors.pink.shade50,
-                              Colors.pink.shade50
-                            ]),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Image.asset(index.isEven
-                                  ? 'assets/images/sareee.png'
-                                  : 'assets/images/anarkali.png'),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          )
+          GridItems(height: height)
         ],
       ),
     );
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+// gridItems
+
+class GridItems extends StatelessWidget {
+  const GridItems({
+    super.key,
+    required this.height,
+  });
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        // color: Color.fromARGB(100, 246, 191, 204),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
+      height: height * 0.74,
+      child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisExtent: 300, crossAxisCount: 2),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.pink.shade100,
+                        Colors.pink.shade50,
+                        Colors.pink.shade50
+                      ]),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Image.asset(index % 3 == 0
+                            ? 'assets/images/sareee.png'
+                            : 'assets/images/anarkali.png'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
+}
+
+
+
+
+
+
+
+// Category items
 class Categories extends StatelessWidget {
   const Categories({
     super.key,
@@ -90,7 +123,7 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 70,
       child: ListView.builder(
           itemCount: 6,
@@ -106,7 +139,7 @@ class Categories extends StatelessWidget {
                 child: Center(
                   child: Icon(
                     icons[index],
-                    color: Color.fromARGB(159, 169, 72, 80),
+                    color: const Color.fromARGB(159, 169, 72, 80),
                   ),
                 ),
               ),
@@ -116,6 +149,10 @@ class Categories extends StatelessWidget {
   }
 }
 
+
+
+
+// search bar
 class SearchBar extends StatelessWidget {
   const SearchBar({
     super.key,
@@ -173,6 +210,12 @@ class SearchBar extends StatelessWidget {
   }
 }
 
+
+
+
+
+
+// top row
 class TopRow extends StatelessWidget {
   const TopRow({
     super.key,
