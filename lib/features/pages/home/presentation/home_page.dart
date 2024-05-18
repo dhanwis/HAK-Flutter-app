@@ -1,7 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,7 +13,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List icons = [
+    final bloc = BlocProvider.of<HomeBloc>(context);
+    List<IconData> icons = [
       EvaIcons.google,
       EvaIcons.clock,
       EvaIcons.facebook,
@@ -18,8 +23,9 @@ class HomePage extends StatelessWidget {
       EvaIcons.bluetooth,
       EvaIcons.wifi
     ];
+
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    //final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
@@ -27,92 +33,58 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 30),
         children: [
           const TopRow(),
-          const H30(),
+          const H20(),
           SearchBar(width: width),
-          const H30(),
+        const   H20(),
           Categories(icons: icons),
-          GridItems(height: height)
+          const OfferCarousel()
+
         ],
       ),
     );
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-// gridItems
-
-class GridItems extends StatelessWidget {
-  const GridItems({
+class OfferCarousel extends StatelessWidget {
+  const OfferCarousel({
     super.key,
-    required this.height,
   });
-
-  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        // color: Color.fromARGB(100, 246, 191, 204),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
-      ),
-      height: height * 0.74,
-      child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisExtent: 300, crossAxisCount: 2),
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.pink.shade100,
-                        Colors.pink.shade50,
-                        Colors.pink.shade50
-                      ]),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Image.asset(index % 3 == 0
-                            ? 'assets/images/sareee.png'
-                            : 'assets/images/anarkali.png'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+    return CarouselSlider(
+      options: CarouselOptions( height:230,
+            enableInfiniteScroll: true,
+            reverse: false,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enlargeCenterPage: true,
+            onPageChanged: (index, d) {},
+            scrollDirection: Axis.horizontal, ),
+      items: [
+        'assets/images/banner1.jpeg',
+        'assets/images/banner3.jpg',
+        'assets/images/banner2.jpeg',
+      ].map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(i)),
+                  borderRadius: BorderRadius.circular(1)),
             );
-          }),
+          },
+        );
+      }).toList(),
     );
   }
 }
 
+// gridItems
 
-
-
-
-
-
-// Category items
 class Categories extends StatelessWidget {
   const Categories({
     super.key,
@@ -123,34 +95,66 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> labels = [
+      'Saree',
+      'TShirts',
+      'Kurti',
+      'Lehanka',
+      'Salwar',
+      'Western',
+      'Traditional'
+    ];
     return SizedBox(
-      height: 70,
+      height: 100,
       child: ListView.builder(
+        padding: EdgeInsets.all(0),
           itemCount: 6,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(left: 25.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(141, 250, 170, 177),
-                    borderRadius: BorderRadius.circular(15)),
-                width: 70,
-                child: Center(
-                  child: Icon(
-                    icons[index],
-                    color: const Color.fromARGB(159, 169, 72, 80),
+              padding: const EdgeInsets.only(
+                left: 25.0,
+                top: 10,
+                bottom: 0
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(1, 1),
+                              blurRadius: 10)
+                        ],
+                        border: Border.all(
+                          width: 2,
+                          color: const Color.fromARGB(99, 202, 201, 202),
+                        ),
+                        borderRadius: BorderRadius.circular(30)),
+                    width: 60,
+                    height: 60,
+                    child: Center(
+                      child: Icon(
+                        icons[index],
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    labels[index],
+                    style: GoogleFonts.aBeeZee(letterSpacing: 1),
+                  )
+                ],
               ),
             );
           }),
     );
   }
 }
-
-
-
 
 // search bar
 class SearchBar extends StatelessWidget {
@@ -171,17 +175,19 @@ class SearchBar extends StatelessWidget {
             child: Container(
               height: 60,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(100, 246, 191, 204)),
+                borderRadius: BorderRadius.circular(10),
+                color: const Color.fromARGB(99, 202, 201, 202),
+              ),
               child: TextFormField(
                 style: const TextStyle(color: Palette.shadowPink),
                 cursorColor: Colors.grey.shade50,
                 decoration: InputDecoration(
                     hintText: 'Search Products',
-                    hintStyle: GoogleFonts.aBeeZee(color: Palette.appTheme),
+                    hintStyle: GoogleFonts.aBeeZee(
+                        color: const Color.fromARGB(255, 182, 182, 182)),
                     prefixIcon: const Icon(
                       EvaIcons.search,
-                      color: Palette.appTheme,
+                      color: Color.fromARGB(255, 175, 174, 174),
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     border: InputBorder.none),
@@ -189,18 +195,23 @@ class SearchBar extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 25.0, right: 10),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Palette.appTheme,
-                borderRadius: BorderRadius.circular(15)),
-            height: 60,
-            width: 60,
-            child: const Center(
-              child: Icon(
-                EvaIcons.arrowForward,
-                color: Color.fromARGB(255, 169, 72, 80),
+        GestureDetector(
+          onTap: () {
+            BlocProvider.of<HomeBloc>(context).add(FetchCategoriesEvent());
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 25.0, right: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 235, 228, 228),
+                  borderRadius: BorderRadius.circular(15)),
+              height: 60,
+              width: 60,
+              child: const Center(
+                child: Icon(
+                  EvaIcons.arrowForward,
+                  color: Color.fromARGB(255, 147, 144, 144),
+                ),
               ),
             ),
           ),
@@ -209,11 +220,6 @@ class SearchBar extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
 
 // top row
 class TopRow extends StatelessWidget {
@@ -230,6 +236,7 @@ class TopRow extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Image.asset(
             'assets/images/logo.png',
+            color: Colors.black,
             height: 40,
           ),
         ),
@@ -241,12 +248,11 @@ class TopRow extends StatelessWidget {
           children: [
             Text(
               'Welcome 👋',
-              style: GoogleFonts.aBeeZee(color: Palette.appTheme),
+              style: GoogleFonts.aBeeZee(),
             ),
             Text(
               'Manjima',
-              style: GoogleFonts.aBeeZee(
-                  color: const Color.fromARGB(255, 209, 86, 96)),
+              style: GoogleFonts.aBeeZee(),
             )
           ],
         ),

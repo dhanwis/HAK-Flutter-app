@@ -30,3 +30,16 @@ class H50 extends StatelessWidget {
     );
   }
 }
+
+class H20 extends StatelessWidget {
+  const H20({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 20,
+    );
+  }
+}
