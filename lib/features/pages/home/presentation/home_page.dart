@@ -4,7 +4,6 @@ import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,7 +25,6 @@ class HomePage extends StatelessWidget {
 
     final width = MediaQuery.of(context).size.width;
     //final height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: ListView(
@@ -35,10 +33,9 @@ class HomePage extends StatelessWidget {
           const TopRow(),
           const H20(),
           SearchBar(width: width),
-        const   H20(),
+          const H20(),
           Categories(icons: icons),
           const OfferCarousel()
-
         ],
       ),
     );
@@ -53,16 +50,18 @@ class OfferCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      options: CarouselOptions( height:230,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            onPageChanged: (index, d) {},
-            scrollDirection: Axis.horizontal, ),
+      options: CarouselOptions(
+        height: 230,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        onPageChanged: (index, d) {},
+        scrollDirection: Axis.horizontal,
+      ),
       items: [
         'assets/images/banner1.jpeg',
         'assets/images/banner3.jpg',
@@ -107,16 +106,12 @@ class Categories extends StatelessWidget {
     return SizedBox(
       height: 100,
       child: ListView.builder(
-        padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           itemCount: 6,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(
-                left: 25.0,
-                top: 10,
-                bottom: 0
-              ),
+              padding: const EdgeInsets.only(left: 25.0, top: 10, bottom: 0),
               child: Column(
                 children: [
                   Container(
