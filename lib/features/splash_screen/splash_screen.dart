@@ -23,14 +23,18 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = pref.getString('accessToken');
 
     if (token != null && token.isNotEmpty) {
-      Timer(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(
-          context,
-          createRoute(
-            const HomePage(),
-          ),
-        );
-      });
+      Timer(
+        const Duration(seconds: 3),
+        () {
+          Navigator.pushReplacement(
+            context,
+            createRoute(
+              const HomePage(),
+            ),
+          );
+        },
+      
+      );
     } else {
       Timer(const Duration(seconds: 3), () {
         Navigator.pushReplacement(
