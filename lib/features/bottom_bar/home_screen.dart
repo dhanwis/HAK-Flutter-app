@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: SnakeNavigationBar.color(
+        height: 50,
         onTap: (value) {
           setState(() {
             currentIndex = value;
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.black,
         snakeViewColor: Colors.pink.shade50,
         snakeShape: SnakeShape.rectangle,
+        
         items: const [
           BottomNavigationBarItem(
               icon: Icon(EvaIcons.homeOutline), label: 'Home'),

@@ -239,7 +239,8 @@ class TopRow extends StatelessWidget {
           width: 70,
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Welcome 👋',
