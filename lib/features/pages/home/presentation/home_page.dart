@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
@@ -59,7 +61,11 @@ class OfferCarousel extends StatelessWidget {
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: true,
-        onPageChanged: (index, d) {},
+        onPageChanged: (index, d) {
+          log(d.toString());
+          log('message');
+          log(index.toString());
+        },
         scrollDirection: Axis.horizontal,
       ),
       items: [
@@ -239,7 +245,6 @@ class TopRow extends StatelessWidget {
           width: 70,
         ),
         Column(
-        
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(

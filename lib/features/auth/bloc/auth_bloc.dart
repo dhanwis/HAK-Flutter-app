@@ -13,7 +13,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SendOtpEvent>(_sendOtp);
     on<SubmitOtpEvent>(_submitOtp);
     on<ChangeMobileNumberEvent>(_changeMobileNumber);
-  
   }
   ApiLinks apiLinks = ApiLinks();
 
@@ -23,9 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(
       OtpLoadingState(),
     );
-
     try {
-
       final response = await dioClient.post(
           'https://hak.pythonanywhere.com/auth/customer/',
           data: {'phone_number': event.mobileNumber});

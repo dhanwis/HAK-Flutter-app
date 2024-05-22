@@ -1,6 +1,5 @@
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Scroll extends StatefulWidget {
   const Scroll({super.key});
@@ -16,7 +15,9 @@ class _ScrollState extends State<Scroll> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            toolbarHeight: 50,
+           
+            pinned: true,
+            toolbarHeight: 80,
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(background: TopRow()),
           ),
