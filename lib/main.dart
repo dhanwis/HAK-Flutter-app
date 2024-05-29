@@ -1,25 +1,16 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
-import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
+import 'package:dil_hack_e_commerce/sa.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(
-    const MyApp(),    
+    const MyApp(),
   );
 }
-
-
-
-
-
-
-
-
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,7 +28,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home: const SplashScreen(),
+        home: const Sample(),
       ),
     );
   }
