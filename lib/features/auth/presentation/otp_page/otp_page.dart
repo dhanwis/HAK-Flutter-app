@@ -29,112 +29,115 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     final height = MediaQuery.sizeOf(context).height;
     bool loading = false;
     final width = MediaQuery.of(context).size.width;
-    return BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
-      if (state is OtpValidatedState) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          Navigator.pushAndRemoveUntil(
-              context, createRoute(const HomeScreen()), (route) => false);
-        });
-        Future.delayed(Duration.zero, () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: IconSnackBar.show(context,
-                  label: 'OTP validated SuccessFully',
-                  snackBarType: SnackBarType.success),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is OtpValidatedState) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            Navigator.pushAndRemoveUntil(
+                context, createRoute(const HomeScreen()), (route) => false);
+          });
+          Future.delayed(Duration.zero, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: IconSnackBar.show(context,
+                    label: 'OTP validated SuccessFully',
+                    snackBarType: SnackBarType.success),
+              ),
+            );
+          });
+        }
+        if (state is OtpValidatingErrorState) {
+          Navigator.push(
+            context,
+            createRoute(
+              const LoginPage(),
             ),
           );
-        });
-      }
-      if (state is OtpValidatingErrorState) {
-        Navigator.push(
-          context,
-          createRoute(
-            const LoginPage(),
+        }
+        if (state is WrongMobileNumberState) {
+          Navigator.pop(context);
+        }
+      },
+      builder: (context, state) {
+        if (state is OtpValidationWaitingState) {
+          loading = true;
+        } else {
+          loading = false;
+        }
+
+        return Scaffold(
+          body: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'OTP Verification',
+                      style: GoogleFonts.aBeeZee(
+                          fontWeight: FontWeight.bold, fontSize: width * 0.07),
+                    ),
+                    const H50(),
+                    Text(
+                      'Enter The Code from the sms we sent to',
+                      style: GoogleFonts.aBeeZee(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const H30(),
+                    Text(
+                      widget.mobileNumber,
+                      style: GoogleFonts.aBeeZee(
+                        fontSize: width * 0.05,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const H30(),
+                    _wrongNumber(width, () {
+                      context.read<AuthBloc>().add(
+                            ChangeMobileNumberEvent(),
+                          );
+                    }),
+                    const H50(),
+                    Pinput(
+                      onCompleted: (pin) {
+                        otp = pin;
+                      },
+                      onSubmitted: (value) {
+                        otp = value;
+                      },
+                    ),
+                    const H50(),
+                    LoginButton(
+                      width: width,
+                      callback: () {
+                        context.read<AuthBloc>().add(SubmitOtpEvent(otp: otp));
+                      },
+                      label: 'Submit OTP',
+                    ),
+                    const H30(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
+                      child: const Text('Resend OTP'),
+                    ),
+                  ],
+                ),
+              ),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return LoadingAnimation(isLoading: loading, height: height);
+                },
+              ),
+            ],
           ),
         );
-      }
-      if (state is WrongMobileNumberState) {
-        Navigator.pop(context);
-      }
-    }, builder: (context, state) {
-      if (state is OtpValidationWaitingState) {
-        loading = true;
-      } else {
-        loading = false;
-      }
-
-      return Scaffold(
-        body: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'OTP Verification',
-                    style: GoogleFonts.aBeeZee(
-                        fontWeight: FontWeight.bold, fontSize: width * 0.07),
-                  ),
-                  const H50(),
-                  Text(
-                    'Enter The Code from the sms we sent to',
-                    style: GoogleFonts.aBeeZee(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const H30(),
-                  Text(
-                    widget.mobileNumber,
-                    style: GoogleFonts.aBeeZee(
-                      fontSize: width * 0.05,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const H30(),
-                  _wrongNumber(width, () {
-                    context.read<AuthBloc>().add(
-                          ChangeMobileNumberEvent(),
-                        );
-                  }),
-                  const H50(),
-                  Pinput(
-                    onCompleted: (pin) {
-                      otp = pin;
-                    },
-                    onSubmitted: (value) {
-                      otp = value;
-                    },
-                  ),
-                  const H50(),
-                  LoginButton(
-                    width: width,
-                    callback: () {
-                      context.read<AuthBloc>().add(SubmitOtpEvent(otp: otp));
-                    },
-                    label: 'Submit OTP',
-                  ),
-                  const H30(),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    },
-                    child: const Text('Resend OTP'),
-                  ),
-                ],
-              ),
-            ),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                return LoadingAnimation(isLoading: loading, height: height);
-              },
-            ),
-          ],
-        ),
-      );
-    });
+      },
+    );
   }
 
   Widget _wrongNumber(double width, VoidCallback callback) {

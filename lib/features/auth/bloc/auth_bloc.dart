@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
@@ -24,10 +25,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     try {
       final response = await dioClient.post(
-          'https://hak-server-side.onrender.com/customers/auth/login',
+          //'https://hak-server-side.onrender.com/customers/auth/login',
+          'http://192.168.1.43:8000/customers/auth/login',
           data: {'phoneNumber': event.mobileNumber});
       emit(AuthInitial());
-      print(response);
+      print('success');
 
       if (response.statusCode == 201) {
         final id = response.data['id'];
@@ -38,6 +40,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         apiLinks.setId = id;
       }
     } catch (error) {
+      print('failed');
+
       emit(
         OtpSendingErrorState(
           msg: error.toString(),
@@ -67,15 +71,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         OtpValidationWaitingState(),
       );
       // we will get the user details here
-      final response = await dioClient.patch(
-        'https://hak.pythonanywhere.com/auth/customer/$id/verify-otp/',
+      final response = await dioClient.post(
+        // 'https://hak-server-side.onrender.com/customers/auth/otp_verification',
+        'http://192.168.1.43:8000/customers/auth/otp_verification',
         data: {"otp": otp},
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final tokenData = AuthResponse.fromJson(response.data);
+        print(response.data);
 
-        //      log(tokenData.access!);
+        //log(tokenData.access!);
         // save the tokens in shared preference data base
         await pref.setString('accessToken', tokenData.access!);
         await pref.setString('refreshToken', tokenData.refresh!);
