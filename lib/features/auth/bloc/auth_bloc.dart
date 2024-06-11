@@ -24,9 +24,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     try {
       final response = await dioClient.post(
-          'https://hak.pythonanywhere.com/auth/customer/',
-          data: {'phone_number': event.mobileNumber});
+          'https://hak-server-side.onrender.com/customers/auth/login',
+          data: {'phoneNumber': event.mobileNumber});
       emit(AuthInitial());
+      print(response);
+
       if (response.statusCode == 201) {
         final id = response.data['id'];
         emit(

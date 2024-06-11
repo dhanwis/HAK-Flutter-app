@@ -20,6 +20,7 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController mobileNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -28,12 +29,14 @@ class _LoginPageState extends State<LoginPage> {
     mobileNumberController.dispose();
     super.dispose();
   }
+
   void _handleFormSubmit(AuthBloc authBloc) {
     if (_formKey.currentState!.validate()) {
       authBloc.add(SendOtpEvent(mobileNumber: mobileNumberController.text));
       SnackBars.otpSendBar(context, mobileNumberController.text);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -84,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   Widget _buildForm(
       double height, double width, AuthBloc authBloc, bool loading) {
     return Form(

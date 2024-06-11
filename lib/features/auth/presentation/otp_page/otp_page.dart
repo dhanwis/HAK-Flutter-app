@@ -4,6 +4,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/login_button.dart';
 import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,7 +114,15 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                     label: 'Submit OTP',
                   ),
                   const H30(),
-                  TextButton(onPressed: () {}, child: const Text('Resend OTP'))
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
+                    child: const Text('Resend OTP'),
+                  ),
                 ],
               ),
             ),
@@ -121,7 +130,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
               builder: (context, state) {
                 return LoadingAnimation(isLoading: loading, height: height);
               },
-            )
+            ),
           ],
         ),
       );
@@ -134,10 +143,9 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
       child: Text(
         'Change Mobile Number',
         style: GoogleFonts.aBeeZee(
-          fontSize: width * 0.03,
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        ),
+            fontSize: width * 0.03,
+            color: Colors.blue,
+            fontWeight: FontWeight.bold),
       ),
     );
   }

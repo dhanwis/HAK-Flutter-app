@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
+//import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/fav/fav_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
@@ -20,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> pages = const [
     HomePage(),
     CartPage(),
-    FavoritesPage(),
-    AccountPage()
+    FavPage(),
+    AccountPage(),
   ];
   int currentIndex = 0;
   @override
@@ -40,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.black,
         snakeViewColor: Colors.pink.shade50,
         snakeShape: SnakeShape.rectangle,
-        
         items: const [
           BottomNavigationBarItem(
               icon: Icon(EvaIcons.homeOutline), label: 'Home'),

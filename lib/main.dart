@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
+import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ void main() {
     const MyApp(),
   );
 }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
     return const Placeholder();
   }
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
