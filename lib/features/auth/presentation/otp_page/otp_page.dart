@@ -34,7 +34,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         if (state is OtpValidatedState) {
           Future.delayed(const Duration(milliseconds: 300), () {
             Navigator.pushAndRemoveUntil(
-                context, createRoute(const HomeScreen()), (route) => false);
+                context, createRoute(const DilHackBottomNavBar()), (route) => false);
           });
           Future.delayed(Duration.zero, () {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +120,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
                         );
                       },
                       child: const Text('Resend OTP'),

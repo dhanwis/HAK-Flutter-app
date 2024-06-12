@@ -22,10 +22,6 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
           },
           icon: const Icon(Icons.arrow_back),
         ),

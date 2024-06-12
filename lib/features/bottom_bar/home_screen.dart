@@ -1,7 +1,5 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/arriveltext.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
-//import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/fav/fav_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
@@ -9,16 +7,16 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
+class DilHackBottomNavBar extends StatefulWidget {
+  const DilHackBottomNavBar({
     super.key,
   });
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<DilHackBottomNavBar> createState() => _DilHackBottomNavBarState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
   List<Widget> pages = const [
     HomePage(),
     CartPage(),
