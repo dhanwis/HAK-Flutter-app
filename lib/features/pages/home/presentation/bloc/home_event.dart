@@ -8,5 +8,6 @@ sealed class HomeEvent extends Equatable {
 }
 
 class FetchCategoriesEvent extends HomeEvent {}
+class FetchProductEvent extends HomeEvent{}
 
 

@@ -1,6 +1,6 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
-import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/home_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(),
         ),
         BlocProvider(
-          create: (context) => HomeBloc(),
+          create: (context) => HomeBloc()..add(FetchProductEvent()),
         ),
       ],
       child: MaterialApp(

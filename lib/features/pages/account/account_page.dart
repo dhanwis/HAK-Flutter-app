@@ -1,4 +1,4 @@
-import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';

@@ -24,6 +24,7 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
     AccountPage(),
   ];
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

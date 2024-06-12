@@ -1,12 +1,11 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/categories.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/offer_carousel.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/search.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  //  final bloc = BlocProvider.of<HomeBloc>(context);
+    //  final bloc = BlocProvider.of<HomeBloc>(context);
     List<IconData> icons = [
       EvaIcons.google,
       EvaIcons.clock,
@@ -175,10 +174,19 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: AllProducts(),
+            ),
+          ),
+
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Container(),
+              child: Container(
+
+              ),
             ),
           ),
         ],
