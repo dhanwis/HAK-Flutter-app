@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/arrivelitem.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/arriveltext.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +39,9 @@ class HomePage extends StatelessWidget {
           SearchBar(width: width),
           const H20(),
           Categories(icons: icons),
-          const OfferCarousel()
+          const OfferCarousel(),
+          const NewArrivelText(),
+          const ArrivalItems(),
         ],
       ),
     );

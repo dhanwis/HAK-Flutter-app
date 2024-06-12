@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/arriveltext.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 //import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';

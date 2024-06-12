@@ -79,7 +79,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (response.statusCode == 200) {
         final tokenData = AuthResponse.fromJson(response.data);
-        print(response.data);
+        print(tokenData);
 
         //log(tokenData.access!);
         // save the tokens in shared preference data base
