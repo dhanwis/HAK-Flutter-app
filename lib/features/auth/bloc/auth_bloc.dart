@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -23,19 +25,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       OtpLoadingState(),
     );
     try {
-      final response = await dioClient.post(
-          //'https://hak-server-side.onrender.com/customers/auth/login',
-          'http://192.168.1.43:8000/customers/auth/login',
-          data: {'phoneNumber': event.mobileNumber});
+      final response = await dioClient
+          .post('https://hak-server-side.onrender.com/customers/auth/login',
+              // 'http://192.168.29.91:8000/customers/auth/login',
+              data: {'phoneNumber': event.mobileNumber});
       emit(AuthInitial());
       print('success');
 
       if (response.statusCode == 201) {
         final id = response.data['id'];
+        print(response.data);
         emit(
           //manjima
           OtpReceivedState(mobileNumber: event.mobileNumber),
         );
+
         apiLinks.setId = id;
       }
     } catch (error) {
@@ -71,14 +75,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       // we will get the user details here
       final response = await dioClient.post(
-        // 'https://hak-server-side.onrender.com/customers/auth/otp_verification',
-        'http://192.168.1.43:8000/customers/auth/otp_verification',
+        'https://hak-server-side.onrender.com/customers/auth/otp_verification',
+        // 'http://192.168.29.91:8000/customers/auth/otp_verification',
         data: {"otp": otp},
       );
 
       if (response.statusCode == 200) {
+        print('kitti');
         final tokenData = AuthResponse.fromJson(response.data);
-        print(tokenData);
+        print(response);
 
         //log(tokenData.access!);
         // save the tokens in shared preference data base

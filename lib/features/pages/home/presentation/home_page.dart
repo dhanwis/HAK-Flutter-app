@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/home_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/categories.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/offer_carousel.dart';
@@ -184,9 +185,7 @@ class HomePage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Container(
-
-              ),
+              child: Container(),
             ),
           ),
         ],

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/loading_dilhak.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
@@ -30,10 +32,12 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     final width = MediaQuery.of(context).size.width;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
+        print(state);
         if (state is OtpValidatedState) {
           Future.delayed(const Duration(milliseconds: 300), () {
-            Navigator.pushAndRemoveUntil(
-                context, createRoute(const DilHackBottomNavBar()), (route) => false);
+            print('going');
+            Navigator.pushAndRemoveUntil(context,
+                createRoute(const DilHackBottomNavBar()), (route) => false);
           });
           Future.delayed(Duration.zero, () {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -46,6 +50,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           });
         }
         if (state is OtpValidatingErrorState) {
+          print('errr');
           Navigator.push(
             context,
             createRoute(
@@ -54,6 +59,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           );
         }
         if (state is WrongMobileNumberState) {
+          print('wrong');
           Navigator.pop(context);
         }
       },
@@ -111,6 +117,14 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                       width: width,
                       callback: () {
                         context.read<AuthBloc>().add(SubmitOtpEvent(otp: otp));
+                        callback:
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DilHackBottomNavBar()),
+                          );
+                        };
                       },
                       label: 'Submit OTP',
                     ),
@@ -119,7 +133,8 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
+                          MaterialPageRoute(
+                              builder: (context) => DilHackBottomNavBar()),
                         );
                       },
                       child: const Text('Resend OTP'),
