@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                               Text(
                                 'New Arrivals',
                                 style: GoogleFonts.aBeeZee(
-                                    fontWeight: FontWeight.w800, fontSize: 20),
+                                    fontWeight: FontWeight.w800, fontSize: 18),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 20),

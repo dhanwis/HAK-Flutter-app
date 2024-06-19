@@ -35,7 +35,7 @@ class TopRow extends StatelessWidget {
               Text(
                 'Manjima',
                 style: GoogleFonts.aBeeZee(fontSize: 15),
-              )
+              ),
             ],
           ),
           const CircleAvatar(
