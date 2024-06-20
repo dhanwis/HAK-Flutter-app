@@ -54,69 +54,12 @@ class AllProducts extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
-          //ProductGrid(products: products), // Display predefined products
+          Container(
+            height: 1000,
+            child: ProductGrid(),
+          ),
         ],
       ),
     );
   }
-}
-
-Widget _buildProductsGrid() {
-  final predefinedProducts = [
-    ProductsModel(
-      name: 'Trendy Superior Sarees',
-      price: 424,
-      imageUrl: 'URL_TO_IMAGE_1', // Replace with actual image URL
-    ),
-    ProductsModel(
-      name: 'Aagyeyi Attractive Sarees',
-      price: 309,
-      imageUrl: 'URL_TO_IMAGE_2', // Replace with actual image URL
-    ),
-    ProductsModel(
-      name: 'Kashvi Refined Sarees',
-      price: 292,
-      imageUrl: 'URL_TO_IMAGE_3', // Replace with actual image URL
-    ),
-    ProductsModel(
-      name: 'Adrika Pretty Sarees',
-      price: 630,
-      imageUrl: 'URL_TO_IMAGE_4', // Replace with actual image URL
-    ),
-    // Add more predefined products as needed
-  ];
-
-  return Padding(
-    padding: const EdgeInsets.only(left: 20, top: 20),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Products For you',
-          style: GoogleFonts.aBeeZee(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-
-        // Expanded(
-        //   child: GridView.builder(
-        //     padding: const EdgeInsets.all(8),
-        //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //       crossAxisCount: 2,
-        //       crossAxisSpacing: 8,
-        //       mainAxisSpacing: 8,
-        //     ),
-        //     itemCount: predefinedProducts.length,
-        //     itemBuilder: (context, index) {
-        //       final product = predefinedProducts[index];
-        //       print(product);
-        //       return ProductItem(product: product);
-        //     },
-        //   ),
-        // ),
-      ],
-    ),
-  );
 }
