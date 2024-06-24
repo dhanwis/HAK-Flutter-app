@@ -36,6 +36,11 @@ class HomePage extends StatelessWidget {
             backgroundColor: Colors.white,
             title: TopRow(),
           ),
+          SliverAppBar(
+            title: AppSearchBar(
+              width: width,
+            ),
+          ),
 //           SliverAppBar(
 //             floating: true,
 //
@@ -55,15 +60,10 @@ class HomePage extends StatelessWidget {
           SliverAppBar(
               pinned: true,
               backgroundColor: Colors.white,
-              expandedHeight: 380,
-              title: AppSearchBar(
-                width: width,
-              ),
+              expandedHeight: 300,
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 100,
-                    ),
+                    padding: const EdgeInsets.only(top: 20),
                     child: Column(
                       children: [
                         Padding(

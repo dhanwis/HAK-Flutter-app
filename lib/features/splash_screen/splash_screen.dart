@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(
             context,
             createRoute(
-              const HomePage(),
+              const LoginPage(),
             ),
           );
         },

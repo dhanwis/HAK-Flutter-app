@@ -1,5 +1,3 @@
-
-
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -51,20 +49,16 @@ class AppSearchBar extends StatelessWidget {
           onTap: () {
             BlocProvider.of<HomeBloc>(context).add(FetchCategoriesEvent());
           },
-          child: Padding(
-            padding: const EdgeInsets.only( right: 10),
-            child: Container(
-              height:50,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 235, 228, 228),
-                  borderRadius: BorderRadius.circular(15)),
-
-              width: 60,
-              child: const Center(
-                child: Icon(
-                  EvaIcons.arrowForward,
-                  color: Color.fromARGB(255, 147, 144, 144),
-                ),
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 235, 228, 228),
+                borderRadius: BorderRadius.circular(15)),
+            width: 60,
+            child: const Center(
+              child: Icon(
+                EvaIcons.arrowForward,
+                color: Color.fromARGB(255, 147, 144, 144),
               ),
             ),
           ),
