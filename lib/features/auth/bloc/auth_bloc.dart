@@ -25,10 +25,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       OtpLoadingState(),
     );
     try {
-      final response = await dioClient
-          .post('https://hak-server-side.onrender.com/customers/auth/login',
-              // 'http://192.168.29.91:8000/customers/auth/login',
-              data: {'phoneNumber': event.mobileNumber});
+      final response = await dioClient.post(
+          'http://192.168.1.31:8000/customers/auth/login',
+          data: {'phoneNumber': event.mobileNumber});
       emit(AuthInitial());
       print('success');
 
@@ -75,8 +74,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       // we will get the user details here
       final response = await dioClient.post(
-        'https://hak-server-side.onrender.com/customers/auth/otp_verification',
-        // 'http://192.168.29.91:8000/customers/auth/otp_verification',
+        'http://192.168.1.31:8000/customers/auth/otp_verification',
         data: {"otp": otp},
       );
 
@@ -97,8 +95,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       // Handle DioException and other errors
       emit(OtpValidatingErrorState());
+
       //   log(e.toString());
     }
+
+    print('object');
+    print(pref.getString('accessToken'));
+    print(pref.getString('refreshToken'));
   }
 
   FutureOr<void> _changeMobileNumber(

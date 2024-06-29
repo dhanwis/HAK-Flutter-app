@@ -32,7 +32,7 @@ class AllProducts extends StatelessWidget {
           return _buildProductsGrid();
         }
 
-        return _buildProductsGrid(); // Fallback to showing predefined products
+        return _buildProductsGrid();
       },
     );
   }
@@ -54,8 +54,11 @@ class AllProducts extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
+          SizedBox(
+            height: 15,
+          ),
           Container(
-            height: 1000,
+            height: 2000,
             child: ProductGrid(),
           ),
         ],
