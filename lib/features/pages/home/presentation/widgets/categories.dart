@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +24,7 @@ class Categories extends StatelessWidget {
       height: 100,
       child: ListView.builder(
           padding: const EdgeInsets.all(0),
-          itemCount: 6,
+          itemCount: 7,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Padding(

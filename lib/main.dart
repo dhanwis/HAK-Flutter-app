@@ -50,8 +50,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
         home: HomeScreen(),
-        //  LoginPage(),
+        // LoginPage(),
       ),
     );
   }
 }
+// 

@@ -1,6 +1,9 @@
 import 'package:dil_hack_e_commerce/api/products.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ProductGrid extends StatefulWidget {
   @override
@@ -43,7 +46,6 @@ class _ProductGridState extends State<ProductGrid> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final product = products[index];
-                    print(product);
                     final firstVariation = product.variations.isNotEmpty
                         ? product.variations.first
                         : null;
@@ -53,16 +55,27 @@ class _ProductGridState extends State<ProductGrid> {
                     final skus = firstVariation?.skus ?? [];
                     final actualPrice =
                         skus.isNotEmpty ? skus.first.actualPrice : 0;
-
-                    print("productssss");
                     final discount = skus.isNotEmpty ? skus.first.discount : 0;
+
+                    final formattedPrice =
+                        NumberFormat('#,##0').format(actualPrice);
+                    final formattedDiscount =
+                        NumberFormat('#,##0').format(discount);
 
                     return Card(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        // ProductDetailpage(product: product),
+                                        ProductDetailPage(product: product)),
+                              );
+                            },
                             child: imageUrl.isNotEmpty
                                 ? Image.network(
                                     imageUrl,
@@ -84,17 +97,21 @@ class _ProductGridState extends State<ProductGrid> {
                               children: [
                                 Text(
                                   product.productName,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.aBeeZee(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
                                 ),
                                 Text(
-                                  '₹${actualPrice}',
-                                  style: TextStyle(color: Colors.green),
+                                  '₹$formattedPrice',
+                                  style:
+                                      GoogleFonts.aBeeZee(color: Colors.green),
                                 ),
                                 Text(
-                                  'Discount: $discount%',
-                                  style: TextStyle(color: Colors.red),
+                                  'Discount: $formattedDiscount%',
+                                  style: GoogleFonts.aBeeZee(color: Colors.red),
                                 ),
-                                Text('Free Delivery'),
+                                Text('Free Delivery',
+                                    style: GoogleFonts.aBeeZee()),
                               ],
                             ),
                           ),

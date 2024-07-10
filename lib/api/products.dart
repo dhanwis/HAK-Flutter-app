@@ -6,7 +6,7 @@ class Product {
   final double productWeight;
   final String productFeatures;
   final String productPublishDate;
-  final String productPublishTime;
+  final DateTime productPublishDatetime;
   final String productPublishStatus;
   final List<String> productTags;
   final String productType;
@@ -22,7 +22,7 @@ class Product {
     required this.productWeight,
     required this.productFeatures,
     required this.productPublishDate,
-    required this.productPublishTime,
+    required this.productPublishDatetime,
     required this.productPublishStatus,
     required this.productTags,
     required this.productType,
@@ -32,28 +32,39 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    // Debug print to see the raw JSON data
+    print('Product JSON: $json');
+
     List<Variation> variationsList = [];
     if (json['variations'] != null) {
       var variationsJson = json['variations'] as List;
       variationsList = variationsJson
-          .map((v) => Variation.fromJson(v, json['product_id']))
+          .map((v) => Variation.fromJson(v, json['product_id'] ?? ''))
           .toList();
     }
 
     return Product(
-      id: json['_id'] ?? '',
-      productId: json['product_id'] ?? '',
-      productName: json['product_name'] ?? '',
-      productDescription: json['product_description'] ?? '',
-      productWeight: (json['product_weight'] ?? 0).toDouble(),
-      productFeatures: json['product_features'] ?? '',
-      productPublishDate: json['product_publish_date'] ?? '',
-      productPublishTime: json['product_publish_time'] ?? '',
-      productPublishStatus: json['product_publish_status'] ?? '',
-      productTags: List<String>.from(json['product_tags'] ?? []),
-      productType: json['product_type'] ?? '',
-      productGender: json['product_gender'] ?? '',
-      productBrand: json['product_brand'] ?? '',
+      id: json['_id']?.toString() ?? '',
+      productId: json['product_id']?.toString() ?? '',
+      productName: json['product_name']?.toString() ?? '',
+      productDescription: json['product_description']?.toString() ?? '',
+      productWeight: (json['product_weight'] is int)
+          ? (json['product_weight'] as int).toDouble()
+          : (json['product_weight'] is double)
+              ? json['product_weight']
+              : 0.0,
+      productFeatures: json['product_features']?.toString() ?? '',
+      productPublishDate: json['product_publish_date']?.toString() ?? '',
+      productPublishDatetime: DateTime.tryParse(
+              json['product_publish_datetime']?.toString() ?? '') ??
+          DateTime(1970),
+      productPublishStatus: json['product_publish_status']?.toString() ?? '',
+      productTags: (json['product_tags'] is List)
+          ? List<String>.from(json['product_tags'])
+          : [],
+      productType: json['product_type']?.toString() ?? '',
+      productGender: json['product_gender']?.toString() ?? '',
+      productBrand: json['product_brand']?.toString() ?? '',
       variations: variationsList,
     );
   }
@@ -73,7 +84,7 @@ class Variation {
   });
 
   factory Variation.fromJson(Map<String, dynamic> json, String productId) {
-    const baseUrl = 'http://192.168.1.57:8000/ProductImg/';
+    const baseUrl = 'http://192.168.1.31:8000/ProductImg/';
 
     List<String> imagesList = [];
     if (json['images'] != null) {
@@ -88,8 +99,8 @@ class Variation {
     }
 
     return Variation(
-      id: json['_id'],
-      color: json['color'],
+      id: json['_id']?.toString() ?? '',
+      color: json['color']?.toString() ?? '',
       images: imagesList,
       skus: skusList,
     );
@@ -97,30 +108,34 @@ class Variation {
 }
 
 class Sku {
-  final String id;
   final String size;
-  final double discount;
+  final int discount;
   final bool inStock;
   final int quantity;
   final double actualPrice;
+  final String id;
 
   Sku({
-    required this.id,
     required this.size,
     required this.discount,
     required this.inStock,
     required this.quantity,
     required this.actualPrice,
+    required this.id,
   });
 
   factory Sku.fromJson(Map<String, dynamic> json) {
     return Sku(
-      id: json['_id'] ?? '',
-      size: json['size'] ?? '',
-      discount: (json['discount'] ?? 0).toDouble(),
+      size: json['size']?.toString() ?? '',
+      discount: json['discount'] ?? 0,
       inStock: json['in_stock'] ?? false,
       quantity: json['quantity'] ?? 0,
-      actualPrice: (json['actualPrice'] ?? 0).toDouble(),
+      actualPrice: (json['actualPrice'] is int)
+          ? (json['actualPrice'] as int).toDouble()
+          : (json['actualPrice'] is double)
+              ? json['actualPrice']
+              : 0.0,
+      id: json['_id']?.toString() ?? '',
     );
   }
 }

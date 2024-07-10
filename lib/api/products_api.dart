@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ProductService {
   static const String url =
-      'http://192.168.1.57:8000/productAdmin/product/view_all_products';
+      'http://192.168.1.31:8000/productAdmin/product/view_all_products';
 
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse(url));
