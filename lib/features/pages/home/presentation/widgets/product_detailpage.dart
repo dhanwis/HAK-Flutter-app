@@ -1,9 +1,8 @@
-//import 'package:dil_hack_e_commerce/api/productById_api.dart';
+
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 
-//import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/similarproducts_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
