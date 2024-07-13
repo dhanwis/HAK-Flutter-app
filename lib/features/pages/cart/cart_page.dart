@@ -19,7 +19,6 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
-    print('');
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

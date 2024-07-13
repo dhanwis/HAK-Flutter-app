@@ -10,8 +10,6 @@ class AllProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build called');
-
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is ProductsLoadingState) {
@@ -19,11 +17,9 @@ class AllProducts extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else if (state is ProductsFetchedState) {
-          print(state.productList.length);
           return ListView.builder(
             itemCount: state.productList.length,
             itemBuilder: (context, index) {
-              print(index.toString());
               final product = state.productList[index];
               // return ProductItem(product: product);
             },

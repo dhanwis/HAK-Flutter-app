@@ -27,7 +27,6 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    print('hai');
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: SnakeNavigationBar.color(

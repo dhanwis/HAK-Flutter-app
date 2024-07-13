@@ -28,7 +28,6 @@ class _OfferCarouselState extends State<OfferCarousel> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching banners in UI: $e');
       setState(() {
         _isLoading = false;
       });

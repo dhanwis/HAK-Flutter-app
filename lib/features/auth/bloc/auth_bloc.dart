@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
+
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -29,11 +29,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           'http://192.168.1.31:8000/customers/auth/login',
           data: {'phoneNumber': event.mobileNumber});
       emit(AuthInitial());
-      print('success');
 
       if (response.statusCode == 201) {
         final id = response.data['id'];
-        print(response.data);
+
         emit(
           //manjima
           OtpReceivedState(mobileNumber: event.mobileNumber),
@@ -42,8 +41,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         apiLinks.setId = id;
       }
     } catch (error) {
-      print('failed');
-
       emit(
         OtpSendingErrorState(
           msg: error.toString(),
@@ -79,9 +76,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (response.statusCode == 200) {
-        print('kitti');
         final tokenData = AuthResponse.fromJson(response.data);
-        print(response);
 
         //log(tokenData.access!);
         // save the tokens in shared preference data base
@@ -98,10 +93,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       //   log(e.toString());
     }
-
-    print('object');
-    print(pref.getString('accessToken'));
-    print(pref.getString('refreshToken'));
   }
 
   FutureOr<void> _changeMobileNumber(

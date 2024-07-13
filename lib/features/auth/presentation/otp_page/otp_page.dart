@@ -45,10 +45,8 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     final width = MediaQuery.of(context).size.width;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        print(state);
         if (state is OtpValidatedState) {
           Future.delayed(const Duration(milliseconds: 300), () {
-            print('going');
             Navigator.pushAndRemoveUntil(context,
                 createRoute(const DilHackBottomNavBar()), (route) => false);
           });
@@ -63,7 +61,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           });
         }
         if (state is OtpValidatingErrorState) {
-          print('errr');
           Navigator.push(
             context,
             createRoute(
@@ -72,7 +69,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           );
         }
         if (state is WrongMobileNumberState) {
-          print('wrong');
           Navigator.pop(context);
         }
       },
@@ -138,7 +134,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                             tokenBox.put(
                                 'tokens', Token(accessToken, refreshToken));
 
-                            print('tocken success $accessToken');
                             context
                                 .read<AuthBloc>()
                                 .add(SubmitOtpEvent(otp: otp));

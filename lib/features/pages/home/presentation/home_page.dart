@@ -113,8 +113,6 @@ class _HomePageState extends State<HomePage> {
                               String imageUrl =
                                   products[index].variations[0].images[0];
 
-                              print('image urllllll');
-                              print(imageUrl);
                               String formattedPrice = NumberFormat('#,##0')
                                   .format(products[index]
                                       .variations[0]

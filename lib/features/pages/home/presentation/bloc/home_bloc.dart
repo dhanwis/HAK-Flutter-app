@@ -39,26 +39,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(ProductsLoadingState());
       final response = await dio.get(url);
       if (response.statusCode == 200 || response.statusCode == 201) {
-
-        emit(ProductsFetchedState(productList: productList) );
-
+        emit(ProductsFetchedState(productList: productList));
 
         for (var i in response.data) {
-
           productList.add(
             ProductsModel.fromJson(i),
           );
-       print(  productList[0].image);
-
         }
-
       }
     } catch (error) {
       print(error);
       emit(ProductsFetchingErrorState());
-
     }
-
-
   }
 }

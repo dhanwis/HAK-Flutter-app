@@ -52,9 +52,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         similarProductsFuture =
             GetSimilarProductsApi().fetchSimilarProductById(newProduct.id);
       });
-    } catch (e) {
-      print('Error fetching product details: $e');
-    }
+    } catch (e) {}
   }
 
   @override

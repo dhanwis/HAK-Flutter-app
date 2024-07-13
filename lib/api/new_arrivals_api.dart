@@ -4,12 +4,8 @@ import 'package:http/http.dart' as http;
 
 class GetAllNewArrivalsApi {
   Future<List<Product>> fetchNewArrivals() async {
-    print('hai');
     final response = await http.get(Uri.parse(
         'http://192.168.1.31:8000/productAdmin/product/new-arrivals'));
-
-    print('resp');
-    print(response);
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);

@@ -5,17 +5,10 @@ import 'package:http/http.dart' as http;
 const String baseUrl = 'http://192.168.1.31:8000';
 
 Future<Product> fetchProductById(String productId) async {
-  print('id');
-  print(productId);
-
   final response = await http
       .get(Uri.parse('$baseUrl/productAdmin/product/viewProductBy/$productId'));
 
-  print('respnse');
-  print(response);
-
   if (response.statusCode == 200) {
-    print('success manji');
     return Product.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load product');

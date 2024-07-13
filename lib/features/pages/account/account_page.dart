@@ -23,9 +23,7 @@ class _AccountPageState extends State<AccountPage> {
           _image = File(pickedImage.path);
         });
       }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _getImageFromCamera() async {
@@ -37,9 +35,7 @@ class _AccountPageState extends State<AccountPage> {
           _image = File(pickedImage.path);
         });
       }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _updateImage() async {
@@ -71,9 +67,7 @@ class _AccountPageState extends State<AccountPage> {
           );
         },
       );
-    } catch (e) {
-      print('Error updating image: $e');
-    }
+    } catch (e) {}
   }
 
   void _showImageSourceActionSheet(BuildContext context) {

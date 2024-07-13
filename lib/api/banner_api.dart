@@ -10,18 +10,13 @@ class BannerService {
     try {
       final response = await http.get(Uri.parse(url));
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       if (response.statusCode == 200) {
         final List<dynamic> bannerJson = json.decode(response.body);
         return bannerJson.map((json) => Banner.fromJson(json)).toList();
       } else {
-        print('Failed to load banners: ${response.reasonPhrase}');
         throw Exception('Failed to load banners');
       }
     } catch (e) {
-      print('Error occurred: $e');
       throw Exception('Error fetching banners');
     }
   }
