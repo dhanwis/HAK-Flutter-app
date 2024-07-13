@@ -1,6 +1,7 @@
-import 'dart:convert';
-import 'package:dil_hack_e_commerce/api/newarrivels_api.dart';
+import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/categories.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/offer_carousel.dart';
@@ -9,7 +10,6 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,12 +20,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<NewArrivalProduct>> futureProducts;
+  late Future<List<Product>> futureProducts;
 
   @override
   void initState() {
     super.initState();
-    futureProducts = fetchNewArrivals();
+    futureProducts = GetAllNewArrivalsApi().fetchNewArrivals();
   }
 
   @override
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          FutureBuilder<List<NewArrivalProduct>>(
+          FutureBuilder<List<Product>>(
             future: futureProducts,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                   child: Center(child: Text('No products found')),
                 );
               } else {
-                List<NewArrivalProduct> products = snapshot.data!;
+                List<Product> products = snapshot.data!;
                 return SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10),
@@ -111,7 +111,10 @@ class _HomePageState extends State<HomePage> {
                             itemCount: products.length,
                             itemBuilder: (context, index) {
                               String imageUrl =
-                                  'http://192.168.1.31:8000/ProductImg/${products[index].productId}/${products[index].variations[0].images[0]}';
+                                  products[index].variations[0].images[0];
+
+                              print('image urllllll');
+                              print(imageUrl);
                               String formattedPrice = NumberFormat('#,##0')
                                   .format(products[index]
                                       .variations[0]
@@ -122,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ProductDetailpage(
+                                      builder: (context) => ProductDetailPage(
                                           product: products[index]),
                                     ),
                                   );
@@ -215,145 +218,5 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-}
-
-class NewArrivalProduct {
-  final String id;
-  final String productId;
-  final String productName;
-  final String productDescription;
-  final String productCategory;
-  final int productWeight;
-  final String productFeatures;
-  final DateTime productPublishDatetime;
-  final String productPublishStatus;
-  final List<String> productTags;
-  final String productType;
-  final String productGender;
-  final String productBrand;
-  final List<Variation> variations;
-
-  NewArrivalProduct({
-    required this.id,
-    required this.productId,
-    required this.productName,
-    required this.productDescription,
-    required this.productCategory,
-    required this.productWeight,
-    required this.productFeatures,
-    required this.productPublishDatetime,
-    required this.productPublishStatus,
-    required this.productTags,
-    required this.productType,
-    required this.productGender,
-    required this.productBrand,
-    required this.variations,
-  });
-
-  factory NewArrivalProduct.fromJson(Map<String, dynamic> json) {
-    // Debug print to see the raw JSON data
-    print('New Arrival Product JSON: $json');
-
-    var tagsFromJson = json['product_tags'];
-    List<String> tagsList =
-        tagsFromJson != null ? List<String>.from(tagsFromJson) : [];
-
-    var variationsFromJson = json['variations'] as List;
-    List<Variation> variationsList =
-        variationsFromJson.map((i) => Variation.fromJson(i)).toList();
-
-    return NewArrivalProduct(
-      id: json['_id']?.toString() ?? '',
-      productId: json['product_id']?.toString() ?? '',
-      productName: json['product_name']?.toString() ?? '',
-      productDescription: json['product_description']?.toString() ?? '',
-      productCategory: json['product_category']?.toString() ?? '',
-      productWeight: json['product_weight'] ?? 0,
-      productFeatures: json['product_features']?.toString() ?? '',
-      productPublishDatetime: DateTime.parse(
-          json['product_publish_datetime'] ?? '1970-01-01T00:00:00Z'),
-      productPublishStatus: json['product_publish_status']?.toString() ?? '',
-      productTags: tagsList,
-      productType: json['product_type']?.toString() ?? '',
-      productGender: json['product_gender']?.toString() ?? '',
-      productBrand: json['product_brand']?.toString() ?? '',
-      variations: variationsList,
-    );
-  }
-}
-
-class Variation {
-  final String color;
-  final List<String> images;
-  final List<Sku> skus;
-
-  Variation({
-    required this.color,
-    required this.images,
-    required this.skus,
-  });
-
-  factory Variation.fromJson(Map<String, dynamic> json) {
-    var imagesFromJson = json['images'];
-    List<String> imagesList =
-        imagesFromJson != null ? List<String>.from(imagesFromJson) : [];
-
-    var skusFromJson = json['skus'] as List;
-    List<Sku> skusList = skusFromJson.map((i) => Sku.fromJson(i)).toList();
-
-    return Variation(
-      color: json['color']?.toString() ?? '',
-      images: imagesList,
-      skus: skusList,
-    );
-  }
-}
-
-class Sku {
-  final String size;
-  final int discount;
-  final bool inStock;
-  final int quantity;
-  final double actualPrice;
-  final String id;
-
-  Sku({
-    required this.size,
-    required this.discount,
-    required this.inStock,
-    required this.quantity,
-    required this.actualPrice,
-    required this.id,
-  });
-
-  factory Sku.fromJson(Map<String, dynamic> json) {
-    return Sku(
-      size: json['size']?.toString() ?? '',
-      discount: json['discount'] ?? 0,
-      inStock: json['in_stock'] ?? false,
-      quantity: json['quantity'] ?? 0,
-      actualPrice: (json['actualPrice'] is int)
-          ? (json['actualPrice'] as int).toDouble()
-          : (json['actualPrice'] is double)
-              ? json['actualPrice']
-              : 0.0,
-      id: json['_id']?.toString() ?? '',
-    );
-  }
-}
-
-Future<List<NewArrivalProduct>> fetchNewArrivals() async {
-  final response = await http.get(
-      Uri.parse('http://192.168.1.31:8000/productAdmin/product/new-arrivals'));
-
-  if (response.statusCode == 200) {
-    final jsonResponse = json.decode(response.body);
-    final List productsJson = jsonResponse['data'];
-    return productsJson
-        .map((product) => NewArrivalProduct.fromJson(product))
-        .toList();
-  } else {
-    throw Exception('Failed to load new arrivals');
   }
 }

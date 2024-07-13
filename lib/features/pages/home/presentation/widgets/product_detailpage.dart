@@ -1,7 +1,9 @@
+//import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
-import 'package:dil_hack_e_commerce/api/products.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/similarproducts_detailpage.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+
+//import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/similarproducts_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,7 +17,7 @@ class Sku {
 }
 
 class ProductDetailPage extends StatefulWidget {
-  final Product product;
+  Product product;
 
   ProductDetailPage({
     Key? key,
@@ -29,23 +31,30 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  late Future<List<String>> similarProductsFuture;
-  late NewArrivalProduct currentProduct;
+  late Future<List<Product>> similarProductsFuture;
+  //late NewArrivalProduct currentProduct;
 
   @override
   void initState() {
     super.initState();
-    currentProduct = widget.product;
-    similarProductsFuture = fetchSimilarProductById(widget.product.id);
+    // currentProduct = widget.product;
+    //similarProductsFuture = fetchSimilarProductById(widget.product.id);
+    similarProductsFuture =
+        GetSimilarProductsApi().fetchSimilarProductById(widget.product.id);
   }
 
-   Future<void> fetchProductDetails(String productId) async {
+  Future<void> fetchProductDetails(String productId) async {
     // Fetch product details by productId
-    NewArrivalProduct newProduct = await fetchProductById(productId),
-    setState(() {
-      currentProduct = newProduct;
-      similarProductsFuture = fetchSimilarProductImages(productId);
-    });
+    try {
+      Product newProduct = await fetchProductById(productId);
+      setState(() {
+        widget.product = newProduct;
+        similarProductsFuture =
+            GetSimilarProductsApi().fetchSimilarProductById(newProduct.id);
+      });
+    } catch (e) {
+      print('Error fetching product details: $e');
+    }
   }
 
   @override
@@ -178,7 +187,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           //     }
           //   },
           // ),
-          FutureBuilder<List<String>>(
+
+          FutureBuilder<List<Product>>(
             future: similarProductsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -197,12 +207,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       (index) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: GestureDetector(
-                          // onTap: () =>
-                          //     {fetchProductById(snapshot.data![index])},
-                          onTap: () => (snapshot.data![index]),
+                          onTap: () =>
+                              fetchProductDetails(snapshot.data![index].id),
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(snapshot.data![index]),
+                            backgroundImage: NetworkImage(snapshot
+                                .data![index].variations.first.images.first),
                             backgroundColor: Colors.grey.shade200,
                             radius: 40,
                           ),

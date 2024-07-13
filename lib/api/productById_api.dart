@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
 const String baseUrl = 'http://192.168.1.31:8000';
 
-Future<NewArrivalProduct> fetchProductById(String productId) async {
+Future<Product> fetchProductById(String productId) async {
   print('id');
   print(productId);
 
@@ -16,7 +16,7 @@ Future<NewArrivalProduct> fetchProductById(String productId) async {
 
   if (response.statusCode == 200) {
     print('success manji');
-    return NewArrivalProduct.fromJson(json.decode(response.body));
+    return Product.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load product');
   }

@@ -1,4 +1,4 @@
-import 'package:dil_hack_e_commerce/api/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class _ProductGridState extends State<ProductGrid> {
   @override
   void initState() {
     super.initState();
-    futureProducts = ProductService().fetchProducts();
+    futureProducts = GetAllProductApi().fetchProducts();
   }
 
   @override

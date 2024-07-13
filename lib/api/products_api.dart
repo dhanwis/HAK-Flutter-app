@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:dil_hack_e_commerce/api/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
-class ProductService {
+class GetAllProductApi {
   static const String url =
       'http://192.168.1.31:8000/productAdmin/product/view_all_products';
 

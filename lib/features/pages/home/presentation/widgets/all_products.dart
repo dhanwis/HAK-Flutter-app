@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_adding.dart'; // Adjust import as per your project structure
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productPage.dart'; // Adjust import as per your project structure
 
 class AllProducts extends StatelessWidget {
   const AllProducts({super.key});
