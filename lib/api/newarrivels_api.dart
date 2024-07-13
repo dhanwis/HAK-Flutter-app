@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,16 +13,29 @@ class Sku {
   Sku({required this.actualPrice, required this.discount});
 }
 
-class ProductDetailpage extends StatelessWidget {
+class ProductDetailpage extends StatefulWidget {
   final NewArrivalProduct product;
 
   ProductDetailpage({Key? key, required this.product}) : super(key: key);
 
   @override
+  _ProductDetailPageState createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailpage> {
+  late Future<List<String>> similarProductsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    similarProductsFuture = fetchSimilarProductById(widget.product.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final actualPrice = product.variations.first.skus.first.actualPrice;
-    final discount = product.variations.first.skus.first.discount;
+    final actualPrice = widget.product.variations.first.skus.first.actualPrice;
+    final discount = widget.product.variations.first.skus.first.discount;
 
     final formattedPrice = NumberFormat('#,##0').format(actualPrice);
 
@@ -34,7 +48,7 @@ class ProductDetailpage extends StatelessWidget {
             height: height * 0.6,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: product.variations.first.images.length,
+              itemCount: widget.product.variations.first.images.length,
               itemBuilder: (context, index) {
                 return SizedBox(
                   height: height * 0.6,
@@ -42,7 +56,7 @@ class ProductDetailpage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.network(
-                        'http://192.168.1.31:8000/ProductImg/${product.productId}/${product.variations.first.images[index]}',
+                        'http://192.168.1.31:8000/ProductImg/${widget.product.productId}/${widget.product.variations.first.images[index]}',
                       ),
                     ),
                   ),
@@ -57,7 +71,7 @@ class ProductDetailpage extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    capitalizeFirstLetter(product.productName),
+                    capitalizeFirstLetter(widget.product.productName),
                     style: GoogleFonts.aBeeZee(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
@@ -85,7 +99,7 @@ class ProductDetailpage extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    capitalizeFirstLetter(product.productDescription),
+                    capitalizeFirstLetter(widget.product.productDescription),
                     style: GoogleFonts.aBeeZee(
                       fontWeight: FontWeight.w300,
                       fontSize: 15,
@@ -131,22 +145,35 @@ class ProductDetailpage extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: List.generate(
-                4,
-                (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('asset/saree/1.jpeg'),
-                    backgroundColor: Colors.grey.shade200,
-                    radius: 40,
+          FutureBuilder<List<String>>(
+            future: similarProductsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('No similar products found.'));
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: List.generate(
+                      snapshot.data!.length,
+                      (index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(snapshot.data![index]),
+                          backgroundColor: Colors.grey.shade200,
+                          radius: 40,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
+                );
+              }
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 10),
@@ -204,8 +231,8 @@ class ProductDetailpage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'Color',
-              value: product.variations.isNotEmpty
-                  ? product.variations[0].color
+              value: widget.product.variations.isNotEmpty
+                  ? widget.product.variations[0].color
                   : 'N/A',
             ),
           ),
@@ -213,39 +240,40 @@ class ProductDetailpage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'Weight',
-              value: product.productWeight.toString(),
+              value: widget.product.productWeight.toString(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: DetailRow(label: 'Brand', value: product.productBrand),
+            child:
+                DetailRow(label: 'Brand', value: widget.product.productBrand),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: DetailRow(label: 'Type', value: product.productType),
+            child: DetailRow(label: 'Type', value: widget.product.productType),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'PublishDate',
               value: DateFormat('dd-MM-yyyy')
-                  .format(product.productPublishDatetime),
+                  .format(widget.product.productPublishDatetime),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'ProductTag',
-              value: product.productTags.toString(),
+              value: widget.product.productTags.toString(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'TotalStock',
-              value: product.variations.isNotEmpty &&
-                      product.variations[0].skus.isNotEmpty
-                  ? product.variations[0].skus[0].quantity.toString()
+              value: widget.product.variations.isNotEmpty &&
+                      widget.product.variations[0].skus.isNotEmpty
+                  ? widget.product.variations[0].skus[0].quantity.toString()
                   : 'N/A',
             ),
           ),

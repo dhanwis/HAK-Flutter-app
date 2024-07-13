@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<List<String>> fetchSimilarProductImages(String productId) async {
-  final apiUrl =
-      'http://192.168.1.31:8000/productAdmin/product/similar/$productId';
+Future<List<String>> fetchSimilarProductById(String id) async {
+  final apiUrl = 'http://192.168.1.31:8000/productAdmin/product/similar/$id';
 
   final response = await http.get(Uri.parse(apiUrl));
 
-  print('Fetching similar product images for product ID: $productId');
+  print('Fetching similar product images for product ID: $id');
 
   if (response.statusCode == 200) {
     final List<dynamic> data = json.decode(response.body);

@@ -1,5 +1,7 @@
+import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/similarproducts_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,17 +22,30 @@ class ProductDetailPage extends StatefulWidget {
     required this.product,
   }) : super(key: key);
 
+  get similarProductImages => null;
+
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Future<List<String>> similarProductsFuture;
+  late NewArrivalProduct currentProduct;
 
   @override
   void initState() {
     super.initState();
-    similarProductsFuture = fetchSimilarProductImages(widget.product.id);
+    currentProduct = widget.product;
+    similarProductsFuture = fetchSimilarProductById(widget.product.id);
+  }
+
+   Future<void> fetchProductDetails(String productId) async {
+    // Fetch product details by productId
+    NewArrivalProduct newProduct = await fetchProductById(productId),
+    setState(() {
+      currentProduct = newProduct;
+      similarProductsFuture = fetchSimilarProductImages(productId);
+    });
   }
 
   @override
@@ -133,6 +148,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ],
           ),
+          // FutureBuilder<List<String>>(
+          //   future: similarProductsFuture,
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //       return Center(child: CircularProgressIndicator());
+          //     } else if (snapshot.hasError) {
+          //       return Center(child: Text('Error: ${snapshot.error}'));
+          //     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          //       return Center(child: Text('No similar products found.'));
+          //     } else {
+          //       return Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           children: List.generate(
+          //             snapshot.data!.length,
+          //             (index) => Padding(
+          //               padding: const EdgeInsets.symmetric(horizontal: 10),
+          //               child: CircleAvatar(
+          //                 backgroundImage: NetworkImage(snapshot.data![index]),
+          //                 backgroundColor: Colors.grey.shade200,
+          //                 radius: 40,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       );
+          //     }
+          //   },
+          // ),
           FutureBuilder<List<String>>(
             future: similarProductsFuture,
             builder: (context, snapshot) {
@@ -151,10 +196,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       snapshot.data!.length,
                       (index) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(snapshot.data![index]),
-                          backgroundColor: Colors.grey.shade200,
-                          radius: 40,
+                        child: GestureDetector(
+                          // onTap: () =>
+                          //     {fetchProductById(snapshot.data![index])},
+                          onTap: () => (snapshot.data![index]),
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(snapshot.data![index]),
+                            backgroundColor: Colors.grey.shade200,
+                            radius: 40,
+                          ),
                         ),
                       ),
                     ),

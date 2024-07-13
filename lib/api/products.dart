@@ -68,6 +68,8 @@ class Product {
       variations: variationsList,
     );
   }
+
+  get similarProducts => null;
 }
 
 class Variation {

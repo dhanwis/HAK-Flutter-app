@@ -72,7 +72,6 @@ class _ProductGridState extends State<ProductGrid> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        // ProductDetailpage(product: product),
                                         ProductDetailPage(product: product)),
                               );
                             },
