@@ -57,7 +57,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     SharedPreferences pref = await SharedPreferences.getInstance();
 // already generated id
-    final id = apiLinks.id;
     emit(
       OtpLoadingState(),
     );
