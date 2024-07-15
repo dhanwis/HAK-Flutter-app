@@ -23,7 +23,7 @@ class TopRow extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 35,
+            width: 80,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
