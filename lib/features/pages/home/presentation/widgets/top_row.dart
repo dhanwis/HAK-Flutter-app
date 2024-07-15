@@ -9,37 +9,36 @@ class TopRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Padding(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Align(
             alignment: Alignment.centerLeft,
             child: Image.asset(
               'assets/images/logo.png',
               color: Colors.black,
-              height: 40,
+              height: screenSize.height * 0.05,
             ),
-          ),
-          const SizedBox(
-            width: 80,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Welcome 👋',
-                style: GoogleFonts.aBeeZee(fontSize: 15),
+                style: GoogleFonts.aBeeZee(fontSize: screenSize.width * 0.04),
               ),
               Text(
                 'Manjima',
-                style: GoogleFonts.aBeeZee(fontSize: 15),
+                style: GoogleFonts.aBeeZee(fontSize: screenSize.width * 0.04),
               ),
             ],
           ),
-          const CircleAvatar(
-            radius: 20,
+          CircleAvatar(
+            radius: screenSize.width * 0.05,
             backgroundColor: Palette.appTheme,
             backgroundImage: AssetImage(
               'assets/images/manji.jpeg',
