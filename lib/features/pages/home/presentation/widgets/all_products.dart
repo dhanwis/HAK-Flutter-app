@@ -35,9 +35,7 @@ class AllProducts extends StatelessWidget {
 
   Widget _buildProductsGrid() {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-      ),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

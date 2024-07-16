@@ -4,8 +4,10 @@ import 'package:http/http.dart' as http;
 
 class GetAllNewArrivalsApi {
   Future<List<Product>> fetchNewArrivals() async {
+    // final response = await http.get(Uri.parse(
+    //     'http://192.168.1.31:8000/productAdmin/product/new-arrivals'));
     final response = await http.get(Uri.parse(
-        'http://192.168.1.31:8000/productAdmin/product/new-arrivals'));
+        'https://hak-server-side.onrender.com/productAdmin/product/new-arrivals'));
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
