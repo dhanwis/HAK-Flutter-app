@@ -154,37 +154,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ],
           ),
-          // FutureBuilder<List<String>>(
-          //   future: similarProductsFuture,
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return Center(child: CircularProgressIndicator());
-          //     } else if (snapshot.hasError) {
-          //       return Center(child: Text('Error: ${snapshot.error}'));
-          //     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          //       return Center(child: Text('No similar products found.'));
-          //     } else {
-          //       return Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           children: List.generate(
-          //             snapshot.data!.length,
-          //             (index) => Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal: 10),
-          //               child: CircleAvatar(
-          //                 backgroundImage: NetworkImage(snapshot.data![index]),
-          //                 backgroundColor: Colors.grey.shade200,
-          //                 radius: 40,
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       );
-          //     }
-          //   },
-          // ),
-
+          
           FutureBuilder<List<Product>>(
             future: similarProductsFuture,
             builder: (context, snapshot) {
