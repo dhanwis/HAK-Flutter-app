@@ -43,24 +43,21 @@ class _HomePageState extends State<HomePage> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: CustomScrollView(
         slivers: [
-
-           SliverAppBar(
-
-            title:TopRow(),
+          SliverAppBar(
+            title: TopRow(),
             centerTitle: false,
             floating: true,
             backgroundColor: Colors.transparent,
-
           ),
-          SliverToBoxAdapter(child: AppSearchBar(
-            width: width,
-          ),),
-
+          SliverToBoxAdapter(
+            child: AppSearchBar(
+              width: width,
+            ),
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),

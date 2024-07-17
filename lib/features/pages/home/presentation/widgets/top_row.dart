@@ -14,10 +14,13 @@ class TopRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          'assets/images/logo-2.png',
-          color: Colors.black,
-          height: screenSize.height * 0.05,
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: Image.asset(
+            'assets/images/logo-2.png',
+            color: Colors.black,
+            height: screenSize.height * 0.05,
+          ),
         ),
         Row(
           children: [
