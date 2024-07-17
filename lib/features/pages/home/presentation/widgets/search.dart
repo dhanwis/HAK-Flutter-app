@@ -15,55 +15,58 @@ class AppSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15),
-            child: Center(
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(99, 202, 201, 202),
-                ),
-                child: TextFormField(
-                  style: const TextStyle(color: Palette.shadowPink),
-                  cursorColor: Colors.grey.shade50,
-                  decoration: InputDecoration(
-                      hintText: 'Search Products',
-                      hintStyle: GoogleFonts.aBeeZee(
-                          color: const Color.fromARGB(255, 182, 182, 182)),
-                      prefixIcon: const Icon(
-                        EvaIcons.search,
-                        color: Color.fromARGB(255, 175, 174, 174),
-                      ),
-                      contentPadding: const EdgeInsets.only(top: 13),
-                      border: InputBorder.none),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15,),
+              child: Center(
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color.fromARGB(99, 202, 201, 202),
+                  ),
+                  child: TextFormField(
+                    style: const TextStyle(color: Palette.shadowPink),
+                    cursorColor: Colors.grey.shade50,
+                    decoration: InputDecoration(
+                        hintText: 'Search Products',
+                        hintStyle: GoogleFonts.aBeeZee(
+                            color: const Color.fromARGB(255, 182, 182, 182)),
+                        prefixIcon: const Icon(
+                          EvaIcons.search,
+                          color: Color.fromARGB(255, 175, 174, 174),
+                        ),
+                        contentPadding: const EdgeInsets.only(top: 13),
+                        border: InputBorder.none),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            BlocProvider.of<HomeBloc>(context).add(FetchCategoriesEvent());
-          },
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 235, 228, 228),
-                borderRadius: BorderRadius.circular(15)),
-            width: 60,
-            child: const Center(
-              child: Icon(
-                EvaIcons.arrowForward,
-                color: Color.fromARGB(255, 147, 144, 144),
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<HomeBloc>(context).add(FetchCategoriesEvent());
+            },
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 235, 228, 228),
+                  borderRadius: BorderRadius.circular(15)),
+              width: 60,
+              child: const Center(
+                child: Icon(
+                  EvaIcons.arrowForward,
+                  color: Color.fromARGB(255, 147, 144, 144),
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

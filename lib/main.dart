@@ -1,15 +1,11 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
-
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
-import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
-
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -49,7 +45,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home: HomeScreen(),
+        home: DilHackBottomNavBar(),
         // LoginPage(),
 
         // HomeScreen(),

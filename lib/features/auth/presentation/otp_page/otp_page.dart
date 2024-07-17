@@ -4,7 +4,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/login_button.dart';
-import 'package:dil_hack_e_commerce/features/hak_bottom_bar/home_screen.dart';
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 
 import 'package:flutter/material.dart';

@@ -81,12 +81,8 @@
 //   }
 // }
 
-import 'dart:ui';
 
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});

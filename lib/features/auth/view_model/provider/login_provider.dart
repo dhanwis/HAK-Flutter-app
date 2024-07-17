@@ -3,7 +3,7 @@
 // import 'dart:developer';
 // import 'package:dil_hack_e_commerce/core/const/snackbar.dart';
 // import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/otp_page.dart';
-// import 'package:dil_hack_e_commerce/features/bottom_bar/home_screen.dart';
+// import 'package:dil_hack_e_commerce/features/bottom_bar/bottom_bar.dart';
 // import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 // import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 // import 'package:dil_hack_e_commerce/secrets/api_links.dart';
