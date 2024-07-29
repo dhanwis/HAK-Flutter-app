@@ -81,182 +81,278 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
-
   @override
-  State<CartPage> createState() => _CartPageState();
+  _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
+  List<Product> products = [
+    Product(
+      imageUrl: 'assets/products/pr4.jpeg',
+      productName: 'Gown',
+      productDescription:
+          'Silhouette: A-line, fit-and-flare, sheath, empire waist, ',
+      size: 'XXL',
+      quantity: 1,
+      price: 575.00,
+      oldPrice: 2499.00,
+      discount: 77,
+      savings: 1924.00,
+    ),
+    Product(
+      imageUrl: 'assets/products/pr4.jpeg',
+      productName: 'Georget Saree',
+      productDescription: 'Traditional Indian garment for women.',
+      size: 'XL',
+      quantity: 1,
+      price: 597.00,
+      oldPrice: 2998.00,
+      discount: 80,
+      savings: 2401.00,
+    ),
+    Product(
+      imageUrl: 'assets/products/pr4.jpeg',
+      productName: 'Kanji Silk Saree',
+      productDescription: 'Traditional Indian garment for women.',
+      size: 'XL',
+      quantity: 1,
+      price: 741.00,
+      oldPrice: 1899.00,
+      discount: 61,
+      savings: 1158.00,
+    ),
+  ];
+
+  double totalPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    totalPrice = _calculateTotalPrice();
+  }
+
+  void _removeProduct(int index) {
+    setState(() {
+      products.removeAt(index);
+      totalPrice =
+          _calculateTotalPrice(); // Update total price after removing a product
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        //   leading: IconButton(
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => HomeScreen()),
-        //       );
-        //     },
-        //     icon: const Icon(Icons.arrow_back),
-        //   ),
-        centerTitle: true,
-        title: Text(
-          "Cart",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: const Text(
+          'Cart',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0xFFFAAAB1),
+        centerTitle: true,
+        leading: const Icon(Icons.arrow_back_ios),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_bag_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: ListView(
+      body: Column(
         children: [
-          SizedBox(
-            height: 30,
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                return ProductCard(
+                  product: products[index],
+                  onRemove: () => _removeProduct(index),
+                );
+              },
+            ),
           ),
-          Carttile(
-            height: 120,
-            width: 150,
-            imagepath: "assets/products/pr6.jpeg",
-            itemname: "saree",
-            itemprize: 300,
+          const SizedBox(height: 8.0),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'View price details',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '₹${totalPrice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: const Color(0xFFFAAAB1),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        elevation: 5,
+                        shadowColor: Colors.black,
+                      ),
+                      child: const Text('Continue'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          Carttile(
-            height: 120,
-            width: 150,
-            imagepath: "assets/products/pr7.jpeg",
-            itemname: "kurta",
-            itemprize: 200,
-          ),
-          SizedBox(
-            height: 380,
-          ),
-          // ElevatedButton(
-          //   child: Text(
-          //     'Continue',
-          //     style: TextStyle(color: Colors.black),
-          //   ),
-          //   onPressed: () {},
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.pinkAccent,
-          //   ),
-          // ),
         ],
       ),
     );
   }
+
+  double _calculateTotalPrice() {
+    return products.fold(0, (total, product) => total + product.price);
+  }
 }
 
-class Carttile extends StatefulWidget {
-  final double height;
-  final double width;
-  final String imagepath;
-  final String itemname;
-  final int itemprize;
-  final IconData itemicon;
+class Product {
+  final String imageUrl;
+  final String productName;
+  final String productDescription;
+  final String size;
+  final int quantity;
+  final double price;
+  final double oldPrice;
+  final int discount;
+  final double savings;
 
-  Carttile({
-    super.key,
-    required this.height,
-    required this.width,
-    required this.imagepath,
-    required this.itemname,
-    required this.itemprize,
-    this.itemicon = Icons.arrow_forward,
+  Product({
+    required this.imageUrl,
+    required this.productName,
+    required this.productDescription,
+    required this.size,
+    required this.quantity,
+    required this.price,
+    required this.oldPrice,
+    required this.discount,
+    required this.savings,
+  });
+}
+
+class ProductCard extends StatelessWidget {
+  final Product product;
+  final VoidCallback onRemove;
+
+  const ProductCard({
+    required this.product,
+    required this.onRemove,
   });
 
   @override
-  State<Carttile> createState() => _CarttileState();
-}
-
-class _CarttileState extends State<Carttile> {
-  int count = 0;
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(20),
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              height: widget.height,
-              width: widget.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Image.asset(
+              product.imageUrl,
+              width: 150,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(widget.imagepath, height: 120),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Text(
+                    product.productName,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+                  Text(product.productDescription),
+                  const SizedBox(height: 8.0),
+                  Row(
                     children: [
                       Text(
-                        widget.itemname,
+                        'Size ${product.size}',
                         style: const TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      const SizedBox(height: 8.0),
+                      const SizedBox(width: 8.0),
                       Text(
-                        widget.itemprize.toString(),
-                        style: const TextStyle(
-                            fontSize: 12.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        "Size:L",
-                        style: TextStyle(
-                            fontSize: 12.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        "Remove",
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red),
+                        'Qty ${product.quantity}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  const SizedBox(height: 8.0),
+                  Row(
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            if (count > 0) {
-                              count--;
-                              setState(() {});
-                            }
-                          },
-                          icon: Icon(Icons.remove_circle)),
+                      Text('₹${product.price.toStringAsFixed(0)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 8.0),
                       Text(
-                        count.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                        '₹${product.oldPrice.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey,
+                        ),
                       ),
-                      IconButton(
-                          onPressed: () {
-                            count++;
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.add_circle)),
+                      const SizedBox(width: 8.0),
+                      Text('(${product.discount}%)'),
                     ],
                   ),
+                  Text(
+                    'You save ₹${product.savings.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      color: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text('10 day Return and Exchange'),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      TextButton(
+                        onPressed: onRemove,
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.red,
+                        ),
+                        child: Text(
+                          'Remove',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

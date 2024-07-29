@@ -17,7 +17,7 @@ class DilHackBottomNavBar extends StatefulWidget {
 }
 
 class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
-  List<Widget> pages = const [
+  List<Widget> pages = [
     HomePage(),
     CartPage(),
     FavPage(),
