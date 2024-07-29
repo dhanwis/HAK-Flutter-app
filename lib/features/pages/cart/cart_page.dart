@@ -97,10 +97,10 @@ class _CartPageState extends State<CartPage> {
           'Silhouette: A-line, fit-and-flare, sheath, empire waist, ',
       size: 'XXL',
       quantity: 1,
-      price: 575.00,
-      oldPrice: 2499.00,
+      price: 575,
+      oldPrice: 2499,
       discount: 77,
-      savings: 1924.00,
+      savings: 1924,
     ),
     Product(
       imageUrl: 'assets/products/pr4.jpeg',
@@ -137,8 +137,7 @@ class _CartPageState extends State<CartPage> {
   void _removeProduct(int index) {
     setState(() {
       products.removeAt(index);
-      totalPrice =
-          _calculateTotalPrice(); // Update total price after removing a product
+      totalPrice = _calculateTotalPrice();
     });
   }
 
@@ -202,8 +201,8 @@ class _CartPageState extends State<CartPage> {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: const Color(0xFFFAAAB1),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
