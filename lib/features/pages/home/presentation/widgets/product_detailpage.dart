@@ -1,4 +1,3 @@
-
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
@@ -154,7 +153,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ],
           ),
-          
           FutureBuilder<List<Product>>(
             future: similarProductsFuture,
             builder: (context, snapshot) {

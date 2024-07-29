@@ -3,9 +3,12 @@ import 'package:http/http.dart' as http;
 
 class BannerService {
   static const String url =
-      'https://hak-server-side.onrender.com/productAdmin/banner/view_all_banners';
-  static const String baseUrl =
-      'https://hak-server-side.onrender.com/bannerImg/';
+      'http://192.168.1.3:8000/productAdmin/banner/view_all_banners';
+  // 'http://192.168.1.3:8000/productAdmin/banner/view_all_banners'
+  // 'https://hak-server-side.onrender.com/productAdmin/banner/view_all_banners';
+  static const String baseUrl = 'http://192.168.1.3:8000/bannerImg/';
+
+  // 'https://hak-server-side.onrender.com/bannerImg/';
 
   Future<List<Banner>> fetchBanners() async {
     try {

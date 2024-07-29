@@ -14,8 +14,8 @@ class AllProducts extends StatelessWidget {
       builder: (context, state) {
         if (state is ProductsLoadingState) {
           return Center(
-            child: CircularProgressIndicator(),
-          );
+              // child: CircularProgressIndicator(),
+              );
         } else if (state is ProductsFetchedState) {
           return ListView.builder(
             itemCount: state.productList.length,

@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                 );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return SliverToBoxAdapter(
-                  child: Center(child: Text('No products found')),
+                  child: Center(child: Text('No New Arrivals found')),
                 );
               } else {
                 List<Product> products = snapshot.data!;

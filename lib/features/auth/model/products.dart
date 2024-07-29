@@ -86,7 +86,7 @@ class Variation {
   });
 
   factory Variation.fromJson(Map<String, dynamic> json, String productId) {
-    const baseUrl = 'http://192.168.1.31:8000/ProductImg/';
+    const baseUrl = 'http://192.168.1.3:8000/ProductImg/';
 
     List<String> imagesList = [];
     if (json['images'] != null) {

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'http://192.168.1.31:8000';
+const String baseUrl = 'http://192.168.1.3:8000';
 
 Future<Product> fetchProductById(String productId) async {
   final response = await http
