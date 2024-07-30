@@ -1,11 +1,11 @@
-import 'package:dil_hack_e_commerce/api/productById_api.dart';
-import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:dil_hack_e_commerce/api/productById_api.dart';
+import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
 
 class Sku {
   final double actualPrice;
@@ -30,13 +30,10 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   late Future<List<Product>> similarProductsFuture;
-  //late NewArrivalProduct currentProduct;
 
   @override
   void initState() {
     super.initState();
-    // currentProduct = widget.product;
-    //similarProductsFuture = fetchSimilarProductById(widget.product.id);
     similarProductsFuture =
         GetSimilarProductsApi().fetchSimilarProductById(widget.product.id);
   }
@@ -139,19 +136,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Similar Products',
-                  style: GoogleFonts.aBeeZee(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Similar Products',
+              style: GoogleFonts.aBeeZee(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-            ],
+            ),
           ),
           FutureBuilder<List<Product>>(
             future: similarProductsFuture,
@@ -190,23 +183,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RatingBar.builder(
-                  initialRating: 4,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  itemCount: 5,
-                  itemSize: 20,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4),
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.green,
-                  ),
-                  onRatingUpdate: (index) {},
-                ),
-              ],
+            child: RatingBar.builder(
+              initialRating: 4,
+              minRating: 1,
+              direction: Axis.horizontal,
+              itemCount: 5,
+              itemSize: 20,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.green,
+              ),
+              onRatingUpdate: (index) {},
             ),
           ),
           Padding(
@@ -226,19 +214,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Product Details',
-                  style: GoogleFonts.aBeeZee(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Product Details',
+              style: GoogleFonts.aBeeZee(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
-            ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -288,46 +272,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   : 'N/A',
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.black,
-                ),
-                label: Text(
-                  'Add to Cart',
-                  style: TextStyle(color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: BorderSide(
-                    color: Color(0xFFFAAAB1),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: RatingAndReviews(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.black,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  label: Text(
+                    'Add to Cart',
+                    style: TextStyle(color: Colors.black),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.double_arrow, color: Colors.black),
-                label: Text(
-                  'Buy Now',
-                  style: TextStyle(color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFAAAB1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                      color: Color(0xFFFAAAB1),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 34, vertical: 12),
                 ),
-              ),
-            ],
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.double_arrow, color: Colors.black),
+                  label: Text(
+                    'Buy Now',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFAAAB1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 34, vertical: 12),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
