@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingAndReviews extends StatelessWidget {
-  final double averageRating = 3.3;
+  final double averageRating = 4.3;
   final int totalRatings = 7;
   final int totalReviews = 3;
   final ratingsCount = {
@@ -45,9 +45,9 @@ class RatingAndReviews extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                          color: Colors.orange),
+                          color: Colors.black),
                     ),
-                    Icon(Icons.star, color: Colors.orange, size: 40),
+                    Icon(Icons.star, color: Colors.black, size: 40),
                   ],
                 ),
               ],
@@ -55,15 +55,14 @@ class RatingAndReviews extends StatelessWidget {
           ),
           ...ratingsCount.keys.map((rating) {
             return RatingRow(
-              ratingLabel: rating,
-              ratingCount: ratingsCount[rating]!,
-              totalRatings: totalRatings,
-              color: rating == 'Very Good'
-                  ? Colors.green
-                  : rating == 'Very Bad'
-                      ? Colors.red
-                      : Colors.grey,
-            );
+                ratingLabel: rating,
+                ratingCount: ratingsCount[rating]!,
+                totalRatings: totalRatings,
+                color: rating == 'Very Good'
+                    ? Colors.green
+                    : rating == 'Very Bad'
+                        ? Colors.red
+                        : Colors.grey);
           }).toList(),
         ],
       ),
