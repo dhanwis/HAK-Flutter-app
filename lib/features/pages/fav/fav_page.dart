@@ -295,3 +295,4 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
