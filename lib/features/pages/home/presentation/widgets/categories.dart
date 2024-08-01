@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/categories_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,15 +24,26 @@ class Categories extends StatelessWidget {
     return SizedBox(
       height: 100,
       child: ListView.builder(
-          padding: const EdgeInsets.all(0),
-          itemCount: 7,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 25.0, top: 10, bottom: 0),
-              child: Column(
-                children: [
-                  Container(
+        padding: const EdgeInsets.all(0),
+        itemCount: 7,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 25.0, top: 10, bottom: 0),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryDetailPage(
+                          category: labels[index],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: const [
@@ -53,17 +65,19 @@ class Categories extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    labels[index],
-                    style: GoogleFonts.aBeeZee(letterSpacing: 1),
-                  )
-                ],
-              ),
-            );
-          }),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  labels[index],
+                  style: GoogleFonts.aBeeZee(letterSpacing: 1),
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
