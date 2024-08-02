@@ -47,13 +47,11 @@ class _ProductGridState extends State<ProductGrid> {
               return CustomScrollView(
                 slivers: [
                   SliverGrid(
-
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
                       childAspectRatio: childAspectRatio,
                     ),
                     delegate: SliverChildBuilderDelegate(
-
                       (context, index) {
                         final product = products[index];
                         final firstVariation = product.variations.isNotEmpty
