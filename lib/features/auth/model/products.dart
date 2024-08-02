@@ -14,6 +14,10 @@ class Product {
   final String productBrand;
   final List<Variation> variations;
 
+  //this below was demmy
+  final double rating;
+  final int reviewCount;
+
   Product({
     required this.id,
     required this.productId,
@@ -29,6 +33,10 @@ class Product {
     required this.productGender,
     required this.productBrand,
     required this.variations,
+
+    //this below was demmy
+    required this.rating,
+    required this.reviewCount,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -65,6 +73,8 @@ class Product {
       productType: json['product_type']?.toString() ?? '',
       productGender: json['product_gender']?.toString() ?? '',
       productBrand: json['product_brand']?.toString() ?? '',
+      rating: 4.0,
+      reviewCount: 1200,
       variations: variationsList,
     );
   }
