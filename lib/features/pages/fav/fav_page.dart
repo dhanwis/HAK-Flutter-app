@@ -92,7 +92,7 @@ class FavPage extends StatefulWidget {
 class _FavPageState extends State<FavPage> {
   final List<Product> products = [
     Product(
-      imageUrl: 'assets/products/pr6.jpeg',
+      imageUrl: 'assets/products/pr9.jpeg',
       name: "BADODIYA'S KURTI WITH PALLAZ...",
       price: '₹547 ',
       offerPrice: '₹507 with 2 Special Offers',
@@ -110,7 +110,7 @@ class _FavPageState extends State<FavPage> {
       freeDelivery: true,
     ),
     Product(
-      imageUrl: 'assets/products/pr9.jpeg',
+      imageUrl: 'assets/products/pr6.jpeg',
       name: 'Ready to wear Daily Routine A line ...',
       price: '₹715',
       offerPrice: '₹685 with 2 Special Offers',
