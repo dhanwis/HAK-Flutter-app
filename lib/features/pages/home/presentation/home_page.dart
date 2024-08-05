@@ -1,14 +1,17 @@
-import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
+import 'package:dil_hack_e_commerce/api/category_api.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/categories.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/offer_carousel.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/search.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,35 +23,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Product>> futureProducts;
+  late Future<List<Category>> futureCategories;
 
   @override
   void initState() {
     super.initState();
     futureProducts = GetAllNewArrivalsApi().fetchNewArrivals();
+    futureCategories = CategoryApi().fetchCategories();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> categoryImages = [
-      'assets/products/pr1.jpeg',
-      'assets/products/pr2.jpeg',
-      'assets/products/pr2.jpeg',
-      'assets/products/pr2.jpeg',
-      'assets/products/pr2.jpeg',
-      'assets/products/pr2.jpeg',
-      'assets/products/pr2.jpeg',
-    ];
-
-    List<String> categoryLabels = [
-      'Saree',
-      'TShirts',
-      'Kurti',
-      'Lehanka',
-      'Salwar',
-      'Western',
-      'Traditional'
-    ];
-
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -69,36 +54,57 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                height: 100,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categoryImages.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: CircleAvatar(
-                              radius: 35,
-                              backgroundImage:
-                                  AssetImage(categoryImages[index]),
+              child: FutureBuilder<List<Category>>(
+                future: futureCategories,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('No categories found'));
+                  } else {
+                    List<Category> categories = snapshot.data!;
+                    return SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: SizedBox(
+                              width: 80,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                          "http://192.168.1.11:8000/categoryImg/${categories[index].imageUrl}"),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    categories[index].label,
+                                    style: GoogleFonts.aBeeZee(
+                                      letterSpacing: 1,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            categoryLabels[index],
-                            style: GoogleFonts.aBeeZee(
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
+                  }
+                },
               ),
             ),
           ),
