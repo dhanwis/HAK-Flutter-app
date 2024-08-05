@@ -41,7 +41,6 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     // Debug print to see the raw JSON data
-    print('Product JSON: $json');
 
     List<Variation> variationsList = [];
     if (json['variations'] != null) {
