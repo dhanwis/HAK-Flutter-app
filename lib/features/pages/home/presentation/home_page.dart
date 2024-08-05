@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: SizedBox(
-                              width: 80, // Adjust this width as needed
+                              width: 80,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                                     child: CircleAvatar(
                                       radius: 30,
                                       backgroundImage: NetworkImage(
-                                          "http://192.168.1.11:8000${categories[index].imageUrl}"),
+                                          "http://192.168.1.11:8000/categoryImg/${categories[index].imageUrl}"),
                                     ),
                                   ),
                                   const SizedBox(height: 5),
