@@ -14,6 +14,8 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/sea
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';
 import 'package:intl/intl.dart';
 
+import 'widgets/productsByCategory.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -80,6 +82,14 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductsByCategory(
+                                                      categoryId:
+                                                          categories[index]
+                                                              .id)));
                                     },
                                     child: CircleAvatar(
                                       radius: 37,
