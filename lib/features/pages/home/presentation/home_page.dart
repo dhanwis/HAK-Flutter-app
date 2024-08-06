@@ -79,9 +79,10 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                    },
                                     child: CircleAvatar(
-                                      radius: 30,
+                                      radius: 37,
                                       backgroundImage: NetworkImage(
                                           "http://192.168.1.11:8000/categoryImg/${categories[index].imageUrl}"),
                                     ),
