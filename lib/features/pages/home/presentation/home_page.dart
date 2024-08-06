@@ -88,8 +88,10 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) =>
                                                   ProductsByCategory(
                                                       categoryId:
+                                                          categories[index].id,
+                                                      categoryName:
                                                           categories[index]
-                                                              .id)));
+                                                              .label)));
                                     },
                                     child: CircleAvatar(
                                       radius: 37,
