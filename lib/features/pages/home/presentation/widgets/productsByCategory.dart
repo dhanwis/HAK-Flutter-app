@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart'; // Import the skeletonizer package
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
@@ -50,10 +51,12 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
               SliverAppBar(
                 title: Text(
                   '${widget.categoryName}',
-                  style: TextStyle(),
+                  style: GoogleFonts.aBeeZee(
+                    fontWeight: FontWeight.bold,
+                    // child:floating: true,
+                    // snap: true,
+                  ),
                 ),
-                floating: true,
-                snap: true,
               ),
             ],
             body: LayoutBuilder(
