@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -32,7 +33,13 @@ class _ViewAllButtonState extends State<ViewAllButton> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Products', style: GoogleFonts.aBeeZee()),
+        title: Text(
+          'New Arrivals',
+          style: GoogleFonts.aBeeZee(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -40,7 +47,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
         future: futureProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: DilhackLogo());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
