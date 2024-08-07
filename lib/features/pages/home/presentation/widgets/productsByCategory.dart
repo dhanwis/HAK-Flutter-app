@@ -1,7 +1,7 @@
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:skeletonizer/skeletonizer.dart'; // Import the skeletonizer package
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:intl/intl.dart';
@@ -162,15 +162,14 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                         product.productName,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: GoogleFonts.aBeeZee(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
                                       ),
                                       SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedPrice',
-                                        style: TextStyle(
+                                        style: GoogleFonts.aBeeZee(
                                           fontSize: 15.0,
                                           color: Colors.black,
                                           decoration:
@@ -180,7 +179,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedDiscount with 1 Special Offer',
-                                        style: TextStyle(
+                                        style: GoogleFonts.aBeeZee(
                                           fontSize: 14.0,
                                           color: Colors.green,
                                         ),
@@ -250,19 +249,18 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
       builder: (context, constraints) {
         final gridWidth = constraints.maxWidth;
         final crossAxisCount = gridWidth > 600 ? 3 : 2;
-        final itemHeight = screenSize.height * 0.28; // Adjust height as needed
+        final itemHeight = screenSize.height * 0.28;
 
         return CustomScrollView(
           slivers: [
             SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: crossAxisCount,
-                childAspectRatio: 0.6, // Adjust aspect ratio as needed
+                childAspectRatio: 0.6,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) => _buildSkeletonCard(itemHeight),
-                childCount:
-                    6, // Adjust this number based on expected product count
+                childCount: 6,
               ),
             ),
           ],
