@@ -6,6 +6,7 @@ import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class Sku {
   final double actualPrice;
@@ -22,8 +23,6 @@ class ProductDetailPage extends StatefulWidget {
     required this.product,
   }) : super(key: key);
 
-  get similarProductImages => null;
-
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
@@ -39,7 +38,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Future<void> fetchProductDetails(String productId) async {
-    // Fetch product details by productId
     try {
       Product newProduct = await fetchProductById(productId);
       setState(() {
@@ -61,22 +59,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            height: height * 0.6,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.product.variations.first.images.length,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  height: height * 0.6,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      widget.product.variations.first.images[index],
+          Skeletonizer(
+            enabled: widget.product.variations.isEmpty,
+            child: Container(
+              height: height * 0.6,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.product.variations.first.images.length,
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    height: height * 0.6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.network(
+                        widget.product.variations.first.images[index],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
           Padding(
@@ -152,7 +153,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             future: similarProductsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return Skeletonizer(
+                  enabled: true,
+                  child: Center(
+                      //   child: CircularProgressIndicator(),
+                      // ),
+                      ),
+                );
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
