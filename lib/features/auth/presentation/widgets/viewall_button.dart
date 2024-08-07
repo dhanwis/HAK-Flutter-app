@@ -1,9 +1,10 @@
-import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
+import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 
 class ViewAllButton extends StatefulWidget {
   final List<Product> products;
@@ -47,7 +48,10 @@ class _ViewAllButtonState extends State<ViewAllButton> {
         future: futureProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: DilhackLogo());
+            return Skeletonizer(
+              enabled: true,
+              child: _buildProductGrid([], true),
+            );
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -55,185 +59,230 @@ class _ViewAllButtonState extends State<ViewAllButton> {
           }
 
           final products = snapshot.data!;
+          return _buildProductGrid(products, false);
+        },
+      ),
+    );
+  }
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final gridWidth = constraints.maxWidth;
-              final crossAxisCount = gridWidth > 600 ? 3 : 2;
-              final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
+  Widget _buildProductGrid(List<Product> products, bool isLoading) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gridWidth = constraints.maxWidth;
+        final crossAxisCount = gridWidth > 600 ? 3 : 2;
+        final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
 
-              return CustomScrollView(
-                slivers: [
-                  SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      childAspectRatio: childAspectRatio,
+        return CustomScrollView(
+          slivers: [
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (isLoading) {
+                    return _buildSkeletonCard();
+                  } else {
+                    final product = products[index];
+                    return _buildProductCard(product);
+                  }
+                },
+                childCount: isLoading ? 6 : products.length,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildSkeletonCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 200.0,
+            color: Colors.grey[300],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 20.0,
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8.0),
+                Container(
+                  height: 20.0,
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8.0),
+                Container(
+                  height: 20.0,
+                  width: 100.0,
+                  color: Colors.grey[300],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductCard(Product product) {
+    final firstVariation =
+        product.variations.isNotEmpty ? product.variations.first : null;
+    final imageUrl = firstVariation?.images.isNotEmpty == true
+        ? firstVariation!.images.first
+        : '';
+    final skus = firstVariation?.skus ?? [];
+    final actualPrice = skus.isNotEmpty ? skus.first.actualPrice : 0;
+    final discount = skus.isNotEmpty ? skus.first.discount : 0;
+
+    final formattedPrice = NumberFormat('#,##0').format(actualPrice);
+    final formattedDiscount = NumberFormat('#,##0').format(discount);
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(product: product),
                     ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final product = products[index];
-                        final firstVariation = product.variations.isNotEmpty
-                            ? product.variations.first
-                            : null;
-                        final imageUrl =
-                            firstVariation?.images.isNotEmpty == true
-                                ? firstVariation!.images.first
-                                : '';
-                        final skus = firstVariation?.skus ?? [];
-                        final actualPrice =
-                            skus.isNotEmpty ? skus.first.actualPrice : 0;
-                        final discount =
-                            skus.isNotEmpty ? skus.first.discount : 0;
-
-                        final formattedPrice =
-                            NumberFormat('#,##0').format(actualPrice);
-                        final formattedDiscount =
-                            NumberFormat('#,##0').format(discount);
-
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Stack(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailPage(
-                                                    product: product)),
-                                      );
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.0),
-                                        topRight: Radius.circular(10.0),
-                                      ),
-                                      child: imageUrl.isNotEmpty
-                                          ? Image.network(
-                                              imageUrl,
-                                              fit: BoxFit.cover,
-                                              height: screenSize.height * 0.28,
-                                              width: double.infinity,
-                                            )
-                                          : Container(
-                                              height: screenSize.height * 0.25,
-                                              width: double.infinity,
-                                              color: Colors.grey[200],
-                                              child: Icon(Icons.image),
-                                            ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 10.0,
-                                    top: 10.0,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        // Handle favorite icon tap
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 15,
-                                        child: Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      product.productName,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      '₹$formattedPrice',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Colors.black,
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      '₹$formattedDiscount with 1 Special Offer',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 2.0,
-                                            horizontal: 4.0,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius:
-                                                BorderRadius.circular(4.0),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '4.0',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12.0,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.star,
-                                                color: Colors.white,
-                                                size: 12.0,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 5.0),
-                                        Text(
-                                          '(1200)',
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      childCount: products.length,
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  child: imageUrl.isNotEmpty
+                      ? Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 0.28,
+                          width: double.infinity,
+                        )
+                      : Container(
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          width: double.infinity,
+                          color: Colors.grey[200],
+                          child: Icon(Icons.image),
+                        ),
+                ),
+              ),
+              Positioned(
+                right: 10.0,
+                top: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    //  favorite icon tap
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 15,
+                    child: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 20,
                     ),
                   ),
-                ],
-              );
-            },
-          );
-        },
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.productName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Text(
+                  '₹$formattedPrice',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Text(
+                  '₹$formattedDiscount with 1 Special Offer',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.green,
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2.0,
+                        horizontal: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            '4.0',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          Icon(
+                            Icons.star,
+                            color: Colors.white,
+                            size: 12.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 5.0),
+                    Text(
+                      '(1200)',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
