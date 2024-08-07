@@ -39,7 +39,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
     if (_isLoading) {}
 
     if (_banners.isEmpty) {
-      return Center(child: Text('No banners available'));
+      // return Center(child: Text());
     }
 
     return _banners.length == 1 ? _buildSingleBanner() : _buildCarouselSlider();
