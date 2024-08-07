@@ -2,6 +2,7 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
 
@@ -139,7 +140,7 @@ class _ProductGridState extends State<ProductGrid> {
                                       product.productName,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: GoogleFonts.aBeeZee(
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.bold,
                                       ),

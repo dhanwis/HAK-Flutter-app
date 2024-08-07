@@ -15,6 +15,7 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top
 import 'package:intl/intl.dart';
 
 import 'widgets/productsByCategory.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,7 +61,33 @@ class _HomePageState extends State<HomePage> {
                 future: futureCategories,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Skeletonizer(
+                      enabled: true,
+                      child: SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 37,
+                                  backgroundColor: Colors.grey.shade200,
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: 80,
+                                  height: 15,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -126,7 +153,23 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SliverToBoxAdapter(
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Skeletonizer(
+                    enabled: true,
+                    child: SizedBox(
+                      height: 330,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 150,
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return SliverToBoxAdapter(
