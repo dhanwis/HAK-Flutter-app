@@ -1,18 +1,23 @@
+import 'package:dil_hack_e_commerce/api/search_api.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productBySearch.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppSearchBar extends StatelessWidget {
-  const AppSearchBar({
-    super.key,
-    required this.width,
-  });
+class AppSearchBar extends StatefulWidget {
+  const AppSearchBar(
+      {super.key, required this.width, required this.onSearchTermChanged});
 
   final double width;
+  final ValueChanged<String> onSearchTermChanged;
 
+  @override
+  _AppSearchBarState createState() => _AppSearchBarState();
+}
+
+class _AppSearchBarState extends State<AppSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,9 +26,7 @@ class AppSearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 15,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: Center(
                 child: Container(
                   height: 50,
@@ -34,16 +37,20 @@ class AppSearchBar extends StatelessWidget {
                   child: TextFormField(
                     style: const TextStyle(color: Palette.shadowPink),
                     cursorColor: Colors.grey.shade50,
+                    onChanged: (value) {
+                      widget.onSearchTermChanged(value);
+                    },
                     decoration: InputDecoration(
-                        hintText: 'Search Products',
-                        hintStyle: GoogleFonts.aBeeZee(
-                            color: const Color.fromARGB(255, 182, 182, 182)),
-                        prefixIcon: const Icon(
-                          EvaIcons.search,
-                          color: Color.fromARGB(255, 175, 174, 174),
-                        ),
-                        contentPadding: const EdgeInsets.only(top: 13),
-                        border: InputBorder.none),
+                      hintText: 'Search Products',
+                      hintStyle: GoogleFonts.aBeeZee(
+                          color: const Color.fromARGB(255, 182, 182, 182)),
+                      prefixIcon: const Icon(
+                        EvaIcons.search,
+                        color: Color.fromARGB(255, 175, 174, 174),
+                      ),
+                      contentPadding: const EdgeInsets.only(top: 13),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
@@ -51,7 +58,7 @@ class AppSearchBar extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              BlocProvider.of<HomeBloc>(context).add(FetchCategoriesEvent());
+              // Add any desired functionality here
             },
             child: Container(
               height: 50,
@@ -71,4 +78,37 @@ class AppSearchBar extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget buildSearchResults(String searchTerm) {
+  return FutureBuilder<List<Product>>(
+    future: fetchSearchResults(searchTerm),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Center(child: Text('No products found'));
+      } else {
+        List<Product> products = snapshot.data!;
+        return ListView.builder(
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(products[index].productName),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductGridPage(products: products),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      }
+    },
+  );
 }

@@ -194,7 +194,7 @@ class _ProductGridState extends State<ProductGrid> {
                                         ),
                                         SizedBox(width: 5.0),
                                         Text(
-                                          '(1200)',
+                                          '(12000)',
                                           style: TextStyle(
                                             fontSize: 12.0,
                                           ),

@@ -1,0 +1,21 @@
+import 'dart:convert';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<Product>> fetchSearchResults(String query) async {
+  if (query.isEmpty) {
+    return [];
+  }
+
+  final url = 'http://192.168.1.11:8000/productAdmin/data/search?q=$query';
+  print('Fetching search results from: $url'); // Debugging line
+
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    List<dynamic> body = jsonDecode(response.body);
+    return body.map((dynamic item) => Product.fromJson(item)).toList();
+  } else {
+    throw Exception('Failed to load search results');
+  }
+}

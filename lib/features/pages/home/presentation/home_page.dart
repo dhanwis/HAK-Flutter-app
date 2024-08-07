@@ -28,6 +28,8 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Product>> futureProducts;
   late Future<List<Category>> futureCategories;
 
+  String searchTerm = '';
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    //buildSearchResults(searchTerm);
 
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
@@ -52,8 +55,20 @@ class _HomePageState extends State<HomePage> {
           SliverToBoxAdapter(
             child: AppSearchBar(
               width: width,
+              onSearchTermChanged: (String value) {
+                setState(() {
+                  searchTerm = value;
+                });
+              },
             ),
           ),
+          if (searchTerm.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 400, // Adjust height as needed
+                child: buildSearchResults(searchTerm),
+              ),
+            ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
