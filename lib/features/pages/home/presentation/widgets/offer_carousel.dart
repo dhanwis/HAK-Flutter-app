@@ -36,9 +36,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      // return Center(child: CircularProgressIndicator());
-    }
+    if (_isLoading) {}
 
     if (_banners.isEmpty) {
       return Center(child: Text('No banners available'));
