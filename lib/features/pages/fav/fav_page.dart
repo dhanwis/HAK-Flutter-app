@@ -93,7 +93,7 @@ class _FavPageState extends State<FavPage> {
   final List<Product> products = [
     Product(
       imageUrl: 'assets/products/pr9.jpeg',
-      name: "BADODIYA'S KURTI WITH PALLAZ...",
+      name: "BADODIYA'S KURTI ",
       price: '₹547 ',
       offerPrice: '₹507 with 2 Special Offers',
       rating: 4.0,
@@ -102,7 +102,7 @@ class _FavPageState extends State<FavPage> {
     ),
     Product(
       imageUrl: 'assets/products/pr7.jpeg',
-      name: 'Nyra Cut kurti, kurti for jeans , Strai...',
+      name: 'Nyra Cut kurti',
       price: '₹297',
       offerPrice: '₹277 with 1 Special Offer',
       rating: 3.9,
@@ -111,7 +111,7 @@ class _FavPageState extends State<FavPage> {
     ),
     Product(
       imageUrl: 'assets/products/pr6.jpeg',
-      name: 'Ready to wear Daily Routine A line ...',
+      name: 'Ready to wear ',
       price: '₹715',
       offerPrice: '₹685 with 2 Special Offers',
       rating: 3.3,
@@ -120,7 +120,7 @@ class _FavPageState extends State<FavPage> {
     ),
     Product(
       imageUrl: 'assets/products/pr10.jpeg',
-      name: 'Nyra Cut kurti, kurti for jeans , Strai...',
+      name: 'Nyra Cut kurti, kurti ',
       price: '₹880',
       offerPrice: '₹831 with 1 Special ',
       rating: 3.4,
@@ -198,7 +198,7 @@ class ProductCard extends StatelessWidget {
                 ),
                 child: Image.asset(
                   product.imageUrl,
-                  height: 220,
+                  height: 180,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
@@ -236,7 +236,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   product.price,
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 10.0,
                     color: Colors.black,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -245,7 +245,7 @@ class ProductCard extends StatelessWidget {
                 Text(
                   product.offerPrice,
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 10.0,
                     color: Colors.green,
                   ),
                 ),

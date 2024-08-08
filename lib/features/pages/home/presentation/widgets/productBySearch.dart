@@ -6,8 +6,10 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/pro
 
 class ProductGridPage extends StatefulWidget {
   final List<Product> products;
+  final String productName;
 
-  const ProductGridPage({super.key, required this.products});
+  const ProductGridPage(
+      {super.key, required this.products, required this.productName});
 
   @override
   _ProductGridPageState createState() => _ProductGridPageState();
@@ -22,8 +24,9 @@ class _ProductGridPageState extends State<ProductGridPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.products}',
+          widget.productName,
           style: GoogleFonts.aBeeZee(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -150,7 +153,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 15.0,
+                                          fontSize: 13.0,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

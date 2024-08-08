@@ -170,7 +170,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 15),
+                                            fontSize: 13),
                                       ),
                                       SizedBox(height: 4.0),
                                       Text(
@@ -186,7 +186,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       Text(
                                         '₹$discountedPriceInt with 1 Special Offer',
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 14.0,
+                                          fontSize: 11.0,
                                           color: Colors.green,
                                         ),
                                       ),

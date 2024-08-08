@@ -141,7 +141,8 @@ Widget buildSearchResults(String searchTerm) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProductGridPage(products: products),
+                      builder: (context) => ProductGridPage(
+                          products: products, productName: product.productName),
                     ),
                   );
                 },
