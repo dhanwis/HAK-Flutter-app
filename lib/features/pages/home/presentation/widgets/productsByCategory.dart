@@ -92,6 +92,10 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                               NumberFormat('#,##0').format(actualPrice);
                           final formattedDiscount =
                               NumberFormat('#,##0').format(discount);
+                          double discountAmount =
+                              (actualPrice * discount) / 100;
+
+                          double discountedPrice = actualPrice - discountAmount;
 
                           return Card(
                             shape: RoundedRectangleBorder(
@@ -178,7 +182,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       ),
                                       SizedBox(height: 4.0),
                                       Text(
-                                        '₹$formattedDiscount with 1 Special Offer',
+                                        '₹$discountedPrice with 1 Special Offer',
                                         style: GoogleFonts.aBeeZee(
                                           fontSize: 14.0,
                                           color: Colors.green,

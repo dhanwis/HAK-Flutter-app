@@ -72,6 +72,11 @@ class _ProductGridState extends State<ProductGrid> {
                         final formattedDiscount =
                             NumberFormat('#,##0').format(discount);
 
+                        // Calculate the discounted price
+                        double discountAmount = (actualPrice * discount) / 100;
+
+                        double discountedPrice = actualPrice - discountAmount;
+
                         return Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -156,7 +161,7 @@ class _ProductGridState extends State<ProductGrid> {
                                     ),
                                     SizedBox(height: 4.0),
                                     Text(
-                                      '₹$formattedDiscount with 1 Special Offer',
+                                      '₹$discountedPrice with 1 Special Offer',
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.green,

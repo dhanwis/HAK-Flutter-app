@@ -82,33 +82,67 @@ class _AppSearchBarState extends State<AppSearchBar> {
 
 Widget buildSearchResults(String searchTerm) {
   return FutureBuilder<List<Product>>(
-    future: fetchSearchResults(searchTerm),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Center(child: Text('Error: ${snapshot.error}'));
-      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text('No products found'));
-      } else {
-        List<Product> products = snapshot.data!;
-        return ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(products[index].productName),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductGridPage(products: products),
-                  ),
-                ).then((x) => {searchTerm = ''});
-              },
-            );
-          },
-        );
-      }
-    },
-  );
+      future: fetchSearchResults(searchTerm),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No products found'));
+        } else {
+          List<Product> products = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+
+              final firstVariation = product.variations.isNotEmpty
+                  ? product.variations.first
+                  : null;
+              final imageUrl = firstVariation?.images.isNotEmpty == true
+                  ? firstVariation!.images.first
+                  : '';
+
+              return ListTile(
+                leading: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.image,
+                              size: 50); // Placeholder for error
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                      )
+                    : Icon(Icons.search, size: 50), // Placeholder for no image
+                title: Text(product.productName),
+                subtitle: Text(product
+                    .productDescription), // Example of additional information
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductGridPage(products: products),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        }
+      });
 }

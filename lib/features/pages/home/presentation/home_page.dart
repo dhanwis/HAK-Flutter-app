@@ -40,7 +40,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    //buildSearchResults(searchTerm);
 
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           if (searchTerm.isNotEmpty)
             SliverToBoxAdapter(
               child: Container(
-                height: 400, // Adjust height as needed
+                height: 800, // Adjust height as needed
                 child: buildSearchResults(searchTerm),
               ),
             ),
