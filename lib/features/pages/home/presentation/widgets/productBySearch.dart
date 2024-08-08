@@ -29,6 +29,8 @@ class _ProductGridPageState extends State<ProductGridPage> {
                 final crossAxisCount = gridWidth > 600 ? 3 : 2;
                 final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
 
+                
+
                 return CustomScrollView(
                   slivers: [
                     SliverGrid(

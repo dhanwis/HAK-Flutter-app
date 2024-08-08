@@ -36,7 +36,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
                   ),
                   child: TextFormField(
                     style: const TextStyle(color: Palette.shadowPink),
-                    cursorColor: Colors.grey.shade50,
+                    cursorColor: Colors.grey,
                     onChanged: (value) {
                       widget.onSearchTermChanged(value);
                     },
@@ -68,7 +68,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
               width: 60,
               child: const Center(
                 child: Icon(
-                  EvaIcons.arrowForward,
+                  EvaIcons.mic,
                   color: Color.fromARGB(255, 147, 144, 144),
                 ),
               ),
@@ -103,7 +103,7 @@ Widget buildSearchResults(String searchTerm) {
                   MaterialPageRoute(
                     builder: (context) => ProductGridPage(products: products),
                   ),
-                );
+                ).then((x) => {searchTerm = ''});
               },
             );
           },
