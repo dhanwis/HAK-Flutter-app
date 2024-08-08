@@ -1,10 +1,10 @@
+import 'package:dil_hack_e_commerce/api/productByCategory.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:dil_hack_e_commerce/api/productByCategory.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsByCategory extends StatefulWidget {
   final String categoryId;
@@ -96,6 +96,8 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                               (actualPrice * discount) / 100;
 
                           double discountedPrice = actualPrice - discountAmount;
+                          // Convert discountedPrice to an integer
+                          int discountedPriceInt = discountedPrice.toInt();
 
                           return Card(
                             shape: RoundedRectangleBorder(
@@ -182,7 +184,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       ),
                                       SizedBox(height: 4.0),
                                       Text(
-                                        '₹$discountedPrice with 1 Special Offer',
+                                        '₹$discountedPriceInt with 1 Special Offer',
                                         style: GoogleFonts.aBeeZee(
                                           fontSize: 14.0,
                                           color: Colors.green,
