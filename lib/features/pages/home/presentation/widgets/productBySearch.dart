@@ -1,9 +1,8 @@
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
-//  import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 
 class ProductGridPage extends StatefulWidget {
   final List<Product> products;
@@ -21,6 +20,27 @@ class _ProductGridPageState extends State<ProductGridPage> {
     final products = widget.products;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '${widget.products}',
+          style: GoogleFonts.aBeeZee(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: products.isEmpty
           ? Center(child: Text('No products available'))
           : LayoutBuilder(
@@ -28,8 +48,6 @@ class _ProductGridPageState extends State<ProductGridPage> {
                 final gridWidth = constraints.maxWidth;
                 final crossAxisCount = gridWidth > 600 ? 3 : 2;
                 final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
-
-                
 
                 return CustomScrollView(
                   slivers: [
@@ -210,7 +228,6 @@ class _ProductGridPageState extends State<ProductGridPage> {
     );
   }
 }
-
 
 
 

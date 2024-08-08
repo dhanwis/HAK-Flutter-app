@@ -124,6 +124,7 @@ class Sku {
   final bool inStock;
   final int quantity;
   final double actualPrice;
+  final double discountedPrice;
   final String id;
 
   Sku({
@@ -132,6 +133,7 @@ class Sku {
     required this.inStock,
     required this.quantity,
     required this.actualPrice,
+    required this.discountedPrice,
     required this.id,
   });
 
@@ -145,6 +147,11 @@ class Sku {
           ? (json['actualPrice'] as int).toDouble()
           : (json['actualPrice'] is double)
               ? json['actualPrice']
+              : 0.0,
+      discountedPrice: (json['discountedPrice'] is int)
+          ? (json['discountedPrice'] as int).toDouble()
+          : (json['discountedPrice'] is double)
+              ? json['discountedPrice']
               : 0.0,
       id: json['_id']?.toString() ?? '',
     );

@@ -64,18 +64,18 @@ class _ProductGridState extends State<ProductGrid> {
                         final skus = firstVariation?.skus ?? [];
                         final actualPrice =
                             skus.isNotEmpty ? skus.first.actualPrice : 0;
-                        final discount =
-                            skus.isNotEmpty ? skus.first.discount : 0;
+                        // final discount =
+                        //     skus.isNotEmpty ? skus.first.discount : 0;
+
+                        final discountedPrice = skus.isNotEmpty &&
+                                skus.first.discountedPrice != null
+                            ? skus.first.discountedPrice
+                            : null;
 
                         final formattedPrice =
                             NumberFormat('#,##0').format(actualPrice);
                         final formattedDiscount =
-                            NumberFormat('#,##0').format(discount);
-
-                        // Calculate the discounted price
-                        double discountAmount = (actualPrice * discount) / 100;
-
-                        double discountedPrice = actualPrice - discountAmount;
+                            NumberFormat('#,##0').format(discountedPrice);
 
                         return Card(
                           shape: RoundedRectangleBorder(
@@ -161,7 +161,7 @@ class _ProductGridState extends State<ProductGrid> {
                                     ),
                                     SizedBox(height: 4.0),
                                     Text(
-                                      '₹$discountedPrice with 1 Special Offer',
+                                      '₹$formattedDiscount with 1 Special Offer',
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.green,

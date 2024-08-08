@@ -129,9 +129,14 @@ Widget buildSearchResults(String searchTerm) {
                         },
                       )
                     : Icon(Icons.search, size: 50), // Placeholder for no image
-                title: Text(product.productName),
-                subtitle: Text(product
-                    .productDescription), // Example of additional information
+                title: Text(
+                  product.productName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  product.productDescription,
+                  style: TextStyle(color: Colors.grey),
+                ), // Example of additional information
                 onTap: () {
                   Navigator.push(
                     context,
