@@ -347,7 +347,7 @@ class DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w800),
         ),
         Text(value, style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w300)),
       ],
