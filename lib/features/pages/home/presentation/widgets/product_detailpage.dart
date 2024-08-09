@@ -233,12 +233,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: DetailRow(
+          //     label: 'Color',
+          //     value: widget.product.variations.isNotEmpty
+          //         ? widget.product.variations.first.color
+          //         : 'N/A',
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
               label: 'Color',
-              value: widget.product.variations.isNotEmpty
-                  ? widget.product.variations[0].color
+              value: widget.product.variations.isNotEmpty &&
+                      widget.product.variations.first.color.isNotEmpty
+                  ? widget.product.variations.first.color
                   : 'N/A',
             ),
           ),

@@ -45,9 +45,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home:
-            //DilHackBottomNavBar(),
-            LoginPage(),
+        home: DilHackBottomNavBar(),
+        // LoginPage(),
 
         // HomeScreen(),
       ),

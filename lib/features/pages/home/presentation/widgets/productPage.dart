@@ -146,7 +146,7 @@ class _ProductGridState extends State<ProductGrid> {
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.aBeeZee(
-                                        fontSize: 12.0,
+                                        fontSize: 14.0,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -163,7 +163,7 @@ class _ProductGridState extends State<ProductGrid> {
                                     Text(
                                       '₹$formattedDiscount with 1 Special Offer',
                                       style: TextStyle(
-                                        fontSize: 10.0,
+                                        fontSize: 14.0,
                                         color: Colors.green,
                                       ),
                                     ),
