@@ -8,13 +8,6 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class Sku {
-  final double actualPrice;
-  final double discount;
-
-  Sku({required this.actualPrice, required this.discount});
-}
-
 class ProductDetailPage extends StatefulWidget {
   Product product;
 
@@ -55,6 +48,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final height = MediaQuery.of(context).size.height;
     final actualPrice = widget.product.variations.first.skus.first.actualPrice;
     final formattedPrice = NumberFormat('#,##0').format(actualPrice);
+
+    // Fetch the list of sizes from the product's variations
+    List<String> sizes = widget.product.variations.isNotEmpty
+        ? widget.product.variations.first.skus.map((sku) => sku.size).toList()
+        : [];
 
     return Scaffold(
       body: ListView(
@@ -219,7 +217,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                SizeSelector(),
+                SizeSelector(sizes: sizes), // Pass sizes list here
               ],
             ),
           ),
@@ -233,15 +231,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: DetailRow(
-          //     label: 'Color',
-          //     value: widget.product.variations.isNotEmpty
-          //         ? widget.product.variations.first.color
-          //         : 'N/A',
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: DetailRow(
@@ -343,14 +332,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
     );
   }
+}
 
-  String capitalizeFirstLetter(String str) {
-    if (str.isEmpty) return str;
-    return str[0].toUpperCase() + str.substring(1);
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  DetailRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
+        ),
+        Text(value, style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w300)),
+      ],
+    );
   }
 }
 
 class SizeSelector extends StatefulWidget {
+  final List<String> sizes;
+
+  SizeSelector({required this.sizes});
+
   @override
   _SizeSelectorState createState() => _SizeSelectorState();
 }
@@ -358,13 +367,11 @@ class SizeSelector extends StatefulWidget {
 class _SizeSelectorState extends State<SizeSelector> {
   String selectedSize = '';
 
-  final List<String> sizes = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8.0,
-      children: sizes.map((size) {
+      children: widget.sizes.map((size) {
         return ChoiceChip(
           label: Text(size),
           selected: selectedSize == size,
@@ -383,29 +390,7 @@ class _SizeSelectorState extends State<SizeSelector> {
   }
 }
 
-class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const DetailRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(color: Colors.grey[600]),
-          ),
-          Text(
-            value,
-            style: TextStyle(color: Colors.black),
-          ),
-        ],
-      ),
-    );
-  }
+String capitalizeFirstLetter(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1).toLowerCase();
 }
