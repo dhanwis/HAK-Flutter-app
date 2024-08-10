@@ -64,8 +64,6 @@ class _ProductGridState extends State<ProductGrid> {
                         final skus = firstVariation?.skus ?? [];
                         final actualPrice =
                             skus.isNotEmpty ? skus.first.actualPrice : 0;
-                        // final discount =
-                        //     skus.isNotEmpty ? skus.first.discount : 0;
 
                         final discountedPrice = skus.isNotEmpty &&
                                 skus.first.discountedPrice != null

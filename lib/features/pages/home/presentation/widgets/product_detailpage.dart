@@ -49,6 +49,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final actualPrice = widget.product.variations.first.skus.first.actualPrice;
     final formattedPrice = NumberFormat('#,##0').format(actualPrice);
 
+    print('here dta');
+    print(widget.product);
+
     // Fetch the list of sizes from the product's variations
     List<String> sizes = widget.product.variations.isNotEmpty
         ? widget.product.variations.first.skus.map((sku) => sku.size).toList()
