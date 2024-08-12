@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_section.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +42,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No products available'));
+            return const Center(child: Text('No products available'));
           }
 
           final products = snapshot.data!;
@@ -57,6 +58,23 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                     // snap: true,
                   ),
                 ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.filter_list),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Filtering(
+                                  initialSortOption: 'Relevance',
+                                  initialPriceFilters: {},
+                                  initialCategoryFilters: {},
+                                  initialMaterialFilters: {},
+                                )),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
             body: LayoutBuilder(
@@ -119,7 +137,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                         );
                                       },
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(10.0),
                                           topRight: Radius.circular(10.0),
                                         ),
@@ -136,7 +154,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                                     screenSize.height * 0.25,
                                                 width: double.infinity,
                                                 color: Colors.grey[200],
-                                                child: Icon(Icons.image),
+                                                child: const Icon(Icons.image),
                                               ),
                                       ),
                                     ),
@@ -145,7 +163,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       top: 10.0,
                                       child: GestureDetector(
                                         onTap: () {},
-                                        child: CircleAvatar(
+                                        child: const CircleAvatar(
                                           backgroundColor: Colors.white,
                                           radius: 15,
                                           child: Icon(
@@ -172,7 +190,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13),
                                       ),
-                                      SizedBox(height: 4.0),
+                                      const SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedPrice',
                                         style: GoogleFonts.aBeeZee(
@@ -182,15 +200,15 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                               TextDecoration.lineThrough,
                                         ),
                                       ),
-                                      SizedBox(height: 4.0),
+                                      const SizedBox(height: 4.0),
                                       Text(
                                         '₹$discountedPriceInt with 1 Special Offer',
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 11.0,
+                                          fontSize: 12.0,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      SizedBox(height: 4.0),
+                                      const SizedBox(height: 4.0),
                                       Row(
                                         children: [
                                           Container(
@@ -203,7 +221,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                               borderRadius:
                                                   BorderRadius.circular(4.0),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               children: [
                                                 Text(
                                                   '4.0',
@@ -220,8 +238,8 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(width: 5.0),
-                                          Text(
+                                          const SizedBox(width: 5.0),
+                                          const Text(
                                             '(1200)',
                                             style: TextStyle(
                                               fontSize: 12.0,
@@ -299,13 +317,13 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                     height: 20,
                     width: 100,
                   ),
-                  SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0),
                   Container(
                     color: Colors.grey[200],
                     height: 15,
                     width: 80,
                   ),
-                  SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0),
                   Container(
                     color: Colors.grey[200],
                     height: 15,

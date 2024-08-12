@@ -3,7 +3,12 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/fil
 import 'package:flutter/material.dart';
 
 class Filtering extends StatefulWidget {
-  const Filtering({super.key});
+  const Filtering(
+      {super.key,
+      required String initialSortOption,
+      required Map<String, bool> initialPriceFilters,
+      required Map<String, bool> initialCategoryFilters,
+      required Map<String, bool> initialMaterialFilters});
 
   @override
   _FilteringState createState() => _FilteringState();
