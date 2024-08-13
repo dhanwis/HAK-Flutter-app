@@ -4,7 +4,8 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
 class GetProductsByCategory {
-  Future<List<Product>> fetchProductByCategoryId(String categoryId) async {
+  Future<List<Product>> fetchProductByCategoryId(String categoryId,
+      {required Map<String, dynamic> filters}) async {
     print(categoryId);
 
     final response = await http

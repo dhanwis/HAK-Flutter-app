@@ -8,7 +8,8 @@ class Filtering extends StatefulWidget {
       required String initialSortOption,
       required Map<String, bool> initialPriceFilters,
       required Map<String, bool> initialCategoryFilters,
-      required Map<String, bool> initialMaterialFilters});
+      required Map<String, bool> initialMaterialFilters,
+      required Null Function(dynamic filters) onFilterApplied});
 
   @override
   _FilteringState createState() => _FilteringState();
