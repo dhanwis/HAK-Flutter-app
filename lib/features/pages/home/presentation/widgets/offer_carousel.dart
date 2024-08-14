@@ -38,9 +38,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Widget build(BuildContext context) {
     if (_isLoading) {}
 
-    if (_banners.isEmpty) {
-      // return Center(child: Text());
-    }
+    if (_banners.isEmpty) {}
 
     return _banners.length == 1 ? _buildSingleBanner() : _buildCarouselSlider();
   }
@@ -48,31 +46,20 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Widget _buildSingleBanner() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 230,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(_banners[0].imageUrl),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(1),
-        ),
-      ),
     );
   }
 
   Widget _buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 400,
+        height: MediaQuery.of(context).size.height * 0.45,
         enableInfiniteScroll: true,
         reverse: false,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeCenterPage: true,
+        enlargeCenterPage: false,
         onPageChanged: (index, reason) {},
         scrollDirection: Axis.horizontal,
       ),
@@ -84,9 +71,8 @@ class _OfferCarouselState extends State<OfferCarousel> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(banner.imageUrl),
-                  fit: BoxFit.contain,
+                  fit: BoxFit.contain, // Show the entire image without cropping
                 ),
-                borderRadius: BorderRadius.circular(1),
               ),
             );
           },
