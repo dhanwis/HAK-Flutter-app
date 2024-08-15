@@ -1,6 +1,7 @@
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_section.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,6 +58,9 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+              SliverToBoxAdapter(
+                child: FilterSection(), // Add FilterSection here
               ),
             ],
             body: LayoutBuilder(
