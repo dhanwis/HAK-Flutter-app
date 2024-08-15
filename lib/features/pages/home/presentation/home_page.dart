@@ -326,11 +326,11 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           const SliverToBoxAdapter(
-            // child: Padding(
-            //   padding: EdgeInsets.only(top: 10),
-            child: OfferCarousel(),
+            child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: OfferCarousel(),
+            ),
           ),
-          // ),
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(top: 10),
