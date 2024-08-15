@@ -190,10 +190,10 @@ class _FilterSectionState extends State<FilterSection> {
         children: [
           const SizedBox(height: 10),
           SizedBox(
-            height: 60, // Adjust height as needed
+            height: 60,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 5, // Updated to 5 to include all filter options
+              itemCount: 5,
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
