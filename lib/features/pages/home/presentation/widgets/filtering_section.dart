@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_screen.dart';
 import 'package:flutter/material.dart';
 
 class FilterSection extends StatefulWidget {
@@ -45,11 +46,34 @@ class _FilterSectionState extends State<FilterSection> {
     'Linen': false,
     'Polyester': false,
   };
-  final Map<String, bool> ColorFilters = {
+
+  final Map<String, bool> colorFilters = {
     'Red': false,
     'Black': false,
     'Pink': false,
   };
+
+  void _navigateToFilterScreen() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => FilterScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(-1.0, 0.0);
+          const end = Offset(0.0, 0.0);
+          const curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
 
   void _showSortOptions() {
     showModalBottomSheet(
@@ -169,20 +193,20 @@ class _FilterSectionState extends State<FilterSection> {
             height: 60, // Adjust height as needed
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
+              itemCount: 5, // Updated to 5 to include all filter options
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
                     return _buildFilterChip(
-                      'Sort By',
+                      'Filter',
                       context,
-                      _showSortOptions,
+                      _navigateToFilterScreen,
                     );
                   case 1:
                     return _buildFilterChip(
-                      'Price',
+                      'Sort By',
                       context,
-                      () => _showFilters('Price', priceFilters),
+                      _showSortOptions,
                     );
                   case 2:
                     return _buildFilterChip(
@@ -200,11 +224,10 @@ class _FilterSectionState extends State<FilterSection> {
                     return _buildFilterChip(
                       'Color',
                       context,
-                      () => _showFilters('color', ColorFilters),
+                      () => _showFilters('Color', colorFilters),
                     );
                   default:
-                    return SizedBox
-                        .shrink(); // Return an empty widget if index is out of bounds
+                    return SizedBox.shrink();
                 }
               },
             ),

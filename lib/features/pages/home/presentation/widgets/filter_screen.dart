@@ -37,7 +37,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 _resetFilters();
               });
             },
-            child: Text('Clear Filters', style: TextStyle(color: Colors.blue)),
+            child: Text('Clear Filters', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -68,7 +68,10 @@ class _FilterScreenState extends State<FilterScreen> {
         onPressed: () {
           _applyFilters();
         },
-        child: const Text('Apply'),
+        child: const Text(
+          'Apply',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
