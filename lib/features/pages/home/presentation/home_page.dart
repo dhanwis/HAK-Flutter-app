@@ -8,7 +8,7 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/categories.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/offer_carousel.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/offer_carousel.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/search.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';

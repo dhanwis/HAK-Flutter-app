@@ -16,9 +16,9 @@ class Banner {
   factory Banner.fromJson(Map<String, dynamic> json) {
     return Banner(
       id: json['_id'] ?? '',
-      imageUrl: json['imageUrl'] ?? '',
-      offerType: json['offerType'] ?? '',
-      targetId: json['targetId'] ?? '',
+      imageUrl: json['banner_image'] ?? '',
+      offerType: json['offer_type'] ?? '',
+      targetId: json['offer_target'] ?? '',
     );
   }
 }
