@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 class GetProductsByCategory {
   Future<List<Product>> fetchProductByCategoryId(String categoryId,
       {required Map<String, dynamic> filters}) async {
-    print(categoryId);
-
     final response = await http
         .get(Uri.parse('$baseUrl/productAdmin/product/category/$categoryId'));
 

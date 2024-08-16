@@ -30,9 +30,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           'http://192.168.1.11:8000/customers/auth/login',
           data: {'phoneNumber': event.mobileNumber});
 
-      print('response');
-      print(response);
-
       emit(AuthInitial());
 
       if (response.statusCode == 201) {
@@ -67,7 +64,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     try {
       String otp = event.otp;
-      print('otp : $otp');
 
       emit(
         OtpValidationWaitingState(),
@@ -77,9 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         'http://192.168.1.11:8000/customers/auth/otp_verification',
         data: {"otp": otp},
       );
-
-      print('response 1');
-      print(response);
 
       if (response.statusCode == 200) {
         final tokenData = AuthResponse.fromJson(response.data);

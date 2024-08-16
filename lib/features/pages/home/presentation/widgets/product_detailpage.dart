@@ -38,9 +38,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         similarProductsFuture =
             GetSimilarProductsApi().fetchSimilarProductById(newProduct.id);
       });
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   @override
@@ -48,9 +46,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final height = MediaQuery.of(context).size.height;
     final actualPrice = widget.product.variations.first.skus.first.actualPrice;
     final formattedPrice = NumberFormat('#,##0').format(actualPrice);
-
-    print('here dta');
-    print(widget.product);
 
     // Fetch the list of sizes from the product's variations
     List<String> sizes = widget.product.variations.isNotEmpty

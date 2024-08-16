@@ -1,5 +1,5 @@
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_screen.dart';
 import 'package:flutter/material.dart';
+import 'filter_screen.dart'; // Adjust this import as needed
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -11,6 +11,8 @@ class FilterSection extends StatefulWidget {
 }
 
 class _FilterSectionState extends State<FilterSection> {
+  List<int> _selectedIndices = [];
+
   final List<String> sortOptions = [
     'Relevance',
     'Popularity',
@@ -52,6 +54,95 @@ class _FilterSectionState extends State<FilterSection> {
     'Black': false,
     'Pink': false,
   };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 60,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return _buildFilterChip(
+                  index,
+                  context,
+                  () => _handleChipSelection(index),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(
+      int index, BuildContext context, VoidCallback onSelected) {
+    final isSelected = _selectedIndices.contains(index);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: FilterChip(
+        label: Text(_getChipLabel(index)),
+        selected: isSelected,
+        selectedColor: Color(0xFFFAAAB1),
+        onSelected: (bool value) {
+          setState(() {
+            if (value) {
+              _selectedIndices.add(index);
+            } else {
+              _selectedIndices.remove(index);
+            }
+          });
+          onSelected();
+        },
+      ),
+    );
+  }
+
+  void _handleChipSelection(int index) {
+    switch (index) {
+      case 0:
+        _navigateToFilterScreen();
+        break;
+      case 1:
+        _showSortOptions();
+        break;
+      case 2:
+        _showFilters('Categories', categoryFilters);
+        break;
+      case 3:
+        _showFilters('Material', materialFilters);
+        break;
+      case 4:
+        _showFilters('Color', colorFilters);
+        break;
+    }
+  }
+
+  String _getChipLabel(int index) {
+    switch (index) {
+      case 0:
+        return 'Filter';
+      case 1:
+        return 'Sort By';
+      case 2:
+        return 'Categories';
+      case 3:
+        return 'Material';
+      case 4:
+        return 'Color';
+      default:
+        return '';
+    }
+  }
 
   void _navigateToFilterScreen() {
     Navigator.push(
@@ -160,6 +251,9 @@ class _FilterSectionState extends State<FilterSection> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          if (widget.onFilterApplied != null) {
+                            widget.onFilterApplied!();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFAAAB1),
@@ -177,76 +271,6 @@ class _FilterSectionState extends State<FilterSection> {
           },
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return _buildFilterChip(
-                      'Filter',
-                      context,
-                      _navigateToFilterScreen,
-                    );
-                  case 1:
-                    return _buildFilterChip(
-                      'Sort By',
-                      context,
-                      _showSortOptions,
-                    );
-                  case 2:
-                    return _buildFilterChip(
-                      'Categories',
-                      context,
-                      () => _showFilters('Categories', categoryFilters),
-                    );
-                  case 3:
-                    return _buildFilterChip(
-                      'Material',
-                      context,
-                      () => _showFilters('Material', materialFilters),
-                    );
-                  case 4:
-                    return _buildFilterChip(
-                      'Color',
-                      context,
-                      () => _showFilters('Color', colorFilters),
-                    );
-                  default:
-                    return SizedBox.shrink();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(
-      String label, BuildContext context, VoidCallback onSelected) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: FilterChip(
-        label: Text(label),
-        onSelected: (bool value) {
-          onSelected();
-        },
-      ),
     );
   }
 }

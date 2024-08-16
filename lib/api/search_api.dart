@@ -8,7 +8,6 @@ Future<List<Product>> fetchSearchResults(String query) async {
   }
 
   final url = 'http://192.168.1.11:8000/productAdmin/data/search?q=$query';
-  print('Fetching search results from: $url'); // Debugging line
 
   final response = await http.get(Uri.parse(url));
 
