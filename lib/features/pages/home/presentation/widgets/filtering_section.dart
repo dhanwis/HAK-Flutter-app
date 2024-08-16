@@ -1,5 +1,6 @@
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -11,12 +12,12 @@ class FilterSection extends StatefulWidget {
 }
 
 class _FilterSectionState extends State<FilterSection> {
+  List<int> _selectedIndices = [];
   final List<String> sortOptions = [
     'Relevance',
     'Popularity',
     'Price -- Low to High',
     'Price -- High to Low',
-    'Newest First',
   ];
 
   String selectedSortOption = 'Relevance';
@@ -24,10 +25,6 @@ class _FilterSectionState extends State<FilterSection> {
   final Map<String, bool> priceFilters = {
     'Rs. 299 and below': false,
     'Rs. 300 - Rs. 499': false,
-    'Rs. 500 - Rs. 699': false,
-    'Rs. 700 - Rs. 999': false,
-    'Rs. 1000 - Rs. 1499': false,
-    'Rs. 1500 and above': false,
   };
 
   final Map<String, bool> categoryFilters = {
@@ -42,16 +39,110 @@ class _FilterSectionState extends State<FilterSection> {
   final Map<String, bool> materialFilters = {
     'Cotton': false,
     'Silk': false,
-    'Wool': false,
-    'Linen': false,
-    'Polyester': false,
   };
 
   final Map<String, bool> colorFilters = {
     'Red': false,
     'Black': false,
-    'Pink': false,
   };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 60,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return _buildFilterChip(
+                  index,
+                  context,
+                  () => _handleChipSelection(index),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(
+      int index, BuildContext context, VoidCallback onSelected) {
+    final isSelected = _selectedIndices.contains(index) ||
+        (index == 2 && _hasSelectedAnyFilters(categoryFilters)) ||
+        (index == 3 && _hasSelectedAnyFilters(materialFilters)) ||
+        (index == 4 && _hasSelectedAnyFilters(colorFilters)) ||
+        (index == 5 && _hasSelectedAnyFilters(priceFilters));
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: FilterChip(
+        label: Text(_getChipLabel(index)),
+        selected: isSelected,
+        selectedColor: Color(0xFFFAAAB1),
+        backgroundColor: Colors.grey[200],
+        onSelected: (bool value) {
+          setState(() {
+            if (value) {
+              _selectedIndices.add(index);
+            } else {
+              _selectedIndices.remove(index);
+            }
+          });
+          onSelected();
+        },
+      ),
+    );
+  }
+
+  bool _hasSelectedAnyFilters(Map<String, bool> filters) {
+    return filters.values.contains(true);
+  }
+
+  void _handleChipSelection(int index) {
+    switch (index) {
+      case 0:
+        _navigateToFilterScreen();
+        break;
+      case 1:
+        _showSortOptions();
+        break;
+      case 2:
+        _showFilters('Categories', categoryFilters);
+        break;
+      case 3:
+        _showFilters('Material', materialFilters);
+        break;
+      case 4:
+        _showFilters('Color', colorFilters);
+        break;
+    }
+  }
+
+  String _getChipLabel(int index) {
+    switch (index) {
+      case 0:
+        return 'Filter';
+      case 1:
+        return 'Sort By';
+      case 2:
+        return 'Categories';
+      case 3:
+        return 'Material';
+      case 4:
+        return 'Color';
+      default:
+        return '';
+    }
+  }
 
   void _navigateToFilterScreen() {
     Navigator.push(
@@ -152,21 +243,24 @@ class _FilterSectionState extends State<FilterSection> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Clear',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.aBeeZee(color: Colors.black),
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          if (widget.onFilterApplied != null) {
+                            widget.onFilterApplied!();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFAAAB1),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Apply',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.aBeeZee(color: Colors.black),
                         ),
                       ),
                     ],
@@ -177,76 +271,6 @@ class _FilterSectionState extends State<FilterSection> {
           },
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return _buildFilterChip(
-                      'Filter',
-                      context,
-                      _navigateToFilterScreen,
-                    );
-                  case 1:
-                    return _buildFilterChip(
-                      'Sort By',
-                      context,
-                      _showSortOptions,
-                    );
-                  case 2:
-                    return _buildFilterChip(
-                      'Categories',
-                      context,
-                      () => _showFilters('Categories', categoryFilters),
-                    );
-                  case 3:
-                    return _buildFilterChip(
-                      'Material',
-                      context,
-                      () => _showFilters('Material', materialFilters),
-                    );
-                  case 4:
-                    return _buildFilterChip(
-                      'Color',
-                      context,
-                      () => _showFilters('Color', colorFilters),
-                    );
-                  default:
-                    return SizedBox.shrink();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(
-      String label, BuildContext context, VoidCallback onSelected) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: FilterChip(
-        label: Text(label),
-        onSelected: (bool value) {
-          onSelected();
-        },
-      ),
     );
   }
 }

@@ -48,7 +48,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       }
     } catch (error) {
-      print(error);
       emit(ProductsFetchingErrorState());
     }
   }

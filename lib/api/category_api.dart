@@ -8,9 +8,6 @@ class CategoryApi {
       Uri.parse('http://192.168.1.11:8000/productAdmin/category/categories'),
     );
 
-    print('response categorues');
-    print(response);
-
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => Category.fromJson(json)).toList();
