@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'filter_screen.dart'; // Adjust this import as needed
 
 class FilterSection extends StatefulWidget {
@@ -207,7 +208,7 @@ class _FilterSectionState extends State<FilterSection> {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: GoogleFonts.aBeeZee(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
@@ -243,27 +244,23 @@ class _FilterSectionState extends State<FilterSection> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
                         ),
-                        child: const Text(
-                          'Clear',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (widget.onFilterApplied != null) {
-                            widget.onFilterApplied!();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFAAAB1),
-                        ),
-                        child: const Text(
-                          'Apply',
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        child: Text('Clear',
+                            style: GoogleFonts.aBeeZee(color: Colors.black)),
                       ),
                     ],
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      if (widget.onFilterApplied != null) {
+                        widget.onFilterApplied!();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFAAAB1),
+                    ),
+                    child: Text('Apply',
+                        style: GoogleFonts.aBeeZee(color: Colors.black)),
                   ),
                 ],
               ),
