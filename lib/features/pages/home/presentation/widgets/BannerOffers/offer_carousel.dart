@@ -1,8 +1,10 @@
+import 'package:dil_hack_e_commerce/features/auth/model/banners.dart' as custom;
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/categoryProductScreen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/productlistScreen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/singleProductScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dil_hack_e_commerce/api/banner_api.dart' as custom;
 
 class OfferCarousel extends StatefulWidget {
   const OfferCarousel({Key? key}) : super(key: key);

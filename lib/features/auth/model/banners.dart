@@ -1,3 +1,5 @@
+import 'package:dil_hack_e_commerce/api/banner_api.dart';
+
 class Banner {
   final String id;
   final String imageUrl;
@@ -16,7 +18,7 @@ class Banner {
   factory Banner.fromJson(Map<String, dynamic> json) {
     return Banner(
       id: json['_id'] ?? '',
-      imageUrl: json['banner_image'] ?? '',
+      imageUrl: '${BannerService.baseUrl}${json['banner_image']}',
       offerType: json['offer_type'] ?? '',
       targetId: json['offer_target'] ?? '',
     );

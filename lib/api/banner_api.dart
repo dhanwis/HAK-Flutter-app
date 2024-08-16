@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dil_hack_e_commerce/features/auth/model/banners.dart';
 import 'package:http/http.dart' as http;
 
 class BannerService {
@@ -26,16 +27,16 @@ class BannerService {
   }
 }
 
-class Banner {
-  final String id;
-  final String imageUrl;
+// class Banner {
+//   final String id;
+//   final String imageUrl;
 
-  Banner({required this.id, required this.imageUrl});
+//   Banner({required this.id, required this.imageUrl});
 
-  factory Banner.fromJson(Map<String, dynamic> json) {
-    return Banner(
-      id: json['_id'] ?? '',
-      imageUrl: '${BannerService.baseUrl}${json['imageUrl']}',
-    );
-  }
-}
+//   factory Banner.fromJson(Map<String, dynamic> json) {
+//     return Banner(
+//       id: json['_id'] ?? '',
+//       imageUrl: '${BannerService.baseUrl}${json['imageUrl']}',
+//     );
+//   }
+// }

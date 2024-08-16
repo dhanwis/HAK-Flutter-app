@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProductListScreen extends StatelessWidget {
-  final String listId;
-
-  ProductListScreen({required this.listId});
+  const ProductListScreen({super.key, listId});
 
   @override
   Widget build(BuildContext context) {
-    // Fetch and display products based on listId
+    return Scaffold(
+        appBar: AppBar(
+      title: Text('helooooooooo'),
+    ));
   }
 }
