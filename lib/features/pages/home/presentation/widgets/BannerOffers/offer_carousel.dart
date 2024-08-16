@@ -1,7 +1,8 @@
 import 'package:dil_hack_e_commerce/features/auth/model/banners.dart' as custom;
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/categoryProductScreen.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/productlistScreen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/singleProductScreen.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dil_hack_e_commerce/api/banner_api.dart' as custom;
@@ -109,32 +110,33 @@ class _OfferCarouselState extends State<OfferCarousel> {
 
   void _handleBannerClick(custom.Banner banner) {
     switch (banner.offerType) {
-      case 'singleProduct':
+      case 'single_product':
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                SingleProductScreen(productId: banner.targetId),
-          ),
+              builder: (context) =>
+                  //SingleProductScreen(productId: banner.targetId),
+                  ProductDetailPage(productId: banner.targetId)),
         );
         break;
-      case 'category':
+      case 'category_offer':
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                CategoryProductsScreen(categoryId: banner.targetId),
+            builder: (context) => ProductsByCategory(
+              categoryId: banner.targetId,
+            ),
           ),
         );
         break;
-      case 'productList':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductListScreen(listId: banner.targetId),
-          ),
-        );
-        break;
+      // case 'productList':
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => ProductListScreen(listId: banner.targetId),
+      //     ),
+      //   );
+      //   break;
       default:
         // Handle unexpected offerType
         break;

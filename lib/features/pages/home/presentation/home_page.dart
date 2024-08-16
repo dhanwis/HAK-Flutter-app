@@ -128,11 +128,9 @@ class _HomePageState extends State<HomePage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ProductsByCategory(
-                                                      categoryId:
-                                                          categories[index].id,
-                                                      categoryName:
-                                                          categories[index]
-                                                              .label)));
+                                                    categoryId:
+                                                        categories[index].id,
+                                                  )));
                                     },
                                     child: CircleAvatar(
                                       radius: 37,
@@ -252,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProductDetailPage(
-                                          product: products[index]),
+                                          productId: products[index].id),
                                     ),
                                   );
                                 },
