@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'filter_screen.dart'; // Adjust this import as needed
+import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -13,13 +12,11 @@ class FilterSection extends StatefulWidget {
 
 class _FilterSectionState extends State<FilterSection> {
   List<int> _selectedIndices = [];
-
   final List<String> sortOptions = [
     'Relevance',
     'Popularity',
     'Price -- Low to High',
     'Price -- High to Low',
-    'Newest First',
   ];
 
   String selectedSortOption = 'Relevance';
@@ -27,10 +24,6 @@ class _FilterSectionState extends State<FilterSection> {
   final Map<String, bool> priceFilters = {
     'Rs. 299 and below': false,
     'Rs. 300 - Rs. 499': false,
-    'Rs. 500 - Rs. 699': false,
-    'Rs. 700 - Rs. 999': false,
-    'Rs. 1000 - Rs. 1499': false,
-    'Rs. 1500 and above': false,
   };
 
   final Map<String, bool> categoryFilters = {
@@ -45,15 +38,11 @@ class _FilterSectionState extends State<FilterSection> {
   final Map<String, bool> materialFilters = {
     'Cotton': false,
     'Silk': false,
-    'Wool': false,
-    'Linen': false,
-    'Polyester': false,
   };
 
   final Map<String, bool> colorFilters = {
     'Red': false,
     'Black': false,
-    'Pink': false,
   };
 
   @override
@@ -86,7 +75,11 @@ class _FilterSectionState extends State<FilterSection> {
 
   Widget _buildFilterChip(
       int index, BuildContext context, VoidCallback onSelected) {
-    final isSelected = _selectedIndices.contains(index);
+    final isSelected = _selectedIndices.contains(index) ||
+        (index == 2 && _hasSelectedAnyFilters(categoryFilters)) ||
+        (index == 3 && _hasSelectedAnyFilters(materialFilters)) ||
+        (index == 4 && _hasSelectedAnyFilters(colorFilters)) ||
+        (index == 5 && _hasSelectedAnyFilters(priceFilters));
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -94,6 +87,7 @@ class _FilterSectionState extends State<FilterSection> {
         label: Text(_getChipLabel(index)),
         selected: isSelected,
         selectedColor: Color(0xFFFAAAB1),
+        backgroundColor: Colors.grey[200],
         onSelected: (bool value) {
           setState(() {
             if (value) {
@@ -106,6 +100,10 @@ class _FilterSectionState extends State<FilterSection> {
         },
       ),
     );
+  }
+
+  bool _hasSelectedAnyFilters(Map<String, bool> filters) {
+    return filters.values.contains(true);
   }
 
   void _handleChipSelection(int index) {
@@ -208,7 +206,7 @@ class _FilterSectionState extends State<FilterSection> {
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.aBeeZee(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
@@ -244,23 +242,27 @@ class _FilterSectionState extends State<FilterSection> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
                         ),
-                        child: Text('Clear',
-                            style: GoogleFonts.aBeeZee(color: Colors.black)),
+                        child: const Text(
+                          'Clear',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          if (widget.onFilterApplied != null) {
+                            widget.onFilterApplied!();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFFAAAB1),
+                        ),
+                        child: const Text(
+                          'Apply',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                     ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      if (widget.onFilterApplied != null) {
-                        widget.onFilterApplied!();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFAAAB1),
-                    ),
-                    child: Text('Apply',
-                        style: GoogleFonts.aBeeZee(color: Colors.black)),
                   ),
                 ],
               ),

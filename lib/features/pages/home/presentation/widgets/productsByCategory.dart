@@ -57,6 +57,15 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
               SliverToBoxAdapter(
                 child: FilterSection(), // Add FilterSection here
@@ -99,7 +108,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                               (actualPrice * discount) / 100;
 
                           double discountedPrice = actualPrice - discountAmount;
-                          // Convert discountedPrice to an integer
+
                           int discountedPriceInt = discountedPrice.toInt();
 
                           return Card(
