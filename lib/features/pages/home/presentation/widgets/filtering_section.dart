@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
@@ -242,9 +243,9 @@ class _FilterSectionState extends State<FilterSection> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Clear',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.aBeeZee(color: Colors.black),
                         ),
                       ),
                       ElevatedButton(
@@ -257,9 +258,9 @@ class _FilterSectionState extends State<FilterSection> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFAAAB1),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Apply',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.aBeeZee(color: Colors.black),
                         ),
                       ),
                     ],

@@ -32,8 +32,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     super.initState();
     // Retrieve tokens from Hive
     var tokenBox = Hive.box<Token>('tokenBox');
-    Token tokens = tokenBox.get('tokens') ??
-        Token("", ""); // Provide default values if tokens are not found
+    Token tokens = tokenBox.get('tokens') ?? Token("", "");
     accessToken = tokens.accessToken;
     refreshToken = tokens.refreshToken;
   }

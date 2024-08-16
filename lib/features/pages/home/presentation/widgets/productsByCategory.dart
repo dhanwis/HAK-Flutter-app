@@ -68,7 +68,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                 ],
               ),
               SliverToBoxAdapter(
-                child: FilterSection(), // Add FilterSection here
+                child: FilterSection(),
               ),
             ],
             body: LayoutBuilder(
