@@ -170,7 +170,8 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(product: product),
+                      builder: (context) =>
+                          ProductDetailPage(productId: product.id),
                     ),
                   );
                 },

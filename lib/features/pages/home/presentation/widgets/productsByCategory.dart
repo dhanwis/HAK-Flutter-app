@@ -9,11 +9,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsByCategory extends StatefulWidget {
   final String categoryId;
-  final String categoryName;
+  //final String categoryName;
 
-  ProductsByCategory(
-      {Key? key, required this.categoryId, required this.categoryName})
-      : super(key: key);
+  ProductsByCategory({Key? key, required this.categoryId}) : super(key: key);
 
   @override
   State<ProductsByCategory> createState() => _ProductsByCategoryState();
@@ -52,7 +50,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
                 title: Text(
-                  '${widget.categoryName}',
+                  '${widget.categoryId}',
                   style: GoogleFonts.aBeeZee(
                     fontWeight: FontWeight.bold,
                   ),
@@ -127,7 +125,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ProductDetailPage(
-                                                      product: product)),
+                                                      productId: product.id)),
                                         );
                                       },
                                       child: ClipRRect(

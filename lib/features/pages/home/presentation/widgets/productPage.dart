@@ -89,9 +89,10 @@ class _ProductGridState extends State<ProductGrid> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailPage(
-                                                    product: product)),
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  productId: product.id),
+                                        ),
                                       );
                                     },
                                     child: ClipRRect(
