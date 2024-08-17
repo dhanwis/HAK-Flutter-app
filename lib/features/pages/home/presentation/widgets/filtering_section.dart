@@ -207,7 +207,7 @@ class _FilterSectionState extends State<FilterSection> {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: GoogleFonts.aBeeZee(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
