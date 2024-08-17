@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FilterScreen extends StatefulWidget {
   @override
@@ -37,7 +38,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 _resetFilters();
               });
             },
-            child: Text('Clear Filters', style: TextStyle(color: Colors.black)),
+            child: Text('Clear Filters',
+                style: GoogleFonts.aBeeZee(color: Colors.black)),
           ),
         ],
       ),
@@ -68,9 +70,9 @@ class _FilterScreenState extends State<FilterScreen> {
         onPressed: () {
           _applyFilters();
         },
-        child: const Text(
+        child: Text(
           'Apply',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.aBeeZee(color: Colors.black),
         ),
       ),
     );
