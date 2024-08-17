@@ -160,7 +160,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                       SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedPrice',
-                                        style: TextStyle(
+                                        style: GoogleFonts.aBeeZee(
                                           fontSize: 15.0,
                                           color: Colors.black,
                                           decoration:
@@ -170,7 +170,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                       SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedDiscount with 1 Special Offer',
-                                        style: TextStyle(
+                                        style: GoogleFonts.aBeeZee(
                                           fontSize: 14.0,
                                           color: Colors.green,
                                         ),
@@ -192,7 +192,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                               children: [
                                                 Text(
                                                   '4.0',
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.aBeeZee(
                                                     color: Colors.white,
                                                     fontSize: 12.0,
                                                   ),
@@ -208,7 +208,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                           SizedBox(width: 5.0),
                                           Text(
                                             '(12000)',
-                                            style: TextStyle(
+                                            style: GoogleFonts.aBeeZee(
                                               fontSize: 12.0,
                                             ),
                                           ),
