@@ -57,9 +57,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              // Add any desired functionality here
-            },
+            onTap: () {},
             child: Container(
               height: 50,
               decoration: BoxDecoration(
@@ -113,8 +111,7 @@ Widget buildSearchResults(String searchTerm) {
                         height: 50,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.image,
-                              size: 50); // Placeholder for error
+                          return Icon(Icons.image, size: 50);
                         },
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
@@ -128,7 +125,7 @@ Widget buildSearchResults(String searchTerm) {
                           );
                         },
                       )
-                    : Icon(Icons.search, size: 50), // Placeholder for no image
+                    : Icon(Icons.search, size: 50),
                 title: Text(
                   product.productName,
                   style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
@@ -136,7 +133,7 @@ Widget buildSearchResults(String searchTerm) {
                 subtitle: Text(
                   product.productDescription,
                   style: GoogleFonts.aBeeZee(color: Colors.grey),
-                ), // Example of additional information
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
