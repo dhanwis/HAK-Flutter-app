@@ -35,7 +35,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
                     color: const Color.fromARGB(99, 202, 201, 202),
                   ),
                   child: TextFormField(
-                    style: const TextStyle(color: Palette.shadowPink),
+                    style: GoogleFonts.aBeeZee(color: Palette.shadowPink),
                     cursorColor: Colors.grey,
                     onChanged: (value) {
                       widget.onSearchTermChanged(value);
@@ -131,11 +131,11 @@ Widget buildSearchResults(String searchTerm) {
                     : Icon(Icons.search, size: 50), // Placeholder for no image
                 title: Text(
                   product.productName,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   product.productDescription,
-                  style: TextStyle(color: Colors.grey),
+                  style: GoogleFonts.aBeeZee(color: Colors.grey),
                 ), // Example of additional information
                 onTap: () {
                   Navigator.push(

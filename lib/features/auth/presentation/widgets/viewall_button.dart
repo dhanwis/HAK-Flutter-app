@@ -224,7 +224,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                   product.productName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: GoogleFonts.aBeeZee(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -232,7 +232,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 SizedBox(height: 4.0),
                 Text(
                   '₹$formattedPrice',
-                  style: TextStyle(
+                  style: GoogleFonts.aBeeZee(
                     fontSize: 15.0,
                     color: Colors.black,
                     decoration: TextDecoration.lineThrough,
@@ -241,7 +241,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 SizedBox(height: 4.0),
                 Text(
                   '₹$formattedDiscount with 1 Special Offer',
-                  style: TextStyle(
+                  style: GoogleFonts.aBeeZee(
                     fontSize: 14.0,
                     color: Colors.green,
                   ),
@@ -262,7 +262,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                         children: [
                           Text(
                             '4.0',
-                            style: TextStyle(
+                            style: GoogleFonts.aBeeZee(
                               color: Colors.white,
                               fontSize: 12.0,
                             ),
@@ -278,7 +278,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                     SizedBox(width: 5.0),
                     Text(
                       '(1200)',
-                      style: TextStyle(
+                      style: GoogleFonts.aBeeZee(
                         fontSize: 12.0,
                       ),
                     ),

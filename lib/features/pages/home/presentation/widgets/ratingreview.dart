@@ -92,7 +92,7 @@ class RatingRow extends StatelessWidget {
           Expanded(
             child: Text(
               ratingLabel,
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: GoogleFonts.aBeeZee(fontSize: 16, color: Colors.black),
             ),
           ),
           SizedBox(width: 8),
@@ -107,7 +107,7 @@ class RatingRow extends StatelessWidget {
           SizedBox(width: 8),
           Text(
             ratingCount.toString(),
-            style: TextStyle(fontSize: 16, color: Colors.black),
+            style: GoogleFonts.aBeeZee(fontSize: 16, color: Colors.black),
           ),
         ],
       ),
