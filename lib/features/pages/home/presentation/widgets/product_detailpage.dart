@@ -111,6 +111,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Expanded(
                           child: Text(
                             capitalizeFirstLetter(product.productName),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,

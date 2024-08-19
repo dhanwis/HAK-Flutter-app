@@ -222,8 +222,9 @@ class _ViewAllButtonState extends State<ViewAllButton> {
               children: [
                 Text(
                   product.productName,
-                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.aBeeZee(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,

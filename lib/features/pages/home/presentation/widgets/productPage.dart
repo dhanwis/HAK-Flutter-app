@@ -142,8 +142,9 @@ class _ProductGridState extends State<ProductGrid> {
                                   children: [
                                     Text(
                                       product.productName,
-                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
                                       style: GoogleFonts.aBeeZee(
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.bold,
