@@ -150,10 +150,10 @@ class _ProductGridPageState extends State<ProductGridPage> {
                                     children: [
                                       Text(
                                         product.productName,
-                                        maxLines: 2,
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 13.0,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
