@@ -138,9 +138,9 @@ Widget buildSearchResults(String searchTerm) {
                 ),
                 trailing: IconButton(
                   icon: Icon(
-                    Icons.arrow_forward_ios,
+                    Icons.arrow_outward_sharp,
                     color: Colors.grey,
-                    size: 16,
+                    size: 25,
                   ),
                   onPressed: () {
                     Navigator.push(

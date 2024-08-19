@@ -1,6 +1,4 @@
 import 'package:dil_hack_e_commerce/features/auth/model/banners.dart' as custom;
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/categoryProductScreen.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/singleProductScreen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
@@ -41,13 +39,9 @@ class _OfferCarouselState extends State<OfferCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
+    if (_isLoading) {}
 
-    if (_banners.isEmpty) {
-      return Center(child: Text('No banners available'));
-    }
+    if (_banners.isEmpty) {}
 
     return _banners.length == 1 ? _buildSingleBanner() : _buildCarouselSlider();
   }
