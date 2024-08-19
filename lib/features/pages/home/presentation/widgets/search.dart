@@ -136,10 +136,22 @@ Widget buildSearchResults(String searchTerm) {
                   product.productDescription,
                   style: GoogleFonts.aBeeZee(color: Colors.grey),
                 ),
-                trailing: Icon(
-                  Icons.arrow_outward, // Arrow icon
-                  color: Colors.grey,
-                  size: 25, // Adjust size as needed
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey,
+                    size: 16,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductGridPage(
+                            products: products,
+                            productName: product.productName),
+                      ),
+                    );
+                  },
                 ),
                 onTap: () {
                   Navigator.push(
