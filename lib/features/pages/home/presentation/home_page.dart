@@ -292,12 +292,12 @@ class _HomePageState extends State<HomePage> {
                                             products[index]
                                                 .productName
                                                 .toUpperCase(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: GoogleFonts.aBeeZee(
                                               fontSize: 13,
                                               fontWeight: FontWeight.w600,
                                             ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                         Text(
