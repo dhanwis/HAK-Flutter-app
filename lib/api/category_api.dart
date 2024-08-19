@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class CategoryApi {
   Future<List<Category>> fetchCategories() async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.11:8000/productAdmin/category/categories'),
+      Uri.parse('http://192.168.1.6:8000/productAdmin/category/categories'),
     );
 
     if (response.statusCode == 200) {

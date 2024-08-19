@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                                     child: CircleAvatar(
                                       radius: 37,
                                       backgroundImage: NetworkImage(
-                                          "http://192.168.1.11:8000/categoryImg/${categories[index].imageUrl}"),
+                                          "http://192.168.1.6:8000/categoryImg/${categories[index].imageUrl}"),
                                     ),
                                   ),
                                   const SizedBox(height: 5),
