@@ -26,6 +26,8 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Future<void> _fetchBanners() async {
     try {
       final banners = await _bannerService.fetchBanners();
+      print('object');
+      print(banners);
       setState(() {
         _banners = banners;
         _isLoading = false;
@@ -105,34 +107,39 @@ class _OfferCarouselState extends State<OfferCarousel> {
   void _handleBannerClick(custom.Banner banner) {
     switch (banner.offerType) {
       case 'single_product':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
+        if (banner.targetId is String) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
               builder: (context) =>
-                  //SingleProductScreen(productId: banner.targetId),
-                  ProductDetailPage(productId: banner.targetId)),
-        );
+                  ProductDetailPage(productId: banner.targetId),
+            ),
+          );
+        }
         break;
       case 'category_offer':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductsByCategory(
-              categoryId: banner.targetId,
+        if (banner.targetId is String) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ProductsByCategory(categoryId: banner.targetId),
             ),
-          ),
-        );
+          );
+        }
         break;
-      // case 'productList':
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => ProductListScreen(listId: banner.targetId),
-      //     ),
-      //   );
+      // case 'product_list':
+      //   if (banner.targetId is List<String>) {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) =>
+      //             ProductListScreen(productIds: banner.targetId),
+      //       ),
+      //     );
+      //   }
       //   break;
       default:
-        // Handle unexpected offerType
         break;
     }
   }
