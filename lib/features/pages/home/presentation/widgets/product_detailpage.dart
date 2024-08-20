@@ -196,15 +196,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: GestureDetector(
-                                  onTap: () => fetchProductDetails(
-                                      snapshot.data![index].id),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProductDetailPage(
+                                          productId: snapshot.data![index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: CircleAvatar(
-                                    backgroundImage: NetworkImage(snapshot
-                                        .data![index]
-                                        .variations
-                                        .first
-                                        .images
-                                        .first),
+                                    backgroundImage: NetworkImage(
+                                      snapshot.data![index].variations.first
+                                          .images.first,
+                                    ),
                                     backgroundColor: Colors.grey.shade200,
                                     radius: 40,
                                   ),
@@ -245,7 +251,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        SizeSelector(sizes: sizes), // Pass sizes list here
+                        SizeSelector(sizes: sizes),
                       ],
                     ),
                   ),
