@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/features/auth/model/banners.dart' as custom;
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/productlist_offercarousel.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,10 @@ class _OfferCarouselState extends State<OfferCarousel> {
   }
 
   void _handleBannerClick(custom.Banner banner) {
+    print('Offer Type: ${banner.offerType}');
+    print('Target ID: ${banner.targetId}');
+    print('Target ID Type: ${banner.targetId.runtimeType}');
+
     switch (banner.offerType) {
       case 'single_product':
         if (banner.targetId is String) {
@@ -115,6 +120,8 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductDetailPage(productId: banner.targetId),
             ),
           );
+        } else {
+          print('Single Product Target ID is not a String');
         }
         break;
       case 'category_offer':
@@ -126,20 +133,25 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductsByCategory(categoryId: banner.targetId),
             ),
           );
+        } else {
+          print('Category Offer Target ID is not a String');
         }
         break;
-      // case 'product_list':
-      //   if (banner.targetId is List<String>) {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) =>
-      //             ProductListScreen(productIds: banner.targetId),
-      //       ),
-      //     );
-      //   }
-      //   break;
+      case 'product_list':
+        if (banner.targetId is List<String>) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ProductByOffercarousel(productIds: banner.targetId),
+            ),
+          );
+        } else {
+          print('Product List Target ID is not a List<String>');
+        }
+        break;
       default:
+        print('Unknown offer type: ${banner.offerType}');
         break;
     }
   }

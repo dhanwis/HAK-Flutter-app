@@ -1,14 +1,19 @@
-import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
-import 'package:dil_hack_e_commerce/api/products_api.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:intl/intl.dart';
 
+import 'package:dil_hack_e_commerce/api/productlistbyOffer_api.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
+
 class ProductByOffercarousel extends StatefulWidget {
+  final List<String> productIds;
+
+  ProductByOffercarousel({Key? key, required this.productIds})
+      : super(key: key);
+
   @override
-  _ProductByOffercarouselState createState() => _ProductByOffercarouselState();
+  State<ProductByOffercarousel> createState() => _ProductByOffercarouselState();
 }
 
 class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
@@ -17,7 +22,8 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
   @override
   void initState() {
     super.initState();
-    futureProducts = GetAllProductApi().fetchProducts();
+    futureProducts =
+        GetProductListByOffer().fetchProductsByIds(widget.productIds);
   }
 
   @override
@@ -25,6 +31,31 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Products by Offer',
+          style: GoogleFonts.aBeeZee(
+            fontSize: 19.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.black,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Product>>(
         future: futureProducts,
         builder: (context, snapshot) {
@@ -64,7 +95,6 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
                         final skus = firstVariation?.skus ?? [];
                         final actualPrice =
                             skus.isNotEmpty ? skus.first.actualPrice : 0;
-
                         final discountedPrice = skus.isNotEmpty &&
                                 skus.first.discountedPrice != null
                             ? skus.first.discountedPrice
