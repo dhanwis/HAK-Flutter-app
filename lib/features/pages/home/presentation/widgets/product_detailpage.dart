@@ -121,7 +121,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Row(
                           children: [
                             IconButton(
-                              icon: Icon(Icons.favorite, color: Colors.red),
+                              icon: Icon(Icons.favorite_border,
+                                  color: Colors.red),
                               onPressed: () {},
                             ),
                             IconButton(

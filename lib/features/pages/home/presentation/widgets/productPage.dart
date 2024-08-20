@@ -119,15 +119,13 @@ class _ProductGridState extends State<ProductGrid> {
                                     right: 10.0,
                                     top: 10.0,
                                     child: GestureDetector(
-                                      onTap: () {
-                                        // Handle favorite icon tap
-                                      },
+                                      onTap: () {},
                                       child: CircleAvatar(
                                         backgroundColor: Colors.white,
                                         radius: 15,
                                         child: Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
+                                          Icons.favorite_border,
+                                          color: Colors.black,
                                           size: 20,
                                         ),
                                       ),
