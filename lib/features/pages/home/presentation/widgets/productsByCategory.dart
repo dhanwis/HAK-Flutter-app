@@ -176,7 +176,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                     children: [
                                       Text(
                                         product.productName,
-                                        maxLines: 2,
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
                                             fontWeight: FontWeight.bold,

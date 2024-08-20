@@ -111,8 +111,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Expanded(
                           child: Text(
                             capitalizeFirstLetter(product.productName),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -180,10 +178,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Skeletonizer(
                           enabled: true,
-                          child: Center(
-                              //   child: CircularProgressIndicator(),
-                              // ),
-                              ),
+                          child: Center(),
                         );
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
