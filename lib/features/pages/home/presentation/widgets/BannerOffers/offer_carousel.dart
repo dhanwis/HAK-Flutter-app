@@ -5,6 +5,7 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/pro
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dil_hack_e_commerce/api/banner_api.dart' as custom;
+import 'package:skeletonizer/skeletonizer.dart';
 
 class OfferCarousel extends StatefulWidget {
   const OfferCarousel({Key? key}) : super(key: key);
@@ -27,8 +28,6 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Future<void> _fetchBanners() async {
     try {
       final banners = await _bannerService.fetchBanners();
-      print('object');
-      print(banners);
       setState(() {
         _banners = banners;
         _isLoading = false;
@@ -42,11 +41,29 @@ class _OfferCarouselState extends State<OfferCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {}
+    if (_isLoading) {
+      return _buildSkeletonLoader();
+    }
 
-    if (_banners.isEmpty) {}
+    if (_banners.isEmpty) {
+      return Center();
+    }
 
     return _banners.length == 1 ? _buildSingleBanner() : _buildCarouselSlider();
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Skeletonizer(
+      child: Container(
+        height: 230,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
   }
 
   Widget _buildSingleBanner() {
@@ -106,10 +123,6 @@ class _OfferCarouselState extends State<OfferCarousel> {
   }
 
   void _handleBannerClick(custom.Banner banner) {
-    print('Offer Type: ${banner.offerType}');
-    print('Target ID: ${banner.targetId}');
-    print('Target ID Type: ${banner.targetId.runtimeType}');
-
     switch (banner.offerType) {
       case 'single_product':
         if (banner.targetId is String) {
