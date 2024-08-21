@@ -10,7 +10,6 @@ import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-// ignore: must_be_immutable
 class ProductDetailPage extends StatefulWidget {
   final String productId;
 
@@ -68,7 +67,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              return Center(child: Text('Product not found'));
+              return Center();
             } else {
               final product = snapshot.data!;
               final actualPrice =
@@ -185,8 +184,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Text('No similar products found.'));
+                        return Center();
                       } else {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),

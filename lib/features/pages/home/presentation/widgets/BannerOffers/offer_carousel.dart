@@ -59,7 +59,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
       ),
