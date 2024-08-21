@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart'; // Import skeleton loader package
 
 import 'package:dil_hack_e_commerce/api/productlistbyOffer_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
@@ -60,7 +61,7 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
         future: futureProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return _buildSkeletonLoader(screenSize);
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -250,6 +251,87 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildSkeletonLoader(Size screenSize) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gridWidth = constraints.maxWidth;
+        final crossAxisCount = gridWidth > 600 ? 3 : 2;
+        final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
+
+        return CustomScrollView(
+          slivers: [
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Skeletonizer(
+                    enabled: true,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: screenSize.height * 0.28,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 15,
+                                  color: Colors.grey[300],
+                                ),
+                                SizedBox(height: 4.0),
+                                Container(
+                                  width: 80,
+                                  height: 15,
+                                  color: Colors.grey[300],
+                                ),
+                                SizedBox(height: 4.0),
+                                Container(
+                                  width: 60,
+                                  height: 15,
+                                  color: Colors.grey[300],
+                                ),
+                                SizedBox(height: 5.0),
+                                Container(
+                                  width: 40,
+                                  height: 15,
+                                  color: Colors.grey[300],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                childCount: crossAxisCount * 2, // Adjust skeleton count
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
