@@ -27,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     try {
       final response = await dioClient.post(
-          'http://192.168.1.6:8000/customers/auth/login',
+          'http://192.168.1.11:8000/customers/auth/login',
           data: {'phoneNumber': event.mobileNumber});
 
       emit(AuthInitial());
@@ -70,7 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       // we will get the user details here
       final response = await dioClient.post(
-        'http://192.168.1.6:8000/customers/auth/otp_verification',
+        'http://192.168.1.11:8000/customers/auth/otp_verification',
         data: {"otp": otp},
       );
 

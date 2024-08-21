@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class GetSimilarProductsApi {
   Future<List<Product>> fetchSimilarProductById(id) async {
-    final apiUrl = 'http://192.168.1.6:8000/productAdmin/product/similar/$id';
+    final apiUrl = 'http://192.168.1.11:8000/productAdmin/product/similar/$id';
 
     final response = await http.get(Uri.parse(apiUrl));
 
