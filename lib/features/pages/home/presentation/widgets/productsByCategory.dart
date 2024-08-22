@@ -58,9 +58,20 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.favorite,
+                    child: IconButton(
+                      icon: Icon(Icons.favorite),
                       color: Colors.red,
+                      onPressed: () {
+                        // Add action for the favorite button
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton(
+                      icon: Icon(Icons.shopping_cart),
+                      color: Colors.black,
+                      onPressed: () {},
                     ),
                   ),
                 ],
