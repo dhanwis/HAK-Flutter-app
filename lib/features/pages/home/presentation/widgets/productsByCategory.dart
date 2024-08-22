@@ -41,7 +41,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No products available'));
+            return const Center();
           }
 
           final products = snapshot.data!;

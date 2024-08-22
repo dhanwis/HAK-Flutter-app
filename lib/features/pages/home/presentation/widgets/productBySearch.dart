@@ -45,7 +45,7 @@ class _ProductGridPageState extends State<ProductGridPage> {
         ],
       ),
       body: products.isEmpty
-          ? Center(child: Text('No products available'))
+          ? Center()
           : LayoutBuilder(
               builder: (context, constraints) {
                 final gridWidth = constraints.maxWidth;
