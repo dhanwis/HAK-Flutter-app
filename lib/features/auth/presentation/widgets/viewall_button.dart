@@ -206,8 +206,8 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                     backgroundColor: Colors.white,
                     radius: 15,
                     child: Icon(
-                      Icons.favorite,
-                      color: Colors.red,
+                      Icons.favorite_border,
+                      color: Colors.black,
                       size: 20,
                     ),
                   ),
