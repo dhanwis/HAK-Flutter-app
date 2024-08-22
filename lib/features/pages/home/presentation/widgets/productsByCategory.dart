@@ -9,7 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsByCategory extends StatefulWidget {
   final String categoryId;
-  //final String categoryName;
+  final String categoryName = "Category";
 
   ProductsByCategory({Key? key, required this.categoryId}) : super(key: key);
 
@@ -50,7 +50,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
                 title: Text(
-                  '${widget.categoryId}',
+                  '${widget.categoryName}',
                   style: GoogleFonts.aBeeZee(
                     fontWeight: FontWeight.bold,
                   ),
