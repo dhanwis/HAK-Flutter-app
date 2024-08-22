@@ -88,7 +88,7 @@ class _FilterSectionState extends State<FilterSection> {
         label: Text(_getChipLabel(index)),
         selected: isSelected,
         selectedColor: Color(0xFFFAAAB1),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.white,
         onSelected: (bool value) {
           setState(() {
             if (value) {
