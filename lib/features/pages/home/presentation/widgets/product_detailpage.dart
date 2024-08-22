@@ -41,7 +41,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           GetSimilarProductsApi().fetchSimilarProductById(product.id);
       return product;
     } catch (e) {
-      print(e);
       throw Exception('Failed to load product');
     }
   }

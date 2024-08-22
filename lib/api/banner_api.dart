@@ -12,8 +12,6 @@ class BannerService {
     try {
       final response = await http.get(Uri.parse(url));
 
-      print(response);
-
       if (response.statusCode == 200) {
         final List<dynamic> bannerJson = json.decode(response.body);
         return bannerJson.map((json) => Banner.fromJson(json)).toList();

@@ -133,9 +133,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductDetailPage(productId: banner.targetId),
             ),
           );
-        } else {
-          print('Single Product Target ID is not a String');
-        }
+        } else {}
         break;
       case 'category_offer':
         if (banner.targetId is String) {
@@ -146,9 +144,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductsByCategory(categoryId: banner.targetId),
             ),
           );
-        } else {
-          print('Category Offer Target ID is not a String');
-        }
+        } else {}
         break;
       case 'product_list':
         if (banner.targetId is List<String>) {
@@ -159,12 +155,9 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductByOffercarousel(productIds: banner.targetId),
             ),
           );
-        } else {
-          print('Product List Target ID is not a List<String>');
-        }
+        } else {}
         break;
       default:
-        print('Unknown offer type: ${banner.offerType}');
         break;
     }
   }
