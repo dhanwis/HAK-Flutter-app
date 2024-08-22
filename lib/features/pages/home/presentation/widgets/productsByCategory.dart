@@ -61,9 +61,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                     child: IconButton(
                       icon: Icon(Icons.favorite),
                       color: Colors.red,
-                      onPressed: () {
-                        // Add action for the favorite button
-                      },
+                      onPressed: () {},
                     ),
                   ),
                   Padding(

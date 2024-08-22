@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class GetAllProductApi {
   static const String url =
-      'http://192.168.1.11:8000/productAdmin/product/view_all_products';
+      'http://192.168.1.6:8000/productAdmin/product/view_all_products';
   // 'https://hak-server-side.onrender.com/productAdmin/product/view_all_products';
 
   Future<List<Product>> fetchProducts() async {
