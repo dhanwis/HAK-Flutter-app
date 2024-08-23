@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';

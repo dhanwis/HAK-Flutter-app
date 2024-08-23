@@ -1,10 +1,10 @@
+import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/Product/product_bloc.dart';
+//import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
-import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,42 +16,31 @@ void main() async {
   runApp(const MyApp());
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // AuthBloc Provider
         BlocProvider(
           create: (context) => AuthBloc(),
         ),
+        // HomeBloc Provider
+        // BlocProvider(
+        //   create: (context) => HomeBloc(),
+        // ),
+        // ProductBloc Provider
+
         BlocProvider(
-          create: (context) => HomeBloc()..add(FetchProductEvent()),
+          create: (context) => ProductBloc(productApi: GetAllProductApi()),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home:
-            //  SplashScreen(),
-            DilHackBottomNavBar(),
-        // LoginPage(),
-
-        // HomeScreen(),
+        home: DilHackBottomNavBar(),
+        // You can set other screens like SplashScreen(), LoginPage(), etc.
       ),
     );
   }

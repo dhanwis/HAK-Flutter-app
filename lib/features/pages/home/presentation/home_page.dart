@@ -329,9 +329,9 @@ class _HomePageState extends State<HomePage> {
               child: OfferCarousel(),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: AllProducts(),
             ),
           ),

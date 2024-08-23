@@ -79,6 +79,8 @@ class Product {
   }
 
   get similarProducts => null;
+
+  //static fromModel(ProductsModel model) {}
 }
 
 class Variation {
