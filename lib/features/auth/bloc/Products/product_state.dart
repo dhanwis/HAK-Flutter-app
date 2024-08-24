@@ -7,7 +7,9 @@ abstract class ProductState extends Equatable {
 
 class ProductInitial extends ProductState {}
 
-class ProductsLoading extends ProductState {}
+class ProductsLoading extends ProductState {
+  get products => null;
+}
 
 class ProductsLoaded extends ProductState {
   final List<Product> products;

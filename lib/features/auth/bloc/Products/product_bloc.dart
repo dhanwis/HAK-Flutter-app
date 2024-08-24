@@ -26,7 +26,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     bool hasReachedMax = false;
 
     if (currentState is ProductsLoaded) {
-      print(products.length);
       products = currentState.products;
       hasReachedMax = currentState.hasReachedMax;
     }
@@ -37,7 +36,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     try {
       final newProducts = await productApi.fetchProducts(page: event.page);
-      print(newProducts.length);
+
       hasReachedMax = newProducts.length < 10;
 
       emit(ProductsLoaded(
@@ -45,7 +44,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         hasReachedMax: hasReachedMax,
       ));
     } catch (e) {
-      print('eee');
       emit(ProductsError(message: e.toString()));
     }
   }
@@ -53,6 +51,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Future<void> _onRefreshProducts(
       RefreshProductsEvent event, Emitter<ProductState> emit) async {
     emit(ProductInitial());
-    add(FetchProductsEvent(page: 1));
+    add(FetchProductsEvent());
   }
 }

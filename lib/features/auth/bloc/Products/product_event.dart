@@ -8,7 +8,7 @@ abstract class ProductEvent extends Equatable {
 class FetchProductsEvent extends ProductEvent {
   final int page;
 
-  FetchProductsEvent({required this.page});
+  FetchProductsEvent({this.page = 1});
 
   @override
   List<Object> get props => [page];

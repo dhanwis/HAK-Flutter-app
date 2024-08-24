@@ -1,10 +1,15 @@
+import 'package:dil_hack_e_commerce/api/category_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 //import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/all_products.dart';
+//import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,22 +31,27 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBloc(),
         ),
-        // HomeBloc Provider
-        // BlocProvider(
-        //   create: (context) => HomeBloc(),
-        // ),
-        // ProductBloc Provider
 
         BlocProvider(
-          create: (context) => ProductBloc(productApi: GetAllProductApi()),
+          create: (context) => CategoryBloc(categoryApi: CategoryApi())
+            ..add(FetchCategoriesEvent()),
         ),
+
+        // BlocProvider(
+        //   create: (context) => ProductBloc(productApi: GetAllProductApi()),
+        // ),
+        BlocProvider(
+          create: (context) => ProductBloc(productApi: GetAllProductApi())
+            ..add(FetchProductsEvent()),
+        )
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home: DilHackBottomNavBar(),
-        // You can set other screens like SplashScreen(), LoginPage(), etc.
-      ),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
+          home: DilHackBottomNavBar()
+          //SplashScreen(),
+          // You can set other screens like SplashScreen(), LoginPage(), etc.
+          ),
     );
   }
 }
