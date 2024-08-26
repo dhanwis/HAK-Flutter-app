@@ -270,12 +270,13 @@ class ProductDetailPage extends StatelessWidget {
                     child: DetailRow(
                       label: 'Color',
                       value: state.product.variations.isNotEmpty &&
-                              state.product.variations.first.colorLabel
+                              state.product.variations.first.color['label']
                                   .isNotEmpty
-                          ? state.product.variations.first.colorLabel
+                          ? state.product.variations.first.color['label']
                           : 'N/A',
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DetailRow(

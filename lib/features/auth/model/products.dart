@@ -85,13 +85,13 @@ class Product {
 
 class Variation {
   final String id;
-  final String colorLabel; // Use this for displaying color in the UI
+  final Map<String, dynamic> color; // Changed from String to Map
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.colorLabel,
+    required this.color,
     required this.images,
     required this.skus,
   });
@@ -113,8 +113,7 @@ class Variation {
 
     return Variation(
       id: json['_id']?.toString() ?? '',
-      colorLabel:
-          json['color']?['label']?.toString() ?? '', // Extract the label
+      color: json['color'] ?? {}, // Now handling color as a Map
       images: imagesList,
       skus: skusList,
     );
