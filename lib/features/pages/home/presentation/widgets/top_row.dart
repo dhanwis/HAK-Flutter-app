@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,12 +39,22 @@ class TopRow extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 5,),
-            CircleAvatar(
-              radius: screenSize.width * 0.05,
-              backgroundColor: Palette.appTheme,
-              backgroundImage: AssetImage(
-                'assets/images/manji.jpeg',
+            SizedBox(
+              width: 5,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountPage()),
+                );
+              },
+              child: CircleAvatar(
+                radius: screenSize.width * 0.05,
+                backgroundColor: Palette.appTheme,
+                backgroundImage: AssetImage(
+                  'assets/images/manji.jpeg',
+                ),
               ),
             ),
           ],
