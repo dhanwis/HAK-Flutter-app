@@ -85,13 +85,13 @@ class Product {
 
 class Variation {
   final String id;
-  final String color;
+  final String colorLabel; // Use this for displaying color in the UI
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.color,
+    required this.colorLabel,
     required this.images,
     required this.skus,
   });
@@ -113,7 +113,8 @@ class Variation {
 
     return Variation(
       id: json['_id']?.toString() ?? '',
-      color: json['color']?.toString() ?? '',
+      colorLabel:
+          json['color']?['label']?.toString() ?? '', // Extract the label
       images: imagesList,
       skus: skusList,
     );
