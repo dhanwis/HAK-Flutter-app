@@ -13,8 +13,6 @@ class Product {
   final String productGender;
   final String productBrand;
   final List<Variation> variations;
-
-  //this below was demmy
   final double rating;
   final int reviewCount;
 
@@ -33,15 +31,11 @@ class Product {
     required this.productGender,
     required this.productBrand,
     required this.variations,
-
-    //this below was demmy
     required this.rating,
     required this.reviewCount,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
-    // Debug print to see the raw JSON data
-
     List<Variation> variationsList = [];
     if (json['variations'] != null) {
       var variationsJson = json['variations'] as List;
@@ -77,58 +71,17 @@ class Product {
       variations: variationsList,
     );
   }
-
-  get similarProducts => null;
-
-  //static fromModel(ProductsModel model) {}
 }
-
-// class Variation {
-//   final String id;
-//   final String color;
-//   final List<String> images;
-//   final List<Sku> skus;
-
-//   Variation({
-//     required this.id,
-//     required this.color,
-//     required this.images,
-//     required this.skus,
-//   });
-
-//   factory Variation.fromJson(Map<String, dynamic> json, String productId) {
-//     const baseUrl = 'http://192.168.1.6:8000/ProductImg/';
-
-//     List<String> imagesList = [];
-//     if (json['images'] != null) {
-//       var imagesJson = json['images'] as List;
-//       imagesList = imagesJson.map((v) => '$baseUrl$productId/$v').toList();
-//     }
-
-//     List<Sku> skusList = [];
-//     if (json['skus'] != null) {
-//       var skusJson = json['skus'] as List;
-//       skusList = skusJson.map((v) => Sku.fromJson(v)).toList();
-//     }
-
-//     return Variation(
-//       id: json['_id']?.toString() ?? '',
-//       color: json['color']?.toString() ?? '',
-//       images: imagesList,
-//       skus: skusList,
-//     );
-//   }
-// }
 
 class Variation {
   final String id;
-  final Map<String, dynamic> color; // This should be a Map
+  final String colorLabel;
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.color,
+    required this.colorLabel,
     required this.images,
     required this.skus,
   });
@@ -150,7 +103,8 @@ class Variation {
 
     return Variation(
       id: json['_id']?.toString() ?? '',
-      color: json['color'] ?? {}, // Ensure this is parsed as a Map
+      colorLabel:
+          json['color']?['label']?.toString() ?? '', // Extract the label
       images: imagesList,
       skus: skusList,
     );

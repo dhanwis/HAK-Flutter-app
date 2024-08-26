@@ -139,11 +139,14 @@ class _ProductGridState extends State<ProductGrid> {
                                           height: screenSize.height * 0.28,
                                           width: double.infinity,
                                         )
-                                      : Container(
-                                          height: screenSize.height * 0.25,
-                                          width: double.infinity,
-                                          color: Colors.grey[200],
-                                          child: Icon(Icons.image),
+                                      : Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            height: screenSize.height * 0.25,
+                                            width: double.infinity,
+                                            color: Colors.grey[200],
+                                            child: Icon(Icons.image),
+                                          ),
                                         ),
                                 ),
                               ),
