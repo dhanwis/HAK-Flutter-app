@@ -1,67 +1,34 @@
+// product_detail_page.dart
+import 'package:dil_hack_e_commerce/api/productById_api.dart';
+import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:dil_hack_e_commerce/api/productById_api.dart';
-import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class ProductDetailPage extends StatefulWidget {
+class ProductDetailPage extends StatelessWidget {
   final String productId;
 
-  ProductDetailPage({
-    Key? key,
-    required this.productId,
-  }) : super(key: key);
-
-  @override
-  _ProductDetailPageState createState() => _ProductDetailPageState();
-}
-
-class _ProductDetailPageState extends State<ProductDetailPage> {
-  late Future<Product> productFuture;
-  late Future<List<Product>> similarProductsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    productFuture = fetchProductDetails(widget.productId);
-    similarProductsFuture =
-        GetSimilarProductsApi().fetchSimilarProductById(widget.productId);
-  }
-
-  Future<Product> fetchProductDetails(String productId) async {
-    try {
-      Product product = await fetchProductById(productId);
-      similarProductsFuture =
-          GetSimilarProductsApi().fetchSimilarProductById(product.id);
-      return product;
-    } catch (e) {
-      throw Exception('Failed to load product');
-    }
-  }
+  const ProductDetailPage({Key? key, required this.productId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    //final actualPrice = productFuture.variations.first.skus.first.actualPrice;
-    // final formattedPrice = NumberFormat('#,##0').format(actualPrice);
-
-    // Fetch the list of sizes from the product's variations
-
-    // List<String> sizes = widget.productId.variations.isNotEmpty
-    //     ? widget.product.variations.first.skus.map((sku) => sku.size).toList()
-    //     : [];
-
     return Scaffold(
-      body: FutureBuilder<Product>(
-          future: productFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              // Skeleton loader when data is loading
+      body: BlocProvider(
+        create: (context) => ProductDetailBloc(
+          productApi: ProductbyidApi(),
+          similarProductsApi: GetSimilarProductsApi(),
+        )..add(FetchProductDetails(productId)),
+        child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+          builder: (context, state) {
+            if (state is ProductDetailLoading) {
               return ListView(
                 children: [
                   Skeletonizer(
@@ -113,18 +80,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ],
               );
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData) {
-              return Center(child: Text('No Product Data'));
-            } else {
-              final product = snapshot.data!;
+            } else if (state is ProductDetailLoaded) {
               final actualPrice =
-                  product.variations.first.skus.first.actualPrice;
+                  state.product.variations.first.skus.first.actualPrice;
               final formattedPrice = NumberFormat('#,##0').format(actualPrice);
 
-              List<String> sizes = product.variations.isNotEmpty
-                  ? product.variations.first.skus
+              List<String> sizes = state.product.variations.isNotEmpty
+                  ? state.product.variations.first.skus
                       .map((sku) => sku.size)
                       .toList()
                   : [];
@@ -135,14 +97,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     height: height * 0.6,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: product.variations.first.images.length,
+                      itemCount: state.product.variations.first.images.length,
                       itemBuilder: (context, index) {
                         return SizedBox(
                           height: height * 0.6,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.network(
-                              product.variations.first.images[index],
+                              state.product.variations.first.images[index],
                             ),
                           ),
                         );
@@ -156,7 +118,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       children: [
                         Expanded(
                           child: Text(
-                            capitalizeFirstLetter(product.productName),
+                            capitalizeFirstLetter(state.product.productName),
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -185,7 +147,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       children: [
                         Flexible(
                           child: Text(
-                            capitalizeFirstLetter(product.productDescription),
+                            capitalizeFirstLetter(
+                                state.product.productDescription),
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.w300,
                               fontSize: 16,
@@ -209,6 +172,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ],
                     ),
                   ),
+
+                  // Similar products UI
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -219,63 +184,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                   ),
-                  FutureBuilder<List<Product>>(
-                    future: similarProductsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Skeletonizer(
-                          enabled: true,
-                          child: Center(
-                            child: Container(
-                              height: 80,
-                              width: 80,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                          child: Text("No Similar Products Available"),
-                        );
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: List.generate(
-                              snapshot.data!.length,
-                              (index) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProductDetailPage(
-                                          productId: snapshot.data![index].id,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                      snapshot.data![index].variations.first
-                                          .images.first,
+                  if (state.similarProducts.isEmpty)
+                    Center(child: Text("No Similar Products Available"))
+                  else
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List.generate(
+                          state.similarProducts.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductDetailPage(
+                                      productId:
+                                          state.similarProducts[index].id,
                                     ),
-                                    backgroundColor: Colors.grey.shade200,
-                                    radius: 40,
                                   ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  state.similarProducts[index].variations.first
+                                      .images.first,
                                 ),
+                                backgroundColor: Colors.grey.shade200,
+                                radius: 40,
                               ),
                             ),
                           ),
-                        );
-                      }
-                    },
-                  ),
+                        ),
+                      ),
+                    ),
+
                   Padding(
                     padding: const EdgeInsets.only(top: 5, bottom: 10),
                     child: RatingBar.builder(
@@ -319,55 +264,58 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                   ),
-//  Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Color',
-//                       value: widget.product.variations.isNotEmpty &&
-//                               widget.product.variations.first.color.isNotEmpty
-//                           ? widget.product.variations.first.color
-//                           : 'N/A',
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Weight',
-//                       value: widget.product.productWeight.toString(),
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Brand',
-//                       value: widget.product.productBrand,
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Type',
-//                       value: widget.product.productType,
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Publish Date',
-//                       value: DateFormat('dd-MM-yyyy')
-//                           .format(widget.productId.productPublishDatetime),
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: DetailRow(
-//                       label: 'Total Stock',
-//                       value: widget.product.variations.isNotEmpty &&
-//                               widget.product.variations[0].skus.isNotEmpty
-//                           ? widget.product.variations[0].skus[0].quantity.toString()
-//                           : 'N/A',
-//                     ),
-//                   ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Color',
+                      value: state.product.variations.isNotEmpty &&
+                              state.product.variations.first.color.isNotEmpty
+                          ? state.product.variations.first.color
+                          : 'N/A',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Weight',
+                      value: state.product.productWeight.toString(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Brand',
+                      value: state.product.productBrand,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Type',
+                      value: state.product.productType,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Publish Date',
+                      value: DateFormat('dd-MM-yyyy')
+                          .format(state.product.productPublishDatetime),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DetailRow(
+                      label: 'Total Stock',
+                      value: state.product.variations.isNotEmpty &&
+                              state.product.variations[0].skus.isNotEmpty
+                          ? state.product.variations[0].skus[0].quantity
+                              .toString()
+                          : 'N/A',
+                    ),
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RatingAndReviews(),
@@ -420,8 +368,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ],
               );
+            } else if (state is ProductDetailError) {
+              return Center(child: Text('Error: ${state.message}'));
+            } else {
+              return Center(child: Text('Something went wrong'));
             }
-          }),
+          },
+        ),
+      ),
     );
   }
 }

@@ -11,8 +11,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetAllProductApi productApi;
 
   ProductBloc({required this.productApi}) : super(ProductInitial()) {
-    print(this.productApi);
-
     on<FetchProductsEvent>(_onFetchProducts);
     on<RefreshProductsEvent>(_onRefreshProducts);
   }
