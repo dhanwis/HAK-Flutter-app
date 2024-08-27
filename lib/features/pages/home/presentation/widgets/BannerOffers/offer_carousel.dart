@@ -125,26 +125,22 @@ class _OfferCarouselState extends State<OfferCarousel> {
   void _handleBannerClick(custom.Banner banner) {
     switch (banner.offerType) {
       case 'single_product':
-        if (banner.targetId is String) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ProductDetailPage(productId: banner.targetId),
-            ),
-          );
-        } else {}
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ProductDetailPage(productId: banner.targetId.join()),
+          ),
+        );
         break;
       case 'category_offer':
-        if (banner.targetId is String) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ProductsByCategory(categoryId: banner.targetId),
-            ),
-          );
-        } else {}
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ProductsByCategory(categoryId: banner.targetId.join()),
+          ),
+        );
         break;
       case 'product_list':
         if (banner.targetId is List<String>) {
@@ -155,7 +151,9 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductByOffercarousel(productIds: banner.targetId),
             ),
           );
-        } else {}
+        } else {
+          print('no going now product list');
+        }
         break;
       default:
         break;
