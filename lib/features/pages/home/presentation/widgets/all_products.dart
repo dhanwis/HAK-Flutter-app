@@ -67,15 +67,17 @@ class _AllProductsState extends State<AllProducts> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Products For you',
-                  style: GoogleFonts.aBeeZee(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Products For you',
+                    style: GoogleFonts.aBeeZee(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
-                SizedBox(height: 15),
                 Container(
                   height: 1000,
                   child: ProductGrid(),
@@ -86,7 +88,7 @@ class _AllProductsState extends State<AllProducts> {
         } else if (state is ProductsError) {
           return Center(child: Text('Error: ${state.message}'));
         }
-        return Center(child: Text('No Products Found'));
+        return Center();
       },
     );
   }

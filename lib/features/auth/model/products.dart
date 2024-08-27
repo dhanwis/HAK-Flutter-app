@@ -13,6 +13,8 @@ class Product {
   final String productGender;
   final String productBrand;
   final List<Variation> variations;
+
+  //this below was demmy
   final double rating;
   final int reviewCount;
 
@@ -31,11 +33,15 @@ class Product {
     required this.productGender,
     required this.productBrand,
     required this.variations,
+
+    //this below was demmy
     required this.rating,
     required this.reviewCount,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    // Debug print to see the raw JSON data
+
     List<Variation> variationsList = [];
     if (json['variations'] != null) {
       var variationsJson = json['variations'] as List;
@@ -71,17 +77,21 @@ class Product {
       variations: variationsList,
     );
   }
+
+  get similarProducts => null;
+
+  //static fromModel(ProductsModel model) {}
 }
 
 class Variation {
   final String id;
-  final String colorLabel;
+  final String color;
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.colorLabel,
+    required this.color,
     required this.images,
     required this.skus,
   });
@@ -103,8 +113,7 @@ class Variation {
 
     return Variation(
       id: json['_id']?.toString() ?? '',
-      colorLabel:
-          json['color']?['label']?.toString() ?? '', // Extract the label
+      color: json['color']?.toString() ?? '',
       images: imagesList,
       skus: skusList,
     );

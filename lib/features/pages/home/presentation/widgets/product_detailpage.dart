@@ -270,9 +270,8 @@ class ProductDetailPage extends StatelessWidget {
                     child: DetailRow(
                       label: 'Color',
                       value: state.product.variations.isNotEmpty &&
-                              state.product.variations.first.colorLabel
-                                  .isNotEmpty
-                          ? state.product.variations.first.colorLabel
+                              state.product.variations.first.color.isNotEmpty
+                          ? state.product.variations.first.color
                           : 'N/A',
                     ),
                   ),

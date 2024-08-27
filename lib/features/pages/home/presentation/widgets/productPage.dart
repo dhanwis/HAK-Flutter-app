@@ -192,7 +192,7 @@ class _ProductGridState extends State<ProductGrid> {
                                     decoration: TextDecoration.lineThrough,
                                   ),
                                 ),
-                                SizedBox(height: 4.0),
+                                SizedBox(height: 8.0),
                                 if (formattedDiscount.isNotEmpty)
                                   Text(
                                     '₹$formattedDiscount with 1 Special Offer',
@@ -201,7 +201,7 @@ class _ProductGridState extends State<ProductGrid> {
                                       color: Colors.green,
                                     ),
                                   ),
-                                SizedBox(height: 5.0),
+                                SizedBox(height: 8.0),
                                 Row(
                                   children: [
                                     Container(
