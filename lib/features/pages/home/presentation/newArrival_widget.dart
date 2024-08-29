@@ -151,7 +151,7 @@ class NewArrivalsWidget extends StatelessWidget {
             ],
           );
         } else {
-          return Center(child: Text('No new arrivals found'));
+          return Center();
         }
       },
     );

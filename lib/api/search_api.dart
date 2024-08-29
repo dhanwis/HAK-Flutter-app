@@ -13,6 +13,7 @@ Future<List<Product>> fetchSearchResults(String query) async {
 
   if (response.statusCode == 200) {
     List<dynamic> body = jsonDecode(response.body);
+
     return body.map((dynamic item) => Product.fromJson(item)).toList();
   } else {
     throw Exception('Failed to load search results');

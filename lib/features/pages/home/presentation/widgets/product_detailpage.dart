@@ -185,7 +185,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   ),
                   if (state.similarProducts.isEmpty)
-                    Center(child: Text("No Similar Products Available"))
+                    Center()
                   else
                     Padding(
                       padding: const EdgeInsets.all(8.0),

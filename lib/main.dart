@@ -9,6 +9,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
@@ -36,6 +37,10 @@ class MyApp extends StatelessWidget {
         // AuthBloc Provider
         BlocProvider(
           create: (context) => AuthBloc(),
+        ),
+
+        BlocProvider(
+          create: (context) => SearchBloc(),
         ),
 
         BlocProvider(
