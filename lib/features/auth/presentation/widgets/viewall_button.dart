@@ -38,11 +38,31 @@ class _ViewAllButtonState extends State<ViewAllButton> {
           'New Arrivals',
           style: GoogleFonts.aBeeZee(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: 17,
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(Icons.favorite),
+              color: Colors.red,
+              iconSize: 20,
+              onPressed: () {},
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              color: Colors.black,
+              iconSize: 20,
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder<List<Product>>(
         future: futureProducts,
@@ -226,7 +246,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 15.0,
+                    fontSize: 12.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -234,20 +254,20 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 Text(
                   '₹$formattedPrice',
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 15.0,
+                    fontSize: 14.0,
                     color: Colors.black,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                // SizedBox(height: 4.0),
                 Text(
                   '₹$formattedDiscount with 1 Special Offer',
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 14.0,
+                    fontSize: 11.0,
                     color: Colors.green,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                // SizedBox(height: 4.0),
                 Row(
                   children: [
                     Container(
@@ -276,13 +296,13 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 5.0),
-                    Text(
-                      '(1200)',
-                      style: GoogleFonts.aBeeZee(
-                        fontSize: 12.0,
-                      ),
-                    ),
+                    // SizedBox(width: 5.0),
+                    // Text(
+                    //   '(1200)',
+                    //   style: GoogleFonts.aBeeZee(
+                    //     fontSize: 12.0,
+                    //   ),
+                    // ),
                   ],
                 ),
               ],

@@ -9,6 +9,9 @@ class GetProductsByCategory {
     final response = await http
         .get(Uri.parse('$baseUrl/productAdmin/product/category/$categoryId'));
 
+    print('response');
+    print(response.body);
+
     if (response.statusCode == 200) {
       final List<dynamic> productJson = json.decode(response.body);
       return productJson.map((json) => Product.fromJson(json)).toList();

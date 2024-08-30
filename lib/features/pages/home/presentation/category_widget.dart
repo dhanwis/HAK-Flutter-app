@@ -28,7 +28,6 @@ class CategoryWidget extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 37,
-                        backgroundColor: Colors.grey.shade200,
                       ),
                       const SizedBox(height: 5),
                       Container(
@@ -95,7 +94,7 @@ class CategoryWidget extends StatelessWidget {
             ),
           );
         } else {
-          return Center(child: Text('No categories found'));
+          return Center();
         }
       },
     );

@@ -151,9 +151,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
                   ProductByOffercarousel(productIds: banner.targetId),
             ),
           );
-        } else {
-          print('no going now product list');
-        }
+        } else {}
         break;
       default:
         break;

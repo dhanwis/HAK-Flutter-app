@@ -3,12 +3,14 @@ import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -127,14 +129,25 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.favorite_border,
-                                  color: Colors.red),
-                              onPressed: () {},
-                            ),
+                            FavoriteButton(), // Replace existing IconButton with FavoriteButton
+                            // IconButton(
+                            //   icon: Icon(Icons.share),
+                            //   onPressed: () {},
+                            // ),
                             IconButton(
                               icon: Icon(Icons.share),
-                              onPressed: () {},
+                              onPressed: () {
+                                // Prepare the content to share
+                                final String productUrl =
+                                    'https://yourwebsite.com/products/${state.product.id}';
+                                final String productDescription =
+                                    state.product.productDescription;
+                                final String shareText =
+                                    '${state.product.productName}\n$productDescription\n$productUrl';
+
+                                // Share the product
+                                Share.share(shareText);
+                              },
                             ),
                           ],
                         ),

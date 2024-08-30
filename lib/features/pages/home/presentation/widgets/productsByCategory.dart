@@ -31,6 +31,8 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    print(widget.categoryId);
+
     return Scaffold(
       body: FutureBuilder<List<Product>>(
         future: futureProductsByCategory,
@@ -52,8 +54,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                 title: Text(
                   '${widget.categoryName}',
                   style: GoogleFonts.aBeeZee(
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 17),
                 ),
                 actions: [
                   Padding(
@@ -195,21 +196,21 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       Text(
                                         '₹$formattedPrice',
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 15.0,
+                                          fontSize: 12.0,
                                           color: Colors.black,
                                           decoration:
                                               TextDecoration.lineThrough,
                                         ),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      // const SizedBox(height: 4.0),
                                       Text(
                                         '₹$discountedPriceInt with 1 Special Offer',
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 12.0,
+                                          fontSize: 11.0,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      // const SizedBox(height: 4.0),
                                       Row(
                                         children: [
                                           Container(
@@ -228,7 +229,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                                   '4.0',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 12.0,
+                                                    fontSize: 11.0,
                                                   ),
                                                 ),
                                                 Icon(
@@ -237,13 +238,6 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                                   size: 12.0,
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                          const SizedBox(width: 5.0),
-                                          const Text(
-                                            '(1200)',
-                                            style: TextStyle(
-                                              fontSize: 12.0,
                                             ),
                                           ),
                                         ],

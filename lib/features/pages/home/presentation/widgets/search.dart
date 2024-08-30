@@ -1,219 +1,15 @@
-// import 'package:dil_hack_e_commerce/api/search_api.dart';
-// import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
-// import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productBySearch.dart';
-// import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:skeleton_loader/skeleton_loader.dart';
-
-// class AppSearchBar extends StatefulWidget {
-//   const AppSearchBar(
-//       {super.key, required this.width, required this.onSearchTermChanged});
-
-//   final double width;
-//   final ValueChanged<String> onSearchTermChanged;
-
-//   @override
-//   _AppSearchBarState createState() => _AppSearchBarState();
-// }
-
-// class _AppSearchBarState extends State<AppSearchBar> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(horizontal: 15),
-//               child: Center(
-//                 child: Container(
-//                   height: 50,
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10),
-//                     color: const Color.fromARGB(99, 202, 201, 202),
-//                   ),
-//                   child: TextFormField(
-//                     style: GoogleFonts.aBeeZee(color: Colors.black),
-//                     cursorColor: Colors.grey,
-//                     onChanged: (value) {
-//                       widget.onSearchTermChanged(value);
-//                     },
-//                     decoration: InputDecoration(
-//                       hintText: 'Search Products',
-//                       hintStyle: GoogleFonts.aBeeZee(
-//                           color: const Color.fromARGB(255, 182, 182, 182)),
-//                       prefixIcon: const Icon(
-//                         EvaIcons.search,
-//                         color: Color.fromARGB(255, 175, 174, 174),
-//                       ),
-//                       contentPadding: const EdgeInsets.only(top: 13),
-//                       border: InputBorder.none,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//           GestureDetector(
-//             onTap: () {},
-//             child: Container(
-//               height: 50,
-//               decoration: BoxDecoration(
-//                   color: const Color.fromARGB(255, 235, 228, 228),
-//                   borderRadius: BorderRadius.circular(15)),
-//               width: 60,
-//               child: const Center(
-//                 child: Icon(
-//                   EvaIcons.mic,
-//                   color: Color.fromARGB(255, 147, 144, 144),
-//                 ),
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// Widget buildSearchResults(String searchTerm) {
-//   return FutureBuilder<List<Product>>(
-//     future: fetchSearchResults(searchTerm),
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.waiting) {
-//         // Skeleton Loader when data is being fetched
-//         return ListView.builder(
-//           itemCount: 6, // Show 6 skeleton items
-//           itemBuilder: (context, index) {
-//             return Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
-//               child: SkeletonLoader(
-//                 builder: Container(
-//                   child: ListTile(
-//                     leading: Container(
-//                       width: 50,
-//                       height: 50,
-//                       color: Colors.grey[300],
-//                     ),
-//                     title: Container(
-//                       width: double.infinity,
-//                       height: 20,
-//                       color: Colors.grey[300],
-//                     ),
-//                     subtitle: Container(
-//                       width: double.infinity,
-//                       height: 15,
-//                       color: Colors.grey[300],
-//                     ),
-//                   ),
-//                 ),
-//                 items: 1,
-//                 period: Duration(seconds: 2),
-//                 highlightColor: Colors.grey[200]!,
-//                 baseColor: Colors.grey[300]!,
-//               ),
-//             );
-//           },
-//         );
-//       } else if (snapshot.hasError) {
-//         return Center(child: Text('Error: ${snapshot.error}'));
-//       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-//         return Center(child: Text('No results found'));
-//       } else {
-//         List<Product> products = snapshot.data!;
-
-//         return ListView.builder(
-//           itemCount: products.length,
-//           itemBuilder: (context, index) {
-//             final product = products[index];
-
-//             final firstVariation =
-//                 product.variations.isNotEmpty ? product.variations.first : null;
-//             final imageUrl = firstVariation?.images.isNotEmpty == true
-//                 ? firstVariation!.images.first
-//                 : '';
-
-//             return ListTile(
-//               leading: imageUrl.isNotEmpty
-//                   ? Image.network(
-//                       imageUrl,
-//                       width: 50,
-//                       height: 50,
-//                       fit: BoxFit.cover,
-//                       errorBuilder: (context, error, stackTrace) {
-//                         return Icon(Icons.image, size: 50);
-//                       },
-//                       loadingBuilder: (context, child, loadingProgress) {
-//                         if (loadingProgress == null) return child;
-//                         return Center(
-//                           child: CircularProgressIndicator(
-//                             value: loadingProgress.expectedTotalBytes != null
-//                                 ? loadingProgress.cumulativeBytesLoaded /
-//                                     loadingProgress.expectedTotalBytes!
-//                                 : null,
-//                           ),
-//                         );
-//                       },
-//                     )
-//                   : Icon(Icons.search, size: 50),
-//               title: Text(
-//                 product.productName,
-//                 maxLines: 1,
-//                 overflow: TextOverflow.ellipsis,
-//                 style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
-//               ),
-//               subtitle: Text(
-//                 product.productDescription,
-//                 style: GoogleFonts.aBeeZee(color: Colors.grey),
-//               ),
-//               trailing: IconButton(
-//                 icon: Icon(
-//                   Icons.arrow_outward_sharp,
-//                   color: Colors.grey,
-//                   size: 25,
-//                 ),
-//                 onPressed: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => ProductGridPage(
-//                           products: products, productName: product.productName),
-//                     ),
-//                   );
-//                 },
-//               ),
-//               onTap: () {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(
-//                     builder: (context) => ProductGridPage(
-//                         products: products, productName: product.productName),
-//                   ),
-//                 );
-//               },
-//             );
-//           },
-//         );
-//       }
-//     },
-//   );
-// }
-
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productBySearch.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
-// Remove BlocProvider from AppSearchBar
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 class AppSearchBar extends StatefulWidget {
   const AppSearchBar({
     super.key,
@@ -231,7 +27,6 @@ class AppSearchBar extends StatefulWidget {
 class _AppSearchBarState extends State<AppSearchBar> {
   @override
   Widget build(BuildContext context) {
-    print('value here'); // Ensure this prints
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Row(
@@ -246,34 +41,186 @@ class _AppSearchBarState extends State<AppSearchBar> {
                     borderRadius: BorderRadius.circular(10),
                     color: const Color.fromARGB(99, 202, 201, 202),
                   ),
-                  child: TextFormField(
-                    onChanged: (value) {
-                      widget.onSearchTermChanged(value);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Search Products',
-                      border: InputBorder.none,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Theme(
+                      data: ThemeData(
+                        textSelectionTheme: TextSelectionThemeData(
+                          cursorColor: Colors.grey, // Cursor color
+                          // Selection handle color
+                        ),
+                      ),
+                      child: TextFormField(
+                        cursorHeight: 24, // Cursor height
+                        onChanged: (value) {
+                          widget.onSearchTermChanged(value);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search Here ..',
+                          hintStyle: GoogleFonts.aBeeZee(
+                            textStyle:
+                                TextStyle(color: Colors.grey, fontSize: 13),
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 235, 228, 228),
-                  borderRadius: BorderRadius.circular(15)),
-              width: 60,
-              child: const Center(
-                child: Icon(Icons.mic),
-              ),
-            ),
-          ),
+
+          // GestureDetector(
+          //   onTap: () {},
+          //   child: Container(
+          //     height: 50,
+          //     decoration: BoxDecoration(
+          //         color: const Color.fromARGB(255, 235, 228, 228),
+          //         borderRadius: BorderRadius.circular(15)),
+          //     width: 60,
+          //     child: const Center(
+          //       child: Icon(
+          //         Icons.mic,
+          //         color: Colors.grey,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
         ],
       ),
     );
   }
+}
+
+Widget buildSearchResults() {
+  return BlocBuilder<SearchBloc, SearchState>(
+    builder: (context, state) {
+      if (state is SearchLoading) {
+        return _buildLoading();
+      } else if (state is SearchSuccess) {
+        if (state.products.isEmpty) {
+          return Center(child: Text('No results found'));
+        } else {
+          return _buildProductList(state.products);
+        }
+      } else if (state is SearchFailure) {
+        return Center(child: Text('Error: ${state.error}'));
+      } else {
+        return Center();
+      }
+    },
+  );
+}
+
+Widget _buildLoading() {
+  return ListView.builder(
+    itemCount: 6,
+    itemBuilder: (context, index) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+        child: SkeletonLoader(
+          builder: Container(
+            child: ListTile(
+              leading: Container(
+                width: 50,
+                height: 50,
+                color: Colors.grey[300],
+              ),
+              title: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.grey[300],
+              ),
+              subtitle: Container(
+                width: double.infinity,
+                height: 15,
+                color: Colors.grey[300],
+              ),
+            ),
+          ),
+          items: 1,
+          period: const Duration(seconds: 2),
+          highlightColor: Colors.grey[200]!,
+          baseColor: Colors.grey[300]!,
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildProductList(List<Product> products) {
+  return ListView.builder(
+    itemCount: products.length,
+    itemBuilder: (context, index) {
+      final product = products[index];
+      final firstVariation =
+          product.variations.isNotEmpty ? product.variations.first : null;
+      final imageUrl = firstVariation?.images.isNotEmpty == true
+          ? firstVariation!.images.first
+          : '';
+
+      return ListTile(
+        leading: imageUrl.isNotEmpty
+            ? Image.network(
+                imageUrl,
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.image, size: 50);
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+              )
+            : const Icon(Icons.search, size: 50),
+        title: Text(
+          product.productName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold, fontSize: 12),
+        ),
+        subtitle: Text(
+          product.productDescription,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: GoogleFonts.aBeeZee(color: Colors.grey, fontSize: 12),
+        ),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.arrow_outward_sharp,
+            color: Colors.grey,
+            size: 20,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductGridPage(
+                    products: products, productName: product.productName),
+              ),
+            );
+          },
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductGridPage(
+                  products: products, productName: product.productName),
+            ),
+          );
+        },
+      );
+    },
+  );
 }

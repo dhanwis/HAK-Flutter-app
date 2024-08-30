@@ -51,7 +51,6 @@ class _ProductGridState extends State<ProductGrid> {
       }
     } catch (e) {
       // Handle error (e.g., show an error message)
-      print('Error fetching products: $e');
     } finally {
       setState(() {
         isLoadingMore = false;
@@ -179,29 +178,29 @@ class _ProductGridState extends State<ProductGrid> {
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.aBeeZee(
-                                    fontSize: 14.0,
+                                    fontSize: 12.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 4.0),
+                                // SizedBox(height: 4.0),
                                 Text(
                                   '₹$formattedPrice',
                                   style: TextStyle(
-                                    fontSize: 15.0,
+                                    fontSize: 12.0,
                                     color: Colors.black,
                                     decoration: TextDecoration.lineThrough,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
+                                //SizedBox(height: 8.0),
                                 if (formattedDiscount.isNotEmpty)
                                   Text(
                                     '₹$formattedDiscount with 1 Special Offer',
                                     style: TextStyle(
-                                      fontSize: 14.0,
+                                      fontSize: 12.0,
                                       color: Colors.green,
                                     ),
                                   ),
-                                SizedBox(height: 8.0),
+                                // SizedBox(height: 8.0),
                                 Row(
                                   children: [
                                     Container(
@@ -229,13 +228,6 @@ class _ProductGridState extends State<ProductGrid> {
                                             size: 12.0,
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                    SizedBox(width: 5.0),
-                                    Text(
-                                      '(12000)',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
                                       ),
                                     ),
                                   ],

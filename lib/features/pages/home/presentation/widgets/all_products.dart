@@ -73,7 +73,7 @@ class _AllProductsState extends State<AllProducts> {
                     'Products For you',
                     style: GoogleFonts.aBeeZee(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

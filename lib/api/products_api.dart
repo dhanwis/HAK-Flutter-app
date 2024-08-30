@@ -10,9 +10,6 @@ class GetAllProductApi {
     final url = '$baseUrl?page=$page&limit=3';
     final response = await http.get(Uri.parse(url));
 
-    print('response itha manjdi');
-    print(response);
-
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> productJson =
