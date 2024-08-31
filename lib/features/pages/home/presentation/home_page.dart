@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                                   'New Arrivals',
                                   style: GoogleFonts.aBeeZee(
                                     fontWeight: FontWeight.w800,
-                                    fontSize: 14,
+                                    fontSize: 13,
                                   ),
                                 ),
                                 GestureDetector(
@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                                     'View All',
                                     style: GoogleFonts.aBeeZee(
                                       fontWeight: FontWeight.w800,
-                                      fontSize: 14,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           SizedBox(
-                            height: 330,
+                            height: 240,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: products.length,
@@ -261,60 +261,59 @@ class _HomePageState extends State<HomePage> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              child: Image.network(
-                                                imageUrl,
-                                                fit: BoxFit.cover,
-                                              ),
+                                    // child: Container(
+                                    //   margin: const EdgeInsets.symmetric(
+                                    //       horizontal: 1),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            child: Image.network(
+                                              imageUrl,
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4),
-                                            child: Text(
-                                              products[index].productBrand,
-                                              style: GoogleFonts.aBeeZee(
-                                                color: Colors.grey,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 1),
-                                            child: Text(
-                                              products[index]
-                                                  .productName
-                                                  .toUpperCase(),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.aBeeZee(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            '₹ $formattedPrice',
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4),
+                                          child: Text(
+                                            products[index].productBrand,
                                             style: GoogleFonts.aBeeZee(
-                                              color: Colors.green,
-                                              fontSize: 14,
+                                              color: Colors.grey,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 1),
+                                          child: Text(
+                                            products[index]
+                                                .productName
+                                                .toUpperCase(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.aBeeZee(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '₹ $formattedPrice',
+                                          style: GoogleFonts.aBeeZee(
+                                            color: Colors.green,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
