@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -44,43 +45,44 @@ class _ViewAllButtonState extends State<ViewAllButton> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.favorite),
-              color: Colors.red,
-              iconSize: 20,
-              onPressed: () {},
-            ),
+          IconButton(
+            icon: Icon(Icons.favorite),
+            color: Colors.red,
+            iconSize: 20,
+            onPressed: () {},
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.shopping_cart),
-              color: Colors.black,
-              iconSize: 20,
-              onPressed: () {},
-            ),
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            color: Colors.black,
+            iconSize: 20,
+            onPressed: () {},
           ),
         ],
       ),
-      body: FutureBuilder<List<Product>>(
-        future: futureProducts,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Skeletonizer(
-              enabled: true,
-              child: _buildProductGrid([], true),
-            );
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center();
-          }
+      body: Column(
+        children: [
+          FilterSection(),
+          Expanded(
+            child: FutureBuilder<List<Product>>(
+              future: futureProducts,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Skeletonizer(
+                    enabled: true,
+                    child: _buildProductGrid([], true),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center();
+                }
 
-          final products = snapshot.data!;
-          return _buildProductGrid(products, false);
-        },
+                final products = snapshot.data!;
+                return _buildProductGrid(products, false);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

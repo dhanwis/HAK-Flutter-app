@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,12 +19,20 @@ class _FilterScreenState extends State<FilterScreen> {
     'Yellow': false,
   };
 
+  Map<String, bool> sizeFilters = {
+    'S': false,
+    'M': false,
+    'L': false,
+    'XL': false,
+  };
+
   late List<bool> _expanded;
 
   @override
   void initState() {
     super.initState();
-    _expanded = List<bool>.generate(2, (index) => false);
+    _expanded = List<bool>.generate(
+        3, (index) => false); // Adjusted to 3 for the new section
   }
 
   @override
@@ -43,29 +52,24 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          SizedBox(
-            width: 240,
-            child: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  _buildFilterSection('Brand', brandFilters, 0),
-                  const SizedBox(height: 10),
-                  _buildFilterSection('Color', colorFilters, 1),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
+      body: Row(children: [
+        SizedBox(
+          width: 240,
+          child: Drawer(
             child: ListView(
-              padding: EdgeInsets.all(16.0),
-              children: [],
+              padding: EdgeInsets.zero,
+              children: [
+                _buildFilterSection('Brand', brandFilters, 0),
+                const SizedBox(height: 10),
+                _buildFilterSection('Color', colorFilters, 1),
+                const SizedBox(height: 10),
+                _buildFilterSection(
+                    'Size', sizeFilters, 2), // New Size filter section
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
       bottomNavigationBar: ElevatedButton(
         onPressed: () {
           _applyFilters();
@@ -107,6 +111,10 @@ class _FilterScreenState extends State<FilterScreen> {
       });
       colorFilters.forEach((key, value) {
         colorFilters[key] = false;
+      });
+      sizeFilters.forEach((key, value) {
+        // Reset the size filters
+        sizeFilters[key] = false;
       });
     });
   }

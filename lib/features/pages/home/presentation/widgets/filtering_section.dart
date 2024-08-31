@@ -49,14 +49,16 @@ class _FilterSectionState extends State<FilterSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(
+          // vertical: 5.0,
+          horizontal: 10.0),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 10),
+          // const SizedBox(height: 10),
           SizedBox(
-            height: 60,
+            height: 50,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 5,
@@ -85,7 +87,10 @@ class _FilterSectionState extends State<FilterSection> {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: FilterChip(
-        label: Text(_getChipLabel(index)),
+        label: Text(
+          _getChipLabel(index),
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w100),
+        ),
         selected: isSelected,
         selectedColor: Color(0xFFFAAAB1),
         backgroundColor: Colors.white,

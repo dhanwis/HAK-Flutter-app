@@ -16,7 +16,7 @@ class GetAllProductApi {
           data['products']; // Adjust if your API returns data differently
       return productJson.map((json) => Product.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load products');
+      throw Exception();
     }
   }
 }

@@ -41,7 +41,7 @@ class ProductbyidApi {
     if (response.statusCode == 200) {
       return Product.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load products');
+      throw Exception();
     }
   }
 }

@@ -123,7 +123,7 @@ class ProductDetailPage extends StatelessWidget {
                             capitalizeFirstLetter(state.product.productName),
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.bold,
-                              fontSize: 25,
+                              fontSize: 18,
                             ),
                           ),
                         ),
@@ -164,13 +164,14 @@ class ProductDetailPage extends StatelessWidget {
                                 state.product.productDescription),
                             style: GoogleFonts.aBeeZee(
                               fontWeight: FontWeight.w300,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -193,7 +194,7 @@ class ProductDetailPage extends StatelessWidget {
                       'Similar Products',
                       style: GoogleFonts.aBeeZee(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -202,31 +203,35 @@ class ProductDetailPage extends StatelessWidget {
                   else
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: List.generate(
-                          state.similarProducts.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProductDetailPage(
-                                      productId:
-                                          state.similarProducts[index].id,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: List.generate(
+                            state.similarProducts.length,
+                            (index) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                        productId:
+                                            state.similarProducts[index].id,
+                                      ),
                                     ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    state.similarProducts[index].variations
+                                        .first.images.first,
                                   ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  state.similarProducts[index].variations.first
-                                      .images.first,
+                                  backgroundColor: Colors.grey.shade200,
+                                  radius: 30,
                                 ),
-                                backgroundColor: Colors.grey.shade200,
-                                radius: 40,
                               ),
                             ),
                           ),
@@ -259,7 +264,7 @@ class ProductDetailPage extends StatelessWidget {
                           'Select Size',
                           style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontSize: 15,
                           ),
                         ),
                         SizedBox(height: 10),
@@ -273,7 +278,7 @@ class ProductDetailPage extends StatelessWidget {
                       'Product Details',
                       style: GoogleFonts.aBeeZee(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -406,9 +411,16 @@ class DetailRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w800),
+          style: GoogleFonts.aBeeZee(
+            fontWeight: FontWeight.w800,
+            fontSize: 12,
+          ),
         ),
-        Text(value, style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w300)),
+        Text(value,
+            style: GoogleFonts.aBeeZee(
+              fontWeight: FontWeight.w300,
+              fontSize: 12,
+            )),
       ],
     );
   }

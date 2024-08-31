@@ -16,6 +16,6 @@ Future<List<Product>> fetchSearchResults(String query) async {
 
     return body.map((dynamic item) => Product.fromJson(item)).toList();
   } else {
-    throw Exception('Failed to load search results');
+    throw Exception();
   }
 }

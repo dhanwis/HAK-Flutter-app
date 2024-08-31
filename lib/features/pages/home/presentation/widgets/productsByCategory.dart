@@ -51,27 +51,24 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
+                backgroundColor: Colors.white,
                 title: Text(
                   '${widget.categoryName}',
                   style: GoogleFonts.aBeeZee(
                       fontWeight: FontWeight.bold, fontSize: 17),
                 ),
                 actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton(
-                      icon: Icon(Icons.favorite),
-                      color: Colors.red,
-                      onPressed: () {},
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.favorite),
+                    color: Colors.red,
+                    iconSize: 20,
+                    onPressed: () {},
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton(
-                      icon: Icon(Icons.shopping_cart),
-                      color: Colors.black,
-                      onPressed: () {},
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    color: Colors.black,
+                    iconSize: 20,
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -192,7 +189,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      // const SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedPrice',
                                         style: GoogleFonts.aBeeZee(
@@ -202,15 +199,17 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                               TextDecoration.lineThrough,
                                         ),
                                       ),
-                                      // const SizedBox(height: 4.0),
+                                      const SizedBox(height: 2.0),
                                       Text(
                                         '₹$discountedPriceInt with 1 Special Offer',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
                                           fontSize: 11.0,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      // const SizedBox(height: 4.0),
+                                      const SizedBox(height: 2.0),
                                       Row(
                                         children: [
                                           Container(

@@ -3,7 +3,7 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // Import for NumberFormat
+import 'package:intl/intl.dart';
 
 class ProductGrid extends StatefulWidget {
   @override
@@ -150,17 +150,17 @@ class _ProductGridState extends State<ProductGrid> {
                                 ),
                               ),
                               Positioned(
-                                right: 10.0,
+                                right: 5.0,
                                 top: 10.0,
                                 child: GestureDetector(
                                   onTap: () {},
                                   child: CircleAvatar(
                                     backgroundColor: Colors.white,
-                                    radius: 15,
+                                    radius: 12,
                                     child: Icon(
                                       Icons.favorite_border,
                                       color: Colors.black,
-                                      size: 20,
+                                      size: 18,
                                     ),
                                   ),
                                 ),
@@ -180,9 +180,11 @@ class _ProductGridState extends State<ProductGrid> {
                                   style: GoogleFonts.aBeeZee(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold,
+                                    // letterSpacing: 1,
                                   ),
                                 ),
                                 // SizedBox(height: 4.0),
+
                                 Text(
                                   '₹$formattedPrice',
                                   style: TextStyle(
@@ -195,12 +197,14 @@ class _ProductGridState extends State<ProductGrid> {
                                 if (formattedDiscount.isNotEmpty)
                                   Text(
                                     '₹$formattedDiscount with 1 Special Offer',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     style: TextStyle(
                                       fontSize: 12.0,
                                       color: Colors.green,
                                     ),
                                   ),
-                                // SizedBox(height: 8.0),
+                                SizedBox(height: 3.0),
                                 Row(
                                   children: [
                                     Container(

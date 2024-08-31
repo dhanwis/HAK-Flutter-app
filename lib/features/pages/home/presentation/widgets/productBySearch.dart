@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -23,10 +24,11 @@ class _ProductGridPageState extends State<ProductGridPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           widget.productName,
           style: GoogleFonts.aBeeZee(
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -37,197 +39,216 @@ class _ProductGridPageState extends State<ProductGridPage> {
               color: Colors.red,
             ),
             onPressed: () {},
+            iconSize: 20,
           ),
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {},
+            iconSize: 20,
           ),
         ],
       ),
-      body: products.isEmpty
-          ? Center()
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                final gridWidth = constraints.maxWidth;
-                final crossAxisCount = gridWidth > 600 ? 3 : 2;
-                final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
+      body: Column(
+        children: [
+          // Add the FilterSection at the top
+          FilterSection(
+            onFilterApplied: () {
+              setState(() {
+                // Implement the logic to filter the products list
+              });
+            },
+          ),
+          Expanded(
+            child: products.isEmpty
+                ? Center(
+                    child: Text("No products available"),
+                  )
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      final gridWidth = constraints.maxWidth;
+                      final crossAxisCount = gridWidth > 600 ? 3 : 2;
+                      final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
 
-                return CustomScrollView(
-                  slivers: [
-                    SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        childAspectRatio: childAspectRatio,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final product = products[index];
-                          final firstVariation = product.variations.isNotEmpty
-                              ? product.variations.first
-                              : null;
-                          final imageUrl =
-                              firstVariation?.images.isNotEmpty == true
-                                  ? firstVariation!.images.first
-                                  : '';
-                          final skus = firstVariation?.skus ?? [];
-                          final actualPrice =
-                              skus.isNotEmpty ? skus.first.actualPrice : 0;
-                          final discount =
-                              skus.isNotEmpty ? skus.first.discount : 0;
-
-                          final formattedPrice =
-                              NumberFormat('#,##0').format(actualPrice);
-                          final formattedDiscount =
-                              NumberFormat('#,##0').format(discount);
-
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                      return CustomScrollView(
+                        slivers: [
+                          SliverGrid(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: crossAxisCount,
+                              childAspectRatio: childAspectRatio,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailPage(
-                                                    productId: product.id),
-                                          ),
-                                        );
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          topRight: Radius.circular(10.0),
-                                        ),
-                                        child: imageUrl.isNotEmpty
-                                            ? Image.network(
-                                                imageUrl,
-                                                fit: BoxFit.cover,
-                                                height:
-                                                    screenSize.height * 0.28,
-                                                width: double.infinity,
-                                              )
-                                            : Container(
-                                                height:
-                                                    screenSize.height * 0.25,
-                                                width: double.infinity,
-                                                color: Colors.grey[200],
-                                                child: Icon(Icons.image),
-                                              ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 10.0,
-                                      top: 10.0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // Handle favorite icon tap
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 15,
-                                          child: Icon(
-                                            Icons.favorite,
-                                            color: Colors.red,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                final product = products[index];
+                                final firstVariation =
+                                    product.variations.isNotEmpty
+                                        ? product.variations.first
+                                        : null;
+                                final imageUrl =
+                                    firstVariation?.images.isNotEmpty == true
+                                        ? firstVariation!.images.first
+                                        : '';
+                                final skus = firstVariation?.skus ?? [];
+                                final actualPrice = skus.isNotEmpty
+                                    ? skus.first.actualPrice
+                                    : 0;
+                                final discount =
+                                    skus.isNotEmpty ? skus.first.discount : 0;
+
+                                final formattedPrice =
+                                    NumberFormat('#,##0').format(actualPrice);
+                                final formattedDiscount =
+                                    NumberFormat('#,##0').format(discount);
+
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        product.productName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.aBeeZee(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4.0),
-                                      Text(
-                                        '₹$formattedPrice',
-                                        style: GoogleFonts.aBeeZee(
-                                          fontSize: 15.0,
-                                          color: Colors.black,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4.0),
-                                      Text(
-                                        '₹$formattedDiscount with 1 Special Offer',
-                                        style: GoogleFonts.aBeeZee(
-                                          fontSize: 14.0,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4.0),
-                                      Row(
+                                      Stack(
                                         children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 2.0,
-                                              horizontal: 4.0,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  '4.0',
-                                                  style: GoogleFonts.aBeeZee(
-                                                    color: Colors.white,
-                                                    fontSize: 12.0,
-                                                  ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProductDetailPage(
+                                                          productId:
+                                                              product.id),
                                                 ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.white,
-                                                  size: 12.0,
-                                                ),
-                                              ],
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
+                                              child: imageUrl.isNotEmpty
+                                                  ? Image.network(
+                                                      imageUrl,
+                                                      fit: BoxFit.cover,
+                                                      height:
+                                                          screenSize.height *
+                                                              0.28,
+                                                      width: double.infinity,
+                                                    )
+                                                  : Container(
+                                                      height:
+                                                          screenSize.height *
+                                                              0.25,
+                                                      width: double.infinity,
+                                                      color: Colors.grey[200],
+                                                      child: Icon(Icons.image),
+                                                    ),
                                             ),
                                           ),
-                                          SizedBox(width: 5.0),
-                                          Text(
-                                            '(12000)',
-                                            style: GoogleFonts.aBeeZee(
-                                              fontSize: 12.0,
+                                          Positioned(
+                                            right: 10.0,
+                                            top: 10.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                // Handle favorite icon tap
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.white,
+                                                radius: 15,
+                                                child: Icon(
+                                                  Icons.favorite_border,
+                                                  color: Colors.black,
+                                                  size: 20,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product.productName,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.aBeeZee(
+                                                fontSize: 13.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '₹$formattedPrice',
+                                              style: GoogleFonts.aBeeZee(
+                                                fontSize: 12.0,
+                                                color: Colors.black,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                            Text(
+                                              '₹$formattedDiscount with 1 Special Offer',
+                                              style: GoogleFonts.aBeeZee(
+                                                fontSize: 11.0,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            SizedBox(height: 2.0),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    vertical: 2.0,
+                                                    horizontal: 4.0,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        '4.0',
+                                                        style:
+                                                            GoogleFonts.aBeeZee(
+                                                          color: Colors.white,
+                                                          fontSize: 12.0,
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.white,
+                                                        size: 12.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                );
+                              },
+                              childCount: products.length,
                             ),
-                          );
-                        },
-                        childCount: products.length,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -11,7 +11,7 @@ class GetProductListByOffer {
       List<dynamic> data = json.decode(response.body);
       return data.map((item) => Product.fromJson(item)).toList();
     } else {
-      throw Exception('Failed to load products');
+      throw Exception();
     }
   }
 }

@@ -26,7 +26,7 @@ class RatingAndReviews extends StatelessWidget {
               Text(
                 'Customer Ratings & Reviews',
                 style: GoogleFonts.aBeeZee(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -43,7 +43,7 @@ class RatingAndReviews extends StatelessWidget {
                     Text(
                       '$averageRating',
                       style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                     ),
@@ -92,10 +92,9 @@ class RatingRow extends StatelessWidget {
           Expanded(
             child: Text(
               ratingLabel,
-              style: GoogleFonts.aBeeZee(fontSize: 16, color: Colors.black),
+              style: GoogleFonts.aBeeZee(fontSize: 12, color: Colors.black),
             ),
           ),
-          SizedBox(width: 8),
           Expanded(
             flex: 2,
             child: LinearProgressIndicator(
@@ -107,7 +106,7 @@ class RatingRow extends StatelessWidget {
           SizedBox(width: 8),
           Text(
             ratingCount.toString(),
-            style: GoogleFonts.aBeeZee(fontSize: 16, color: Colors.black),
+            style: GoogleFonts.aBeeZee(fontSize: 12, color: Colors.black),
           ),
         ],
       ),

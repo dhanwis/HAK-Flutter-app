@@ -14,7 +14,7 @@ class GetAllNewArrivalsApi {
       final List productsJson = jsonResponse['data'];
       return productsJson.map((product) => Product.fromJson(product)).toList();
     } else {
-      throw Exception('Failed to load new arrivals');
+      throw Exception();
     }
   }
 }

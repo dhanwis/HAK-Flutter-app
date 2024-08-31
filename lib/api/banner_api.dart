@@ -16,10 +16,10 @@ class BannerService {
         final List<dynamic> bannerJson = json.decode(response.body);
         return bannerJson.map((json) => Banner.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load banners');
+        throw Exception();
       }
     } catch (e) {
-      throw Exception('Error fetching banners');
+      throw Exception();
     }
   }
 }
