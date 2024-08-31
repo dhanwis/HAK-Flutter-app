@@ -77,96 +77,92 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: BlocBuilder<CategoryBloc, CategoryState>(
-                  builder: (context, state) {
-                    if (state is CategoriesLoading) {
-                      return Skeletonizer(
-                        enabled: true,
-                        child: SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 5,
-                            itemBuilder: (context, index) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+              child: BlocBuilder<CategoryBloc, CategoryState>(
+                builder: (context, state) {
+                  if (state is CategoriesLoading) {
+                    return Skeletonizer(
+                      enabled: true,
+                      child: SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor: Colors.grey.shade200,
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: 80,
+                                  height: 15,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (state is CategoriesError) {
+                    return Center(child: Text('Error: ${state.error}'));
+                  } else if (state is CategoriesLoaded) {
+                    List<Category> categories = state.categories;
+                    return SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: SizedBox(
+                              width: 60,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.grey.shade200,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductsByCategory(
+                                                    categoryId:
+                                                        categories[index].id,
+                                                  )));
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 37,
+                                      backgroundImage: NetworkImage(
+                                          "http://192.168.1.6:8000/categoryImg/${categories[index].imageUrl}"),
+                                    ),
                                   ),
                                   const SizedBox(height: 5),
-                                  Container(
-                                    width: 80,
-                                    height: 15,
-                                    color: Colors.grey.shade200,
+                                  Text(
+                                    categories[index].label,
+                                    style: GoogleFonts.aBeeZee(
+                                      fontSize: 12,
+                                      letterSpacing: 1,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    } else if (state is CategoriesError) {
-                      return Center(child: Text('Error: ${state.error}'));
-                    } else if (state is CategoriesLoaded) {
-                      List<Category> categories = state.categories;
-                      return SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: SizedBox(
-                                width: 80,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProductsByCategory(
-                                                      categoryId:
-                                                          categories[index].id,
-                                                    )));
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 37,
-                                        backgroundImage: NetworkImage(
-                                            "http://192.168.1.6:8000/categoryImg/${categories[index].imageUrl}"),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      categories[index].label,
-                                      style: GoogleFonts.aBeeZee(
-                                        letterSpacing: 1,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    } else {
-                      return Center();
-                    }
-                  },
-                ),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Center();
+                  }
+                },
               ),
             ),
             FutureBuilder<List<Product>>(

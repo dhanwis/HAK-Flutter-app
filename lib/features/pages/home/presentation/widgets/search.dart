@@ -36,9 +36,9 @@ class _AppSearchBarState extends State<AppSearchBar> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Center(
                 child: Container(
-                  height: 50,
+                  height: 44,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     color: const Color.fromARGB(99, 202, 201, 202),
                   ),
                   child: Padding(
@@ -51,7 +51,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
                         ),
                       ),
                       child: TextFormField(
-                        cursorHeight: 24, // Cursor height
+                        cursorHeight: 20, // Cursor height
                         onChanged: (value) {
                           widget.onSearchTermChanged(value);
                         },
