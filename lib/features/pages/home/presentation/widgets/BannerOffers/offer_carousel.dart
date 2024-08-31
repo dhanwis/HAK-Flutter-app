@@ -89,7 +89,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Widget _buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 230,
+        height: 170,
         enableInfiniteScroll: true,
         reverse: false,
         autoPlay: true,
