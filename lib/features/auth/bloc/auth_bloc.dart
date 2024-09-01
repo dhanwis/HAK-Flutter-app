@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dil_hack_e_commerce/database_support/database_support.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
@@ -31,8 +32,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthInitial());
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         final id = response.data['id'];
+        DatabaseSupport.saveusername(event.mobileNumber);
 
         emit(
           //manjima

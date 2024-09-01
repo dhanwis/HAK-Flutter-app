@@ -4,6 +4,7 @@ import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
+import 'package:dil_hack_e_commerce/database_support/database_support.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
@@ -25,6 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox<Token>('tokenBox');
+
   runApp(const MyApp());
 }
 

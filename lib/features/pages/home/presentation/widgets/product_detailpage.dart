@@ -264,7 +264,7 @@ class ProductDetailPage extends StatelessWidget {
                           'Select Size',
                           style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 14,
                           ),
                         ),
                         SizedBox(height: 10),
