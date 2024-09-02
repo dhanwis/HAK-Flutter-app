@@ -211,7 +211,7 @@ class ProductDetailPage extends StatelessWidget {
                             state.similarProducts.length,
                             (index) => Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(

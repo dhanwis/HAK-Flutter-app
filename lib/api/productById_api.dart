@@ -28,13 +28,14 @@
 // }
 
 import 'dart:convert';
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
 class ProductbyidApi {
   Future<Product> fetchProductById(productId) async {
     final apiUrl =
-        'http://192.168.1.6:8000/productAdmin/product/viewProductBy/$productId';
+        '${AppConstants.BASE_URL}/customerApp/product/viewProductBy/$productId';
 
     final response = await http.get(Uri.parse(apiUrl));
 
