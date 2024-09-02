@@ -152,7 +152,10 @@ class _ProductGridState extends State<ProductGrid> {
                     (context, index) {
                       if (index == products.length) {
                         if (isLoadingMore) {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(
+                              child: CircularProgressIndicator(
+                            color: Color(0xFFFAAAB1),
+                          ));
                         }
                         return SizedBox.shrink();
                       }
@@ -317,7 +320,7 @@ class _ProductGridState extends State<ProductGrid> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Center(child: CircularProgressIndicator()),
+                    child: Center(),
                   ),
                 ),
             ],
