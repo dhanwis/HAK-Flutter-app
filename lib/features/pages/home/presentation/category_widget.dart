@@ -70,6 +70,7 @@ class CategoryWidget extends StatelessWidget {
                             );
                           },
                           child: CircleAvatar(
+                            backgroundColor: Colors.white,
                             radius: 37,
                             backgroundImage: NetworkImage(
                               "http://192.168.1.6:8000/categoryImg/${categories[index].imageUrl}",

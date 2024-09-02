@@ -8,7 +8,7 @@ class GetAllProductApi {
 
   Future<List<Product>> fetchProducts({int page = 1}) async {
     final url =
-        '${AppConstants.BASE_URL}/customerApp/product/view_all_products?page=$page&limit=10';
+        '${AppConstants.BASE_URL}/customerApp/product/view_all_products?page=$page&limit=7';
 
     final response = await http.get(Uri.parse(url));
 
