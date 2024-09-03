@@ -1,4 +1,3 @@
-// product_detail_page.dart
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
@@ -31,57 +30,7 @@ class ProductDetailPage extends StatelessWidget {
         child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
           builder: (context, state) {
             if (state is ProductDetailLoading) {
-              return ListView(
-                children: [
-                  Skeletonizer(
-                    enabled: true,
-                    child: Container(
-                      height: height * 0.6,
-                      color: Colors.grey.shade300,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        height: 30,
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        height: 20,
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        height: 20,
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        height: 40,
-                        color: Colors.grey.shade300,
-                      ),
-                    ),
-                  ),
-                ],
-              );
+              return SkeletonLoader();
             } else if (state is ProductDetailLoaded) {
               final actualPrice =
                   state.product.variations.first.skus.first.actualPrice;
@@ -129,23 +78,16 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            FavoriteButton(), // Replace existing IconButton with FavoriteButton
-                            // IconButton(
-                            //   icon: Icon(Icons.share),
-                            //   onPressed: () {},
-                            // ),
+                            FavoriteButton(),
                             IconButton(
                               icon: Icon(Icons.share),
                               onPressed: () {
-                                // Prepare the content to share
                                 final String productUrl =
                                     'https://yourwebsite.com/products/${state.product.id}';
                                 final String productDescription =
                                     state.product.productDescription;
                                 final String shareText =
                                     '${state.product.productName}\n$productDescription\n$productUrl';
-
-                                // Share the product
                                 Share.share(shareText);
                               },
                             ),
@@ -171,7 +113,6 @@ class ProductDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -186,8 +127,6 @@ class ProductDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Similar products UI
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -199,7 +138,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   ),
                   if (state.similarProducts.isEmpty)
-                    Center()
+                    SimilarProductsSkeletonLoader()
                   else
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -238,7 +177,6 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   Padding(
                     padding: const EdgeInsets.only(top: 5, bottom: 10),
                     child: RatingBar.builder(
@@ -282,7 +220,6 @@ class ProductDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DetailRow(
@@ -292,7 +229,6 @@ class ProductDetailPage extends StatelessWidget {
                           : 'N/A',
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DetailRow(
@@ -333,7 +269,6 @@ class ProductDetailPage extends StatelessWidget {
                           : 'N/A',
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RatingAndReviews(),
@@ -365,20 +300,16 @@ class ProductDetailPage extends StatelessWidget {
                                 horizontal: 24, vertical: 12),
                           ),
                         ),
-                        ElevatedButton.icon(
+                        ElevatedButton(
                           onPressed: () {},
-                          icon: Icon(Icons.double_arrow, color: Colors.black),
-                          label: Text(
-                            'Buy Now',
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          child: Text('Buy Now'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFFAAAB1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 34, vertical: 12),
+                                horizontal: 24, vertical: 12),
                           ),
                         ),
                       ],
@@ -387,11 +318,109 @@ class ProductDetailPage extends StatelessWidget {
                 ],
               );
             } else if (state is ProductDetailError) {
-              return Center(child: Text('Error: ${state.message}'));
-            } else {
-              return Center(child: Text('Something went wrong'));
+              return Center(
+                child: Text('Error: ${state.message}'),
+              );
             }
+            return Container(); // Default case, should not reach here
           },
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Skeletonizer(
+            child: SkeletonImage(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            child: SkeletonText(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SkeletonImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade300,
+      height: MediaQuery.of(context).size.height * 0.6,
+    );
+  }
+}
+
+class SkeletonText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 20,
+      color: Colors.grey.shade300,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+    );
+  }
+}
+
+class SimilarProductsSkeletonLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            5, // Number of skeleton items you want to display
+            (index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: CircleAvatar(
+                backgroundColor: Colors.grey.shade300,
+                radius: 30,
+              ),
+            ),
+          ),
         ),
       ),
     );
