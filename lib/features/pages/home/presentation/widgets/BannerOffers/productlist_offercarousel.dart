@@ -336,7 +336,7 @@ class _ProductByOffercarouselState extends State<ProductByOffercarousel> {
                     ),
                   );
                 },
-                childCount: crossAxisCount * 2, // Adjust skeleton count
+                childCount: crossAxisCount * 2,
               ),
             ),
           ],

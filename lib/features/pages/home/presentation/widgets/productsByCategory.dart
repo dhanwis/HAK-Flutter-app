@@ -1,338 +1,3 @@
-// import 'package:dil_hack_e_commerce/api/productByCategory.dart';
-// import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
-// import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
-// import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:intl/intl.dart';
-// import 'package:skeletonizer/skeletonizer.dart';
-
-// class ProductsByCategory extends StatefulWidget {
-//   final String categoryId;
-//   final String categoryName = "Category";
-
-//   ProductsByCategory({Key? key, required this.categoryId}) : super(key: key);
-
-//   @override
-//   State<ProductsByCategory> createState() => _ProductsByCategoryState();
-// }
-
-// class _ProductsByCategoryState extends State<ProductsByCategory> {
-//   late Future<List<Product>> futureProductsByCategory;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     futureProductsByCategory = GetProductsByCategory()
-//             .fetchProductByCategoryId(widget.categoryId, filters: {})
-//         as Future<List<Product>>;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenSize = MediaQuery.of(context).size;
-//     print(widget.categoryId);
-
-//     return Scaffold(
-//       body: FutureBuilder<List<Product>>(
-//         future: futureProductsByCategory,
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             // Show skeleton loader while waiting for data
-//             return _buildSkeletonLoader();
-//           } else if (snapshot.hasError) {
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-//             return const Center();
-//           }
-
-//           final products = snapshot.data!;
-
-//           return NestedScrollView(
-//             headerSliverBuilder: (context, innerBoxIsScrolled) => [
-//               SliverAppBar(
-//                 backgroundColor: Colors.white,
-//                 title: Text(
-//                   '${widget.categoryName}',
-//                   style: GoogleFonts.aBeeZee(
-//                       fontWeight: FontWeight.bold, fontSize: 17),
-//                 ),
-//                 actions: [
-//                   IconButton(
-//                     icon: Icon(Icons.favorite),
-//                     color: Colors.red,
-//                     iconSize: 20,
-//                     onPressed: () {},
-//                   ),
-//                   IconButton(
-//                     icon: Icon(Icons.shopping_cart),
-//                     color: Colors.black,
-//                     iconSize: 20,
-//                     onPressed: () {},
-//                   ),
-//                 ],
-//               ),
-//               SliverToBoxAdapter(
-//                 child: FilterSection(),
-//               ),
-//             ],
-//             body: LayoutBuilder(
-//               builder: (context, constraints) {
-//                 final gridWidth = constraints.maxWidth;
-//                 final crossAxisCount = gridWidth > 600 ? 3 : 2;
-//                 final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
-
-//                 return CustomScrollView(
-//                   slivers: [
-//                     SliverGrid(
-//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                         crossAxisCount: crossAxisCount,
-//                         childAspectRatio: childAspectRatio,
-//                       ),
-//                       delegate: SliverChildBuilderDelegate(
-//                         (context, index) {
-//                           final product = products[index];
-//                           final firstVariation = product.variations.isNotEmpty
-//                               ? product.variations.first
-//                               : null;
-//                           final imageUrl =
-//                               firstVariation?.images.isNotEmpty == true
-//                                   ? firstVariation!.images.first
-//                                   : '';
-//                           final skus = firstVariation?.skus ?? [];
-//                           final actualPrice =
-//                               skus.isNotEmpty ? skus.first.actualPrice : 0;
-//                           final discount =
-//                               skus.isNotEmpty ? skus.first.discount : 0;
-
-//                           final formattedPrice =
-//                               NumberFormat('#,##0').format(actualPrice);
-//                           final formattedDiscount =
-//                               NumberFormat('#,##0').format(discount);
-//                           double discountAmount =
-//                               (actualPrice * discount) / 100;
-
-//                           double discountedPrice = actualPrice - discountAmount;
-
-//                           int discountedPriceInt = discountedPrice.toInt();
-
-//                           return Card(
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(10.0),
-//                             ),
-//                             child: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Stack(
-//                                   children: [
-//                                     GestureDetector(
-//                                       onTap: () {
-//                                         Navigator.push(
-//                                           context,
-//                                           MaterialPageRoute(
-//                                               builder: (context) =>
-//                                                   ProductDetailPage(
-//                                                       productId: product.id)),
-//                                         );
-//                                       },
-//                                       child: ClipRRect(
-//                                         borderRadius: const BorderRadius.only(
-//                                           topLeft: Radius.circular(10.0),
-//                                           topRight: Radius.circular(10.0),
-//                                         ),
-//                                         child: imageUrl.isNotEmpty
-//                                             ? Image.network(
-//                                                 imageUrl,
-//                                                 fit: BoxFit.cover,
-//                                                 height:
-//                                                     screenSize.height * 0.28,
-//                                                 width: double.infinity,
-//                                               )
-//                                             : Container(
-//                                                 height:
-//                                                     screenSize.height * 0.25,
-//                                                 width: double.infinity,
-//                                                 color: Colors.grey[200],
-//                                                 child: const Icon(Icons.image),
-//                                               ),
-//                                       ),
-//                                     ),
-//                                     Positioned(
-//                                       right: 10.0,
-//                                       top: 10.0,
-//                                       child: GestureDetector(
-//                                         onTap: () {},
-//                                         child: const CircleAvatar(
-//                                           backgroundColor: Colors.white,
-//                                           radius: 15,
-//                                           child: Icon(
-//                                             Icons.favorite_border,
-//                                             color: Colors.black,
-//                                             size: 20,
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(8.0),
-//                                   child: Column(
-//                                     crossAxisAlignment:
-//                                         CrossAxisAlignment.start,
-//                                     children: [
-//                                       Text(
-//                                         product.productName,
-//                                         maxLines: 1,
-//                                         overflow: TextOverflow.ellipsis,
-//                                         style: GoogleFonts.aBeeZee(
-//                                             fontWeight: FontWeight.bold,
-//                                             fontSize: 13),
-//                                       ),
-//                                       // const SizedBox(height: 4.0),
-//                                       Text(
-//                                         '₹$formattedPrice',
-//                                         style: GoogleFonts.aBeeZee(
-//                                           fontSize: 12.0,
-//                                           color: Colors.black,
-//                                           decoration:
-//                                               TextDecoration.lineThrough,
-//                                         ),
-//                                       ),
-//                                       const SizedBox(height: 2.0),
-//                                       Text(
-//                                         '₹$discountedPriceInt with 1 Special Offer',
-//                                         maxLines: 1,
-//                                         overflow: TextOverflow.ellipsis,
-//                                         style: GoogleFonts.aBeeZee(
-//                                           fontSize: 11.0,
-//                                           color: Colors.green,
-//                                         ),
-//                                       ),
-//                                       const SizedBox(height: 2.0),
-//                                       Row(
-//                                         children: [
-//                                           Container(
-//                                             padding: const EdgeInsets.symmetric(
-//                                               vertical: 2.0,
-//                                               horizontal: 4.0,
-//                                             ),
-//                                             decoration: BoxDecoration(
-//                                               color: Colors.green,
-//                                               borderRadius:
-//                                                   BorderRadius.circular(4.0),
-//                                             ),
-//                                             child: const Row(
-//                                               children: [
-//                                                 Text(
-//                                                   '4.0',
-//                                                   style: TextStyle(
-//                                                     color: Colors.white,
-//                                                     fontSize: 11.0,
-//                                                   ),
-//                                                 ),
-//                                                 Icon(
-//                                                   Icons.star,
-//                                                   color: Colors.white,
-//                                                   size: 12.0,
-//                                                 ),
-//                                               ],
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           );
-//                         },
-//                         childCount: products.length,
-//                       ),
-//                     ),
-//                   ],
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget _buildSkeletonLoader() {
-//     final screenSize = MediaQuery.of(context).size;
-//     return LayoutBuilder(
-//       builder: (context, constraints) {
-//         final gridWidth = constraints.maxWidth;
-//         final crossAxisCount = gridWidth > 600 ? 3 : 2;
-//         final itemHeight = screenSize.height * 0.28;
-
-//         return CustomScrollView(
-//           slivers: [
-//             SliverGrid(
-//               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                 crossAxisCount: crossAxisCount,
-//                 childAspectRatio: 0.6,
-//               ),
-//               delegate: SliverChildBuilderDelegate(
-//                 (context, index) => _buildSkeletonCard(itemHeight),
-//                 childCount: 6,
-//               ),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-
-//   Widget _buildSkeletonCard(double height) {
-//     return Skeletonizer(
-//       child: Card(
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(10.0),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Container(
-//               color: Colors.grey[200],
-//               height: height,
-//               width: double.infinity,
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Container(
-//                     color: Colors.grey[200],
-//                     height: 20,
-//                     width: 100,
-//                   ),
-//                   const SizedBox(height: 4.0),
-//                   Container(
-//                     color: Colors.grey[200],
-//                     height: 15,
-//                     width: 80,
-//                   ),
-//                   const SizedBox(height: 4.0),
-//                   Container(
-//                     color: Colors.grey[200],
-//                     height: 15,
-//                     width: 120,
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
@@ -378,7 +43,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No products available.'));
+            return const Center();
           }
 
           final products = snapshot.data!;
@@ -388,19 +53,19 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
               SliverAppBar(
                 backgroundColor: Colors.white,
                 title: Text(
-                  widget.categoryName,
+                  '${widget.categoryName}',
                   style: GoogleFonts.aBeeZee(
                       fontWeight: FontWeight.bold, fontSize: 17),
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.favorite),
+                    icon: Icon(Icons.favorite),
                     color: Colors.red,
                     iconSize: 20,
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.shopping_cart),
+                    icon: Icon(Icons.shopping_cart),
                     color: Colors.black,
                     iconSize: 20,
                     onPressed: () {},
@@ -465,10 +130,9 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailPage(
-                                                    productId: product.id),
-                                          ),
+                                              builder: (context) =>
+                                                  ProductDetailPage(
+                                                      productId: product.id)),
                                         );
                                       },
                                       child: ClipRRect(
@@ -525,6 +189,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13),
                                       ),
+                                      // const SizedBox(height: 4.0),
                                       Text(
                                         '₹$formattedPrice',
                                         style: GoogleFonts.aBeeZee(
@@ -613,8 +278,7 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) => _buildSkeletonCard(itemHeight),
-                childCount:
-                    6, // Adjust the count to match the number of skeletons you want to show
+                childCount: 6,
               ),
             ),
           ],
@@ -632,10 +296,17 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: Colors.grey[200],
-              height: height,
-              width: double.infinity,
+            // Use a flexible height for the image container
+            Flexible(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(10.0)),
+                ),
+                width: double.infinity,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -643,21 +314,27 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Colors.grey[200],
-                    height: 20,
-                    width: 100,
-                  ),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    color: Colors.grey[200],
+                    width: double.infinity,
                     height: 15,
+                    color: Colors.grey[300],
+                  ),
+                  SizedBox(height: 4.0),
+                  Container(
+                    width: double.infinity,
+                    height: 15,
+                    color: Colors.grey[300],
+                  ),
+                  SizedBox(height: 4.0),
+                  Container(
                     width: 80,
-                  ),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    color: Colors.grey[200],
                     height: 15,
-                    width: 120,
+                    color: Colors.grey[300],
+                  ),
+                  SizedBox(height: 5.0),
+                  Container(
+                    width: 40,
+                    height: 15,
+                    color: Colors.grey[300],
                   ),
                 ],
               ),
@@ -665,6 +342,32 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    final screenSize = MediaQuery.of(context).size;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gridWidth = constraints.maxWidth;
+        final crossAxisCount = gridWidth > 600 ? 3 : 2;
+
+        return CustomScrollView(
+          slivers: [
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: 0.6,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) =>
+                    _buildSkeletonCard(screenSize.height * 0.28),
+                childCount: 6,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
