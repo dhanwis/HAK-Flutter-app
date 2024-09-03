@@ -28,8 +28,10 @@ class WrongMobileNumberState extends AuthState {}
 
 class OtpReceivedState extends AuthState {
   final String mobileNumber;
+  final String verificationSid;
 
-  const OtpReceivedState({required this.mobileNumber});
+  const OtpReceivedState(
+      {required this.mobileNumber, required this.verificationSid});
 }
 
 class OtpSubmittedState extends AuthState {}

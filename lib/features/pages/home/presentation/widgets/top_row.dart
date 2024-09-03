@@ -46,7 +46,7 @@ class TopRow extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AccountPage()),
+                  MaterialPageRoute(builder: (context) => CreateProfilePage()),
                 );
               },
               child: CircleAvatar(

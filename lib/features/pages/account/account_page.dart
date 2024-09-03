@@ -1,18 +1,42 @@
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class CreateProfilePage extends StatefulWidget {
+  const CreateProfilePage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<CreateProfilePage> createState() => _CreateProfilePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _CreateProfilePageState extends State<CreateProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  File? _image;
+  File? _image; // For image selection
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _pincodeController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _stateController = TextEditingController();
+  final List<String> _states = [
+    'Kannur',
+    'Kasargod',
+    'Kozhikode',
+    'Wayanad',
+    'Malapuram',
+    'Palakad',
+    'Trissur',
+    'Eranakulam',
+    'idukki',
+    'pathanamthitta',
+    'Alapuzha',
+    'Kollam',
+    'Thiruvananthapuram',
+  ];
+  String? _selectedState;
 
   Future<void> _getImageFromGallery() async {
     try {
@@ -95,6 +119,16 @@ class _AccountPageState extends State<AccountPage> {
                   });
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('Remove'),
+                onTap: () {
+                  setState(() {
+                    _image = null; // Clear the selected image
+                  });
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         );
@@ -159,6 +193,55 @@ class _AccountPageState extends State<AccountPage> {
     return null;
   }
 
+  Future<void> _saveProfile() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Gather data from form fields
+        String username = _nameController.text;
+        String email = _emailController.text;
+        String phoneNumber = _phoneController.text;
+        String pincode = _pincodeController.text;
+        String city = _cityController.text;
+        String state = _stateController.text;
+
+        // Convert image to path or handle it if necessary
+        String userImgPath = _image != null ? _image!.path : '';
+
+        // Call createCustomerProfile function
+        CustomerProfile profile = await ApiService().createCustomerProfile(
+          username: username,
+          email: email,
+          phoneNumber: phoneNumber,
+          pincode: pincode,
+          city: city,
+          state: state,
+          userImgPath: userImgPath,
+        );
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            // Color.fromARGB(255, 249, 231, 233),
+            content: Text('Data saved successfully! Profile ID: ${profile.id}',
+                style: TextStyle(color: Colors.black)),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (e) {
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Error saving data: $e',
+                style: TextStyle(color: Colors.white)),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +250,9 @@ class _AccountPageState extends State<AccountPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DilHackBottomNavBar()), // Ensure this widget exists
             );
           },
           icon: const Icon(Icons.arrow_back),
@@ -175,9 +260,10 @@ class _AccountPageState extends State<AccountPage> {
         title: const Text(
           "My Profile",
           style: TextStyle(
-              color: Color.fromARGB(255, 4, 4, 4),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
+            color: Color.fromARGB(255, 4, 4, 4),
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
         backgroundColor: const Color(0xFFFAAAB1),
       ),
@@ -214,6 +300,7 @@ class _AccountPageState extends State<AccountPage> {
                             },
                             icon: const Icon(
                               Icons.camera_alt,
+                              size: 40,
                             ),
                           ),
                   ),
@@ -221,6 +308,7 @@ class _AccountPageState extends State<AccountPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
+                    controller: _nameController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.person),
@@ -228,9 +316,8 @@ class _AccountPageState extends State<AccountPage> {
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     keyboardType: TextInputType.name,
                     validator: _validateName,
@@ -239,6 +326,7 @@ class _AccountPageState extends State<AccountPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
+                    controller: _phoneController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.phone),
@@ -246,9 +334,8 @@ class _AccountPageState extends State<AccountPage> {
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     keyboardType: TextInputType.phone,
                     validator: _validateMobile,
@@ -257,6 +344,7 @@ class _AccountPageState extends State<AccountPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
+                    controller: _emailController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
@@ -264,9 +352,8 @@ class _AccountPageState extends State<AccountPage> {
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     validator: _validateEmail,
@@ -275,6 +362,7 @@ class _AccountPageState extends State<AccountPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
+                    controller: _pincodeController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.pin),
@@ -282,9 +370,8 @@ class _AccountPageState extends State<AccountPage> {
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     validator: _validatePincode,
@@ -293,6 +380,7 @@ class _AccountPageState extends State<AccountPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
+                    controller: _cityController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.location_on),
@@ -300,9 +388,8 @@ class _AccountPageState extends State<AccountPage> {
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
                     keyboardType: TextInputType.name,
                     validator: _validateCity,
@@ -310,25 +397,37 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedState,
+                    items: _states.map((String state) {
+                      return DropdownMenuItem<String>(
+                        value: state,
+                        child: Text(state),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedState = newValue;
+                      });
+                    },
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.location_city),
                       labelText: 'State',
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: UnderlineInputBorder(),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black,
-                      )),
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                     ),
-                    keyboardType: TextInputType.name,
-                    validator: _validateState,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select a state';
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   child: const Text(
                     'Save',
@@ -336,16 +435,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Color.fromARGB(255, 249, 231, 233),
-                          content: Text(
-                            'Data saved successfully!',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      _saveProfile();
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -8,6 +8,7 @@ import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.da
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 //import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
+import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 
 //import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-          home: DilHackBottomNavBar()
-          //SplashScreen(),
-          // You can set other screens like SplashScreen(), LoginPage(), etc.
-          ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
+        home: SplashScreen(),
+        // DilHackBottomNavBar()
+
+        // You can set other screens like SplashScreen(), LoginPage(), etc.
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/database_support/database_support.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 
@@ -15,88 +16,84 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<SendOtpEvent>(_sendOtp);
     on<SubmitOtpEvent>(_submitOtp);
-    on<ChangeMobileNumberEvent>(_changeMobileNumber);
+    //on<ChangeMobileNumberEvent>(_changeMobileNumber);
   }
-  ApiLinks apiLinks = ApiLinks();
 
-  FutureOr<void> _sendOtp(SendOtpEvent event, Emitter<AuthState> emit) async {
+  ApiLinks apiLinks = ApiLinks();
+  String? _phoneNumber;
+  String? _verificationSid;
+
+  Future<void> _sendOtp(SendOtpEvent event, Emitter<AuthState> emit) async {
     Dio dioClient = Dio();
 
-    emit(
-      OtpLoadingState(),
-    );
+    emit(OtpLoadingState());
     try {
       final response = await dioClient.post(
-          'http://192.168.1.6:8000/customers/auth/login',
-          data: {'phoneNumber': event.mobileNumber});
+        '${AppConstants.BASE_URL}/auth_customer/customer/auth/login',
+        data: {'phoneNumber': event.mobileNumber},
+      );
 
       emit(AuthInitial());
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        final id = response.data['id'];
+      if (response.statusCode == 201) {
+        final verificationSid = response.data['verificationSid'];
+
+        _phoneNumber = event.mobileNumber;
+        _verificationSid = verificationSid;
+
         DatabaseSupport.saveusername(event.mobileNumber);
 
-        emit(
-          //manjima
-          OtpReceivedState(mobileNumber: event.mobileNumber),
-        );
+        emit(OtpReceivedState(
+            mobileNumber: event.mobileNumber,
+            verificationSid: verificationSid));
 
-        apiLinks.setId = id;
+        apiLinks.setId = verificationSid;
       }
     } catch (error) {
-      emit(
-        OtpSendingErrorState(
-          msg: error.toString(),
-        ),
-      );
+      emit(OtpSendingErrorState(msg: error.toString()));
     }
   }
 
-  FutureOr<void> _submitOtp(
-    SubmitOtpEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _submitOtp(SubmitOtpEvent event, Emitter<AuthState> emit) async {
+    if (_phoneNumber == null || _verificationSid == null) {
+      emit(OtpValidatingErrorState());
+      return;
+    }
+
     Dio dioClient = Dio();
 
     SharedPreferences pref = await SharedPreferences.getInstance();
-// already generated id
-    emit(
-      OtpLoadingState(),
-    );
+    emit(OtpLoadingState());
     try {
       String otp = event.otp;
 
-      emit(
-        OtpValidationWaitingState(),
-      );
-      // we will get the user details here
+      emit(OtpValidationWaitingState());
+
       final response = await dioClient.post(
-        'http://192.168.1.6:8000/customers/auth/otp_verification',
-        data: {"otp": otp},
+        '${AppConstants.BASE_URL}/auth_customer/customer/auth/otp_verification',
+        data: {
+          "otp": otp,
+          "phoneNumber": _phoneNumber,
+          "verificationSid": _verificationSid,
+        },
       );
 
       if (response.statusCode == 200) {
         final tokenData = AuthResponse.fromJson(response.data);
 
-        //log(tokenData.access!);
-        // save the tokens in shared preference data base
         await pref.setString('accessToken', tokenData.access!);
         await pref.setString('refreshToken', tokenData.refresh!);
         emit(OtpValidatedState(token: tokenData.access!));
       } else {
-        // Handle unexpected status codes
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle DioException and other errors
       emit(OtpValidatingErrorState());
-
-      //   log(e.toString());
     }
   }
 
-  FutureOr<void> _changeMobileNumber(
-      ChangeMobileNumberEvent event, Emitter<AuthState> emit) {
-    emit(WrongMobileNumberState());
-  }
+  // Future<void> _changeMobileNumber(
+  //     ChangeMobileNumberEvent event, Emitter<AuthState> emit) {
+  //   emit(WrongMobileNumberState());
+  // }
 }

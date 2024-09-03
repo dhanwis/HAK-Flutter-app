@@ -19,7 +19,9 @@ class SendOtpEvent extends AuthEvent {
 class SubmitOtpEvent extends AuthEvent {
   final String otp;
 
-  const SubmitOtpEvent({required this.otp});
+  const SubmitOtpEvent({
+    required this.otp,
+  });
   @override
   List<Object> get props => [otp];
 }
