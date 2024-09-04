@@ -1,14 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/database_support/database_support.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 
 import 'package:dil_hack_e_commerce/secrets/api_links.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -29,12 +30,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(OtpLoadingState());
     try {
       final response = await dioClient.post(
-        '${AppConstants.BASE_URL}/auth_customer/customer/auth/login',
+        '${AppConstants.BASE_URL}/auth_customer/auth/login',
         data: {'phoneNumber': event.mobileNumber},
       );
 
       emit(AuthInitial());
 
+      print(response);
       if (response.statusCode == 201) {
         final verificationSid = response.data['verificationSid'];
 
@@ -55,6 +57,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _submitOtp(SubmitOtpEvent event, Emitter<AuthState> emit) async {
+    final tokenStorage = TokenStorage();
+
     if (_phoneNumber == null || _verificationSid == null) {
       emit(OtpValidatingErrorState());
       return;
@@ -62,15 +66,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     Dio dioClient = Dio();
 
-    SharedPreferences pref = await SharedPreferences.getInstance();
     emit(OtpLoadingState());
     try {
       String otp = event.otp;
-
       emit(OtpValidationWaitingState());
 
       final response = await dioClient.post(
-        '${AppConstants.BASE_URL}/auth_customer/customer/auth/otp_verification',
+        '${AppConstants.BASE_URL}/auth_customer/auth/otp_verification',
         data: {
           "otp": otp,
           "phoneNumber": _phoneNumber,
@@ -79,16 +81,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (response.statusCode == 200) {
+        print('Response data: ${response.data}');
         final tokenData = AuthResponse.fromJson(response.data);
 
-        await pref.setString('accessToken', tokenData.access!);
-        await pref.setString('refreshToken', tokenData.refresh!);
-        emit(OtpValidatedState(token: tokenData.access!));
+        String? accessToken = tokenData.access;
+        String? refreshToken = tokenData.refresh;
+
+        print('AccessToken: $accessToken');
+        print('RefreshToken: $refreshToken');
+
+        await tokenStorage.saveTokens(accessToken!, refreshToken!);
+
+        emit(OtpValidatedState(token: accessToken));
+        print('OtpValidatedState emitted');
       } else {
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } catch (e) {
+      print('Error occurred: $e');
       emit(OtpValidatingErrorState());
+    }
+  }
+
+  Future<String> refreshToken(String refreshToken) async {
+    Dio dioClient = Dio();
+
+    final response = await dioClient.post(
+      '${AppConstants.BASE_URL}/token',
+      data: {'token': refreshToken},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data)['accessToken'];
+      // final tokenData = AuthResponse.fromJson(response.data);
+      //return AuthResponse.fromJson(response.data)['accessToken'];
+    } else {
+      throw Exception('Failed to refresh Token');
     }
   }
 

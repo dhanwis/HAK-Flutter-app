@@ -6,7 +6,7 @@ class CustomerProfile {
   final String phoneNumber;
   final String pincode;
   final String city;
-  final String state;
+  final String? state;
   final String? userImg;
 
   CustomerProfile({
@@ -16,7 +16,7 @@ class CustomerProfile {
     required this.phoneNumber,
     required this.pincode,
     required this.city,
-    required this.state,
+    this.state, // Nullable field
     this.userImg,
   });
 

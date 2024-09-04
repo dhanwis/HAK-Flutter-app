@@ -1,7 +1,10 @@
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -13,6 +16,8 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
+  // String accessToken = '';
+  // String refreshToken = '';
   final _formKey = GlobalKey<FormState>();
   File? _image; // For image selection
   final _nameController = TextEditingController();
@@ -20,10 +25,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   final _emailController = TextEditingController();
   final _pincodeController = TextEditingController();
   final _cityController = TextEditingController();
-  final _stateController = TextEditingController();
-  final List<String> _states = [
-    'Kannur',
+  //final _stateController = TextEditingController();
+  String? _selectedState;
+  //XFile? _image;
+
+  final List<String> _stateController = [
     'Kasargod',
+    'Kannur',
     'Kozhikode',
     'Wayanad',
     'Malapuram',
@@ -32,11 +40,11 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     'Eranakulam',
     'idukki',
     'pathanamthitta',
+    'Kottayam',
     'Alapuzha',
     'Kollam',
     'Thiruvananthapuram',
   ];
-  String? _selectedState;
 
   Future<void> _getImageFromGallery() async {
     try {
@@ -122,6 +130,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text('Remove'),
+                titleTextStyle: GoogleFonts.aBeeZee(color: Colors.black),
                 onTap: () {
                   setState(() {
                     _image = null; // Clear the selected image
@@ -202,7 +211,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
         String phoneNumber = _phoneController.text;
         String pincode = _pincodeController.text;
         String city = _cityController.text;
-        String state = _stateController.text;
+        String state = _selectedState ?? '';
 
         // Convert image to path or handle it if necessary
         String userImgPath = _image != null ? _image!.path : '';
@@ -224,12 +233,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             backgroundColor: Colors.green,
             // Color.fromARGB(255, 249, 231, 233),
             content: Text('Data saved successfully! Profile ID: ${profile.id}',
-                style: TextStyle(color: Colors.black)),
+                style: GoogleFonts.aBeeZee(color: Colors.black)),
             duration: Duration(seconds: 2),
           ),
         );
       } catch (e) {
         // Show error message
+        print('Error: $e'); // Log the error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
@@ -257,12 +267,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           },
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text(
+        title: Text(
           "My Profile",
-          style: TextStyle(
+          style: GoogleFonts.aBeeZee(
             color: Color.fromARGB(255, 4, 4, 4),
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 17,
           ),
         ),
         backgroundColor: const Color(0xFFFAAAB1),
@@ -300,7 +310,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             },
                             icon: const Icon(
                               Icons.camera_alt,
-                              size: 40,
+                              size: 30,
                             ),
                           ),
                   ),
@@ -310,12 +320,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: TextFormField(
                     controller: _nameController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        size: 18,
+                      ),
                       labelText: 'Name',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
+                      enabledBorder: const UnderlineInputBorder(),
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -328,12 +342,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: TextFormField(
                     controller: _phoneController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.phone),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.phone,
+                        size: 18,
+                      ),
                       labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
+                      enabledBorder: const UnderlineInputBorder(),
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -346,11 +364,14 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: TextFormField(
                     controller: _emailController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        size: 18,
+                      ),
                       labelText: 'Email id',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
@@ -364,12 +385,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: TextFormField(
                     controller: _pincodeController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.pin),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.pin,
+                        size: 18,
+                      ),
                       labelText: 'Pincode',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
+                      enabledBorder: const UnderlineInputBorder(),
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -379,27 +404,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: _cityController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_on),
-                      labelText: 'City',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                      ),
-                    ),
-                    keyboardType: TextInputType.name,
-                    validator: _validateCity,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField<String>(
                     value: _selectedState,
-                    items: _states.map((String state) {
+                    items: _stateController.map((String state) {
                       return DropdownMenuItem<String>(
                         value: state,
                         child: Text(state),
@@ -410,12 +417,16 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         _selectedState = newValue;
                       });
                     },
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_city),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.location_city,
+                        size: 18,
+                      ),
                       labelText: 'State',
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: UnderlineInputBorder(),
-                      focusedBorder: UnderlineInputBorder(
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
+                      enabledBorder: const UnderlineInputBorder(),
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
@@ -427,11 +438,33 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: _cityController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.location_on,
+                        size: 18,
+                      ),
+                      labelText: 'City',
+                      labelStyle: GoogleFonts.aBeeZee(
+                          color: Colors.black, fontSize: 15),
+                      enabledBorder: const UnderlineInputBorder(),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    keyboardType: TextInputType.name,
+                    validator: _validateCity,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  child: const Text(
+                  child: Text(
                     'Save',
-                    style: TextStyle(color: Colors.black),
+                    style: GoogleFonts.aBeeZee(color: Colors.black),
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

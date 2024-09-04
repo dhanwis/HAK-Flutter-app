@@ -1,6 +1,8 @@
+// import 'package:flutter/material.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_screen.dart';
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -48,41 +50,51 @@ class _FilterSectionState extends State<FilterSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          // vertical: 5.0,
-          horizontal: 10.0),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // const SizedBox(height: 10),
-          SizedBox(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return _buildFilterChip(
-                  index,
-                  context,
-                  () => _handleChipSelection(index),
-                );
-              },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 40,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return _buildFilterChip(
+                    index,
+                    context,
+                    () => _handleChipSelection(index),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildFilterChip(
       int index, BuildContext context, VoidCallback onSelected) {
-    final isSelected = _selectedIndices.contains(index) ||
-        (index == 2 && _hasSelectedAnyFilters(categoryFilters)) ||
-        (index == 3 && _hasSelectedAnyFilters(materialFilters)) ||
-        (index == 4 && _hasSelectedAnyFilters(colorFilters)) ||
-        (index == 5 && _hasSelectedAnyFilters(priceFilters));
+    final bool isSelected;
+
+    switch (index) {
+      case 2:
+        isSelected = _hasSelectedAnyFilters(categoryFilters);
+        break;
+      case 3:
+        isSelected = _hasSelectedAnyFilters(materialFilters);
+        break;
+      case 4:
+        isSelected = _hasSelectedAnyFilters(colorFilters);
+        break;
+      default:
+        isSelected = _selectedIndices.contains(index);
+        break;
+    }
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -201,7 +213,7 @@ class _FilterSectionState extends State<FilterSection> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
+          builder: (BuildContext context, StateSetter setModalState) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -217,7 +229,11 @@ class _FilterSectionState extends State<FilterSection> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          setState(
+                              () {}); // Ensure the filter section UI updates
+                          Navigator.pop(context);
+                        },
                       ),
                     ],
                   ),
@@ -228,9 +244,10 @@ class _FilterSectionState extends State<FilterSection> {
                           title: Text(key),
                           value: filters[key],
                           onChanged: (bool? value) {
-                            setState(() {
+                            setModalState(() {
                               filters[key] = value!;
                             });
+                            setState(() {}); // Update the UI immediately
                           },
                         );
                       }).toList(),
@@ -241,9 +258,11 @@ class _FilterSectionState extends State<FilterSection> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          setState(() {
+                          setModalState(() {
                             filters.updateAll((key, value) => false);
                           });
+                          setState(
+                              () {}); // Reflect the cleared filters in the UI
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
@@ -256,6 +275,8 @@ class _FilterSectionState extends State<FilterSection> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          setState(
+                              () {}); // Update the UI after applying filters
                           if (widget.onFilterApplied != null) {
                             widget.onFilterApplied!();
                           }

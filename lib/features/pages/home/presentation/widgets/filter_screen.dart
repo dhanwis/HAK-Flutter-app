@@ -1,40 +1,6 @@
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class FilterScreen extends StatefulWidget {
-  @override
-  _FilterScreenState createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
-  Map<String, bool> brandFilters = {
-    'Dilhak': false,
-  };
-
-  Map<String, bool> colorFilters = {
-    'Red': false,
-    'Blue': false,
-    'Green': false,
-    'Yellow': false,
-  };
-
-  Map<String, bool> sizeFilters = {
-    'S': false,
-    'M': false,
-    'L': false,
-    'XL': false,
-  };
-
-  late List<bool> _expanded;
-
-  @override
-  void initState() {
-    super.initState();
-    _expanded = List<bool>.generate(
-        3, (index) => false); // Adjusted to 3 for the new section
-  }
-
+class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,83 +9,79 @@ class _FilterScreenState extends State<FilterScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
-                _resetFilters();
-              });
+              // Clear filter logic
             },
-            child: Text('Clear Filters',
-                style: GoogleFonts.aBeeZee(color: Colors.black)),
+            child: Text(
+              'Clear Filters',
+              style: TextStyle(color: Colors.blue),
+            ),
           ),
         ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        elevation: 0,
+        centerTitle: true,
       ),
-      body: Row(children: [
-        SizedBox(
-          width: 240,
-          child: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                _buildFilterSection('Brand', brandFilters, 0),
-                const SizedBox(height: 10),
-                _buildFilterSection('Color', colorFilters, 1),
-                const SizedBox(height: 10),
-                _buildFilterSection(
-                    'Size', sizeFilters, 2), // New Size filter section
-              ],
+      body: Drawer(
+        width: 340,
+        child: Card(
+          child: ListView(
+            padding: EdgeInsets.all(16.0),
+            children: [
+              ExpansionTile(
+                title: Text('Price'),
+                children: [
+                  // Add your price range selector here
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Brand'),
+                children: [
+                  // Add brand options here
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Color'),
+                children: [
+                  // Add color options here
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Categories'),
+                children: [
+                  // Add categories options here
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Material'),
+                children: [
+                  // Add material options here
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            // Apply filter logic
+          },
+          child: Text('Apply'),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
             ),
           ),
         ),
-      ]),
-      bottomNavigationBar: ElevatedButton(
-        onPressed: () {
-          _applyFilters();
-        },
-        child: Text(
-          'Apply',
-          style: GoogleFonts.aBeeZee(color: Colors.black),
-        ),
       ),
     );
-  }
-
-  Widget _buildFilterSection(
-      String title, Map<String, bool> filters, int index) {
-    return ExpansionTile(
-      title: Text(title),
-      children: [
-        Column(
-          children: filters.keys.map((String key) {
-            return CheckboxListTile(
-              title: Text(key),
-              value: filters[key]!,
-              onChanged: (bool? value) {
-                setState(() {
-                  filters[key] = value!;
-                });
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  void _resetFilters() {
-    setState(() {
-      brandFilters.forEach((key, value) {
-        brandFilters[key] = false;
-      });
-      colorFilters.forEach((key, value) {
-        colorFilters[key] = false;
-      });
-      sizeFilters.forEach((key, value) {
-        // Reset the size filters
-        sizeFilters[key] = false;
-      });
-    });
-  }
-
-  void _applyFilters() {
-    Navigator.pop(context);
   }
 }

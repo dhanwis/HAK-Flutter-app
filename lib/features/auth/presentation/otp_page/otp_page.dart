@@ -25,17 +25,16 @@ class EnterOtpPage extends StatefulWidget {
 
 class _EnterOtpPageState extends State<EnterOtpPage> {
   String otp = '';
-  late String accessToken;
-  late String refreshToken;
-  @override
-  void initState() {
-    super.initState();
-    // Retrieve tokens from Hive
-    var tokenBox = Hive.box<Token>('tokenBox');
-    Token tokens = tokenBox.get('tokens') ?? Token("", "");
-    accessToken = tokens.accessToken;
-    refreshToken = tokens.refreshToken;
-  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Retrieve tokens from Hive
+  //   var tokenBox = Hive.box<Token>('tokenBox');
+  //   Token tokens = tokenBox.get('tokens') ?? Token("", "");
+  //   accessToken = tokens.accessToken;
+  //   refreshToken = tokens.refreshToken;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,10 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     final width = MediaQuery.of(context).size.width;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
+        print('auth otpvalidate state');
+        print(state);
         if (state is OtpValidatedState) {
+          print('schecking');
           Future.delayed(const Duration(milliseconds: 300), () {
             Navigator.pushAndRemoveUntil(context,
                 createRoute(const DilHackBottomNavBar()), (route) => false);
@@ -125,29 +127,40 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                           },
                         ),
                         const H50(),
+                        // LoginButton(
+                        //   width: width,
+                        //   callback: () {
+                        //     // Save Tokens to Hive
+                        //     // var tokenBox = Hive.box<Token>('tokenBox');
+                        //     // tokenBox.put(
+                        //     //     'tokens', Token(accessToken, refreshToken));
+
+                        //     context
+                        //         .read<AuthBloc>()
+                        //         .add(SubmitOtpEvent(otp: otp));
+
+                        //     () {
+                        //       Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) =>
+                        //                 DilHackBottomNavBar()),
+                        //       );
+                        //     };
+                        //   },
+                        //   label: 'Submit OTP',
+                        // ),
+
                         LoginButton(
                           width: width,
                           callback: () {
-                            // Save Tokens to Hive
-                            var tokenBox = Hive.box<Token>('tokenBox');
-                            tokenBox.put(
-                                'tokens', Token(accessToken, refreshToken));
-
                             context
                                 .read<AuthBloc>()
                                 .add(SubmitOtpEvent(otp: otp));
-                            callback:
-                            () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        DilHackBottomNavBar()),
-                              );
-                            };
                           },
                           label: 'Submit OTP',
                         ),
+
                         const H30(),
                         TextButton(
                           onPressed: () {

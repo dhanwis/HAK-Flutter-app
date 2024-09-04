@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
+import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
+
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -15,8 +17,10 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future _checkTokenAndNavigate() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final token = pref.getString('accessToken');
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    // final token = pref.getString('accessToken');
+
+    final token = await TokenStorage().getAccessToken();
 
     if (token != null && token.isNotEmpty) {
       Timer(
@@ -25,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(
             context,
             createRoute(
-              const LoginPage(),
+              const DilHackBottomNavBar(),
             ),
           );
         },
