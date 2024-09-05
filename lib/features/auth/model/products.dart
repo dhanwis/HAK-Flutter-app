@@ -102,8 +102,9 @@ class Variation {
     List<String> imagesList = [];
     if (json['images'] != null) {
       var imagesJson = json['images'] as List;
-      imagesList =
-          imagesJson.map((v) => '${AppConstants.PRODUCT_IMG}/$v').toList();
+      imagesList = imagesJson
+          .map((v) => '${AppConstants.PRODUCT_IMG}/$productId/$v')
+          .toList();
     }
 
     List<Sku> skusList = [];
