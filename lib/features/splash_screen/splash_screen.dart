@@ -6,7 +6,6 @@ import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,6 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = await TokenStorage().getAccessToken();
 
     if (token != null && token.isNotEmpty) {
+      print('token checking');
+      print(token);
+
       Timer(
         const Duration(seconds: 3),
         () {
@@ -35,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         },
       );
     } else {
+      print('no token');
       Timer(const Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,

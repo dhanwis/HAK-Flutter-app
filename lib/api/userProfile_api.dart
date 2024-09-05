@@ -45,66 +45,70 @@ class ApiService {
     var response = await client.send(request);
     var responseBody = await response.stream.bytesToString();
 
-    // if (response.statusCode == 201) {
-    //   return CustomerProfile.fromJson(jsonDecode(responseBody)['profile']);
-    // } else {
-    //   throw Exception('Failed to create customer profile');
-    // }
-
     if (response.statusCode == 201) {
       return CustomerProfile.fromJson(jsonDecode(responseBody)['profile']);
-    } else if (response.statusCode == 400) {
-      // Handle client-side error (e.g., validation error)
-      throw Exception('Client error: ${jsonDecode(responseBody)['message']}');
-    } else if (response.statusCode == 500) {
-      // Handle server-side error
-      throw Exception('Server error: ${jsonDecode(responseBody)['error']}');
     } else {
-      throw Exception('Unexpected error: ${response.statusCode}');
+      throw Exception('Failed to create customer profile');
     }
   }
 
-  Future<CustomerProfile> updateCustomerProfile({
-    required String id,
-    String? username,
-    String? email,
-    String? phoneNumber,
-    String? pincode,
-    String? city,
-    String? state,
-    String? userImgPath,
-  }) async {
-    var uri = Uri.parse('${AppConstants.BASE_URL}/customer_profile_update/$id');
-    var request = http.MultipartRequest('PUT', uri);
+  // Future<CustomerProfile> updateCustomerProfile({
+  //   required String id,
+  //   String? username,
+  //   String? email,
+  //   String? phoneNumber,
+  //   String? pincode,
+  //   String? city,
+  //   String? state,
+  //   String? userImgPath,
+  // }) async {
+  //   var uri = Uri.parse('${AppConstants.BASE_URL}/customer_profile_update/$id');
+  //   var request = http.MultipartRequest('PUT', uri);
 
-    if (username != null) request.fields['username'] = username;
-    if (email != null) request.fields['email'] = email;
-    if (phoneNumber != null) request.fields['phoneNumber'] = phoneNumber;
-    if (pincode != null) request.fields['pincode'] = pincode;
-    if (city != null) request.fields['city'] = city;
-    if (state != null) request.fields['state'] = state;
+  //   if (username != null) request.fields['username'] = username;
+  //   if (email != null) request.fields['email'] = email;
+  //   if (phoneNumber != null) request.fields['phoneNumber'] = phoneNumber;
+  //   if (pincode != null) request.fields['pincode'] = pincode;
+  //   if (city != null) request.fields['city'] = city;
+  //   if (state != null) request.fields['state'] = state;
 
-    if (userImgPath != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath('userImg', userImgPath));
-    }
+  //   if (userImgPath != null) {
+  //     request.files
+  //         .add(await http.MultipartFile.fromPath('userImg', userImgPath));
+  //   }
 
-    var response = await request.send();
-    var responseBody = await response.stream.bytesToString();
+  //   var response = await request.send();
+  //   var responseBody = await response.stream.bytesToString();
+
+  //   if (response.statusCode == 200) {
+  //     return CustomerProfile.fromJson(jsonDecode(responseBody)['profile']);
+  //   } else {
+  //     throw Exception('Failed to update customer profile');
+  //   }
+  // }
+
+  // Future<void> deleteCustomerProfile(String id) async {
+  //   var uri = Uri.parse('${AppConstants.BASE_URL}/customer_profile_delete/$id');
+  //   var response = await http.delete(uri);
+
+  //   if (response.statusCode != 200) {
+  //     throw Exception('Failed to delete customer profile');
+  //   }
+  // }
+
+  Future<CustomerProfile> getProfileData(id) async {
+    final response = await client.get(
+      Uri.parse(
+          '${AppConstants.BASE_URL}/auth_customer/customer/ProfileDataXYZ/$id'),
+    );
 
     if (response.statusCode == 200) {
-      return CustomerProfile.fromJson(jsonDecode(responseBody)['profile']);
+      final data = jsonDecode(response.body);
+      print('user dataaaaa');
+      print(data);
+      return CustomerProfile.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to update customer profile');
-    }
-  }
-
-  Future<void> deleteCustomerProfile(String id) async {
-    var uri = Uri.parse('${AppConstants.BASE_URL}/customer_profile_delete/$id');
-    var response = await http.delete(uri);
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to delete customer profile');
+      throw Exception();
     }
   }
 }

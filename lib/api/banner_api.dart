@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/constants/defaultHttp.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/banners.dart';
 import 'package:http/http.dart' as http;
 
 class BannerService {
+  final client = AuthHttpClient(http.Client());
   static const String url =
       '${AppConstants.BASE_URL}/customerApp/banner/view_all_banners';
 
@@ -11,7 +13,7 @@ class BannerService {
 
   Future<List<Banner>> fetchBanners() async {
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await client.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final List<dynamic> bannerJson = json.decode(response.body);

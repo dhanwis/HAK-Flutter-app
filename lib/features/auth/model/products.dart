@@ -1,3 +1,5 @@
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+
 class Product {
   final String id;
   final String productId;
@@ -97,12 +99,11 @@ class Variation {
   });
 
   factory Variation.fromJson(Map<String, dynamic> json, String productId) {
-    const baseUrl = 'http://192.168.1.6:8000/ProductImg/';
-
     List<String> imagesList = [];
     if (json['images'] != null) {
       var imagesJson = json['images'] as List;
-      imagesList = imagesJson.map((v) => '$baseUrl$productId/$v').toList();
+      imagesList =
+          imagesJson.map((v) => '${AppConstants.PRODUCT_IMG}/$v').toList();
     }
 
     List<Sku> skusList = [];

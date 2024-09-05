@@ -44,10 +44,10 @@ class TopRow extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateProfilePage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => CreateProfilePage()),
+                // );
               },
               child: CircleAvatar(
                 radius: screenSize.width * 0.05,

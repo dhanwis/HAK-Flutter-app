@@ -58,9 +58,9 @@ class AuthHttpClient extends http.BaseClient {
     }
 
     final response = await http.post(
-      Uri.parse('${AppConstants.BASE_URL}/auth_customer/auth/refresh_token'),
+      Uri.parse('${AppConstants.BASE_URL}/auth_customer/auth/refresh-token'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'refresh_token': refreshToken}),
+      body: jsonEncode({'token': refreshToken}),
     );
 
     if (response.statusCode == 200) {

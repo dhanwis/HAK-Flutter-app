@@ -29,15 +29,17 @@
 
 import 'dart:convert';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/constants/defaultHttp.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:http/http.dart' as http;
 
 class ProductbyidApi {
+  final client = AuthHttpClient(http.Client());
   Future<Product> fetchProductById(productId) async {
     final apiUrl =
         '${AppConstants.BASE_URL}/customerApp/product/viewProductBy/$productId';
 
-    final response = await http.get(Uri.parse(apiUrl));
+    final response = await client.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
       return Product.fromJson(json.decode(response.body));

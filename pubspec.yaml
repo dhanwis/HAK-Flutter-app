@@ -66,6 +66,7 @@ dependencies:
   skeleton_loader: ^2.0.0+4
   carousel_slider: ^5.0.0
   share_plus: ^10.0.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:

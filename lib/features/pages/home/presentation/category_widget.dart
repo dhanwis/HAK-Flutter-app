@@ -1,4 +1,5 @@
 // category_widget.dart
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/categories.dart';
@@ -73,7 +74,7 @@ class CategoryWidget extends StatelessWidget {
                             backgroundColor: Colors.white,
                             radius: 37,
                             backgroundImage: NetworkImage(
-                              "http://192.168.1.6:8000/categoryImg/${categories[index].imageUrl}",
+                              "${AppConstants.CATEOGRYIMG}/${categories[index].imageUrl}",
                             ),
                           ),
                         ),

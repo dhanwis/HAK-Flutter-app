@@ -19,3 +19,5 @@ class NewArrivalsBloc extends Bloc<NewArrivalsEvent, NewArrivalsState> {
     });
   }
 }
+
+//9074434030
