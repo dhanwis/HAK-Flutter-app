@@ -1,7 +1,8 @@
+import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
-import 'package:dil_hack_e_commerce/features/pages/fav/fav_page.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -18,17 +19,51 @@ class DilHackBottomNavBar extends StatefulWidget {
 
 class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
   List<Widget> pages = [
-    HomePage(),
-    CartPage(),
-    FavPage(),
-    CreateProfilePage(),
+    // HomePage(),
+    // CartPage(),
+    // WishlistPage(
+    //   userId: userId,
+    // ),
+    // CreateProfilePage(),
   ];
+
   int currentIndex = 0;
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUser(); // Decode token and get userId
+  }
+
+  Future<void> _initializeUser() async {
+    try {
+      // Decode the token and get userId
+      Map<String, dynamic> decodedToken = await decodeJwt();
+      setState(() {
+        userId = decodedToken[
+            'userId']; // Assuming 'userId' is the key in your token
+        // Initialize pages after userId is obtained
+        pages = [
+          HomePage(),
+          CartPage(),
+          WishlistPage(userId: userId),
+          CreateProfilePage(),
+        ];
+      });
+    } catch (e) {
+      print("Error decoding token: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentIndex],
+      body: pages.isEmpty
+          ? Center(
+              child:
+                  CircularProgressIndicator()) // Show loading indicator while decoding token
+          : pages[currentIndex],
       bottomNavigationBar: SnakeNavigationBar.color(
         height: 50,
         onTap: (value) {

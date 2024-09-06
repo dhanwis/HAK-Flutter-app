@@ -1,8 +1,11 @@
 import 'package:dil_hack_e_commerce/api/products_api.dart';
+import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
@@ -20,8 +23,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  await Hive.openBox<Token>('tokenBox');
+  // await Hive.initFlutter();
+  // await Hive.openBox<Token>('tokenBox');
 
   runApp(const MyApp());
 }

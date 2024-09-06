@@ -11,6 +11,7 @@ class WishlistService {
     final response = await client
         .get(Uri.parse('$baseUrl/customerApp/wishList/get_all/$userId'));
     if (response.statusCode == 200) {
+      print('all ${response.body}');
       return json.decode(response.body)['products'];
     } else {
       throw Exception('Failed to load wishlist');
@@ -18,11 +19,13 @@ class WishlistService {
   }
 
   Future<void> addToWishlist(String userId, String productId) async {
+    print('acllnig');
     final response = await client.post(
       Uri.parse('$baseUrl/customerApp/wishList/add/$userId'),
       body: json.encode({'productId': productId}),
       headers: {'Content-Type': 'application/json'},
     );
+    print(response.body);
     if (response.statusCode != 201) {
       throw Exception('Failed to add to wishlist');
     }

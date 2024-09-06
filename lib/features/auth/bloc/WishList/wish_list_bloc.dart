@@ -19,6 +19,8 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     });
 
     on<AddToWishlist>((event, emit) async {
+      print('event bellow');
+      print(event);
       try {
         await wishlistService.addToWishlist(event.userId, event.productId);
         final wishlist = await wishlistService.fetchWishlist(event.userId);

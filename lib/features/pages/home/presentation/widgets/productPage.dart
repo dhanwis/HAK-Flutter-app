@@ -21,16 +21,33 @@ class _ProductGridState extends State<ProductGrid> {
   bool isLoading = true; // Initial loading state
   final ScrollController _scrollController = ScrollController();
 
+  String userId = '';
+
   @override
   void initState() {
     super.initState();
     _fetchProducts();
+    _initializeUser();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _fetchProducts();
       }
     });
+  }
+
+  Future<void> _initializeUser() async {
+    try {
+      // Decode the token and get userId
+      Map<String, dynamic> decodedToken = await decodeJwt();
+      setState(() {
+        userId = decodedToken[
+            'userId']; // Assuming 'userId' is the key in your token
+        // Initialize pages after userId is obtained
+      });
+    } catch (e) {
+      print("Error decoding token: $e");
+    }
   }
 
   Future<void> _fetchProducts() async {
@@ -232,7 +249,7 @@ class _ProductGridState extends State<ProductGrid> {
                                     onTap: () {},
                                     child: CircleAvatar(
                                       backgroundColor: Colors.white,
-                                      radius: 15,
+                                      radius: 16,
                                       //   child: Icon(
                                       //     Icons.favorite_border,
                                       //     color: Colors.black,
@@ -240,7 +257,10 @@ class _ProductGridState extends State<ProductGrid> {
                                       //   ),
                                       // ),
 
-                                      child: FavoriteButton(),
+                                      child: FavoriteButton(
+                                        userId: userId,
+                                        productId: product.id,
+                                      ),
                                     ),
                                   ),
                                 ),

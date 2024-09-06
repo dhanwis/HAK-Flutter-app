@@ -170,10 +170,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
     final skus = firstVariation?.skus ?? [];
     final actualPrice = skus.isNotEmpty ? skus.first.actualPrice : 0;
 
-    final discountedPrice =
-        skus.isNotEmpty && skus.first.discountedPrice != null
-            ? skus.first.discountedPrice
-            : null;
+    final discountedPrice = skus.isNotEmpty ? skus.first.discountedPrice : null;
 
     final formattedPrice = NumberFormat('#,##0').format(actualPrice);
     final formattedDiscount = NumberFormat('#,##0').format(discountedPrice);
