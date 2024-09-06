@@ -9,7 +9,7 @@ class CreateUser extends ProfileEvent {
   final String pincode;
   final String city;
   final String state;
-  final String userImgPath;
+  final String? userImgPath;
 
   CreateUser({
     required this.username,
@@ -18,7 +18,7 @@ class CreateUser extends ProfileEvent {
     required this.pincode,
     required this.city,
     required this.state,
-    required this.userImgPath,
+    this.userImgPath,
   });
 
   @override

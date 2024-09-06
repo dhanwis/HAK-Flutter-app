@@ -18,7 +18,7 @@ class ApiService {
     required String pincode,
     required String city,
     required String state,
-    required String userImgPath, // Path to the user image
+    String? userImgPath, // Path to the user image
     // required String accessToken, // Add accessToken as a required parameter
   }) async {
     // String? accessToken = await tokenStorage.getAccessToken();
@@ -37,7 +37,7 @@ class ApiService {
     // Add the authorization header with the Bearer token
     //request.headers['Authorization'] = 'Bearer $accessToken';
 
-    if (userImgPath.isNotEmpty) {
+    if (userImgPath != null) {
       request.files
           .add(await http.MultipartFile.fromPath('userImg', userImgPath));
     }

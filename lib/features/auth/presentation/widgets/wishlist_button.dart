@@ -14,7 +14,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
         color: isFavorite ? Colors.red : Colors.black,
-        size: 20,
+        size: 18,
       ),
       onPressed: () {
         setState(() {

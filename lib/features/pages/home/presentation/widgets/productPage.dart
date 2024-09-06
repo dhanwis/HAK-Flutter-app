@@ -1,6 +1,7 @@
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -225,18 +226,21 @@ class _ProductGridState extends State<ProductGrid> {
                                   ),
                                 ),
                                 Positioned(
-                                  right: 5.0,
+                                  right: 8.0,
                                   top: 10.0,
                                   child: GestureDetector(
                                     onTap: () {},
                                     child: CircleAvatar(
                                       backgroundColor: Colors.white,
-                                      radius: 12,
-                                      child: Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.black,
-                                        size: 18,
-                                      ),
+                                      radius: 15,
+                                      //   child: Icon(
+                                      //     Icons.favorite_border,
+                                      //     color: Colors.black,
+                                      //  size: 18,
+                                      //   ),
+                                      // ),
+
+                                      child: FavoriteButton(),
                                     ),
                                   ),
                                 ),

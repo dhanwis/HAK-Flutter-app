@@ -1,18 +1,12 @@
-import 'dart:convert';
-
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
-import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_state.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
-import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -38,7 +32,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   //XFile? _image;
   List<String> _stateController = [
     // Ensure this is populated correctly
-
     'Kasargod',
     'Kannur',
     'Kozhikode',
@@ -289,19 +282,19 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileBloc(ApiService())
-        ..add(FetchProfile(userId!)), // Provide ProfileBloc here
+      create: (context) => ProfileBloc(ApiService()),
+      // Provide ProfileBloc here
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
-              );
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
+          // leading: IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
+          //     );
+          //   },
+          //   icon: const Icon(Icons.arrow_back),
+          // ),
           title: Text(
             "My Profile",
             style: GoogleFonts.aBeeZee(
@@ -322,10 +315,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     return const CircularProgressIndicator();
                   }
 
-                  // if (state is ProfileLoaded) {
-                  //   // Use state.profile to access loaded profile data
-                  //   return _buildProfileForm(context);
-                  // }
+                  if (state is ProfileLoaded) {
+                    // Use state.profile to access loaded profile data
+                    return _buildProfileForm(context);
+                  }
 
                   if (state is ProfileError) {
                     return Text('Error: ${state.error}');
@@ -401,15 +394,20 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           validator: _validatePincode,
           keyboardType: TextInputType.number,
         ),
+
         _buildDropdownField(
           context: context,
           selectedState: _selectedState,
-          items:
-              _stateController, // Assuming _stateController is a list of states
+          items: _stateController.isNotEmpty
+              ? _stateController
+              : ['Select a state'], // Safeguard for empty list
           onChanged: (newValue) {
-            _selectedState = newValue;
+            setState(() {
+              _selectedState = newValue;
+            });
           },
         ),
+
         _buildTextFormField(
           controller: _cityController,
           label: 'City',

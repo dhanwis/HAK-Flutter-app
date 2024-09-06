@@ -21,7 +21,7 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
     HomePage(),
     CartPage(),
     FavPage(),
-    // CreateProfilePage(),
+    CreateProfilePage(),
   ];
   int currentIndex = 0;
 

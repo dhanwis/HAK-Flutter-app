@@ -7,6 +7,9 @@ Future<Map<String, dynamic>> decodeJwt() async {
   // Fetch the access token asynchronously
   final accessToken = await tokenStorage.getAccessToken();
 
+  print('acces now');
+  print(accessToken);
+
   // Check if accessToken is null or invalid
   if (accessToken == null || accessToken.isEmpty) {
     throw Exception("Access token not found");
@@ -14,6 +17,9 @@ Future<Map<String, dynamic>> decodeJwt() async {
 
   // Decode the token, JwtDecoder.decode returns a Map<String, dynamic>
   Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+
+  print('access return now');
+  print(decodedToken);
 
   return decodedToken;
 }
