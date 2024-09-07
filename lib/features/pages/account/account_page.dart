@@ -1,3 +1,5 @@
+import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
+import 'package:dil_hack_e_commerce/features/pages/account/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,10 +15,141 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFAAAB1),
+        backgroundColor: Colors.white,
+        // Color(0xFFFAAAB1),
         title: Text(
-          'ProfilePage',
-          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold, fontSize: 17),
+          'Account',
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w600, fontSize: 18),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  ProfileAvatar(),
+                  SizedBox(width: 30),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xFFFAAAB1),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 16.0),
+                    ),
+                    child: Text(
+                      'Sign up',
+                      style: GoogleFonts.aBeeZee(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Column(
+            //   children: [
+            //     Text(
+            //       'View and Update Your Profile Details',
+            //       style: GoogleFonts.aBeeZee(),
+            //     )
+            //   ],
+            // ),
+            Divider(),
+            SectionHeader(
+              title: 'My Payments',
+            ),
+            ListTileWidget(
+              icon: Icons.account_balance_wallet,
+              iconColor: Colors.black,
+              label: 'Bank & UPI Details',
+              onTap: () {},
+            ),
+            ListTileWidget(
+              icon: Icons.payment,
+              iconColor: Colors.black,
+              label: 'Payment & Refund',
+              onTap: () {},
+            ),
+            Divider(),
+            SectionHeader(title: 'My Activity'),
+            ListTileWidget(
+              icon: Icons.favorite,
+              iconColor: Colors.black,
+              label: 'Wishlisted Products',
+              onTap: () {},
+            ),
+            ListTileWidget(
+              icon: Icons.share,
+              iconColor: Colors.black,
+              label: 'Shared Products',
+              onTap: () {},
+            ),
+            Divider(),
+            SectionHeader(
+              title: 'Others',
+            ),
+            ListTileWidget(
+              icon: Icons.settings,
+              iconColor: Colors.black,
+              label: 'Settings',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ListTileWidget extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Widget? trailing;
+  final VoidCallback onTap;
+  final Color iconColor;
+
+  const ListTileWidget(
+      {required this.icon,
+      required this.label,
+      this.trailing,
+      required this.onTap,
+      required this.iconColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: iconColor,
+      ),
+      title: Text(label),
+      trailing: trailing,
+      onTap: onTap,
+    );
+  }
+}
+
+class SectionHeader extends StatelessWidget {
+  final String title;
+
+  const SectionHeader({
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
         ),
       ),
     );

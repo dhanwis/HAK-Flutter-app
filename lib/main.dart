@@ -1,16 +1,13 @@
 import 'package:dil_hack_e_commerce/api/products_api.dart';
-import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
+
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
+
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 
 //import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 
@@ -19,7 +16,6 @@ import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 //import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,4 +58,5 @@ class MyApp extends StatelessWidget {
 }
 // 6235749079
 
-// 9846571297
+// 9846571297 
+// 8921633037
