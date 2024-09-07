@@ -1,4 +1,6 @@
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
+
+import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/bank_upi.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,7 +69,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               icon: Icons.account_balance_wallet,
               iconColor: Colors.black,
               label: 'Bank & UPI Details',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BankUPIDetails()),
+                );
+              },
             ),
             ListTileWidget(
               icon: Icons.payment,
@@ -77,6 +84,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             ),
             Divider(),
             SectionHeader(title: 'My Activity'),
+            ListTileWidget(
+              icon: Icons.indeterminate_check_box_sharp,
+              iconColor: Colors.black,
+              label: 'My Orders',
+              onTap: () {},
+            ),
             ListTileWidget(
               icon: Icons.favorite,
               iconColor: Colors.black,
