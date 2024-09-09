@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/add_upidetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -118,13 +119,20 @@ class _BankUPIDetailsState extends State<BankUPIDetails> {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpiDetailsScreen()),
+                    );
+                  },
                   child: Text(
                     "ADD",
                     style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],

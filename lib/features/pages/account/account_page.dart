@@ -112,6 +112,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               label: 'Settings',
               onTap: () {},
             ),
+            ListTileWidget(
+              icon: Icons.logout_outlined,
+              iconColor: Colors.black,
+              label: 'Logout',
+              onTap: () {},
+            ),
           ],
         ),
       ),

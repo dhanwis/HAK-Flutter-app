@@ -7,7 +7,6 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dar
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
-import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 
 //import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
 
