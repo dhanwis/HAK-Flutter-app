@@ -1,4 +1,4 @@
-import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/upi_option.dart';
+import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/upi_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

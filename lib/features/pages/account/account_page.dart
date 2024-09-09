@@ -102,22 +102,65 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               label: 'Shared Products',
               onTap: () {},
             ),
-            Divider(),
-            SectionHeader(
-              title: 'Others',
-            ),
+
             ListTileWidget(
-              icon: Icons.settings,
-              iconColor: Colors.black,
-              label: 'Settings',
-              onTap: () {},
-            ),
-            ListTileWidget(
-              icon: Icons.logout_outlined,
-              iconColor: Colors.black,
-              label: 'Logout',
-              onTap: () {},
-            ),
+                icon: Icons.logout_outlined,
+                iconColor: Colors.black,
+                label: 'Logout',
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          titlePadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.all(16),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Are you sure you want to logout?',
+                                style: GoogleFonts.aBeeZee(),
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Cancel',
+                                      style: GoogleFonts.aBeeZee(),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Logout',
+                                      style: GoogleFonts.aBeeZee(
+                                          color: Colors.black),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xFFFAAAB1),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                }),
           ],
         ),
       ),
@@ -146,7 +189,10 @@ class ListTileWidget extends StatelessWidget {
         icon,
         color: iconColor,
       ),
-      title: Text(label),
+      title: Text(
+        label,
+        style: GoogleFonts.aBeeZee(),
+      ),
       trailing: trailing,
       onTap: onTap,
     );
