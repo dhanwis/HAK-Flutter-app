@@ -232,6 +232,23 @@ class PaymentOptions extends StatelessWidget {
         SizedBox(
           height: 18,
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 50,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFFAAAB1),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: Text('Submit',
+                  style:
+                      GoogleFonts.aBeeZee(color: Colors.black, fontSize: 15)),
+            ),
+          ),
+        ),
       ],
     );
   }

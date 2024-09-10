@@ -47,7 +47,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: Palette.backgroundColor),
-        home: SplashScreen(),
+        home:
+            //  PaymentPage2()
+            SplashScreen(),
         // DilHackBottomNavBar(),
 
         // You can set other screens like SplashScreen(), LoginPage(), etc.
