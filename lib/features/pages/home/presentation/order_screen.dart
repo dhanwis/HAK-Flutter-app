@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/home/Paymentpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -336,14 +337,18 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PaymentPage()));
+            },
             child: Text(
               'Continue',
               style: GoogleFonts.aBeeZee(fontSize: 15, color: Colors.black),
             ),
             style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFFAAAB1),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             ),
           ),
         ],
