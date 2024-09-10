@@ -323,12 +323,6 @@ class ProductCard extends StatelessWidget {
                       Text('(${product.discount}%)'),
                     ],
                   ),
-                  Text(
-                    'You save ₹${product.savings.toStringAsFixed(0)}',
-                    style: const TextStyle(
-                      color: Colors.green,
-                    ),
-                  ),
                   const SizedBox(
                     height: 8.0,
                   ),

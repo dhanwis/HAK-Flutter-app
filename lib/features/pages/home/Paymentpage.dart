@@ -41,8 +41,6 @@ class PaymentOptions extends StatelessWidget {
           ],
         ),
         SizedBox(height: 40),
-
-        // Total Amount Container
         Container(
           padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
@@ -74,7 +72,6 @@ class PaymentOptions extends StatelessWidget {
           ),
         ),
         SizedBox(height: 30),
-
         ExpansionTile(
           leading: Icon(
             Icons.credit_card,
@@ -90,21 +87,21 @@ class PaymentOptions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                         labelText: 'Card Number',
                         labelStyle: TextStyle(fontSize: 14)),
                   ),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                         labelText: 'Expiry Date',
                         labelStyle: TextStyle(fontSize: 14)),
                   ),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                         labelText: 'CVV', labelStyle: TextStyle(fontSize: 14)),
                   ),
-                  TextField(
+                  const TextField(
                     decoration: InputDecoration(
                         labelText: 'Name on Card',
                         labelStyle: TextStyle(fontSize: 14)),
@@ -127,8 +124,8 @@ class PaymentOptions extends StatelessWidget {
             ),
           ],
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
         ExpansionTile(
@@ -178,45 +175,6 @@ class PaymentOptions extends StatelessWidget {
         ),
         ExpansionTile(
           leading: Icon(
-            Icons.account_balance_wallet,
-            color: Colors.black,
-          ),
-          title: Text('Wallets'),
-          children: [
-            ListTile(
-              title: Text('Select Wallet'),
-              trailing: DropdownButton<String>(
-                items: <String>['Wallet A', 'Wallet B', 'Wallet C']
-                    .map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (_) {},
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "Pay now",
-                  style: GoogleFonts.aBeeZee(),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFAAAB1),
-                ),
-              ),
-            )
-          ],
-        ),
-        Divider(),
-        SizedBox(
-          height: 10,
-        ),
-        ExpansionTile(
-          leading: Icon(
             Icons.payment,
             color: Colors.black,
           ),
@@ -229,7 +187,7 @@ class PaymentOptions extends StatelessWidget {
               title: TextField(
                 decoration: InputDecoration(
                     labelText: 'Enter UPI ID',
-                    hintStyle: GoogleFonts.aBeeZee(fontSize: 13)),
+                    hintStyle: GoogleFonts.aBeeZee(fontSize: 12)),
               ),
             ),
             Padding(
@@ -287,7 +245,7 @@ class PaymentOptions extends StatelessWidget {
           child: Text(
             stepNumber.toString(),
             style: GoogleFonts.aBeeZee(
-              color: isActive ? Color.fromARGB(255, 95, 21, 255) : Colors.black,
+              color: isActive ? Color.fromARGB(255, 3, 3, 3) : Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

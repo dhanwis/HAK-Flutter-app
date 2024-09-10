@@ -125,7 +125,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 15),
+            // SizedBox(height: 12),
             Text(
               _selectedAddress,
               style: GoogleFonts.aBeeZee(height: 1.9),
@@ -154,7 +154,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   Text(
                     "Choose a delivery address",
                     style: GoogleFonts.aBeeZee(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
                   RadioListTile<String>(
@@ -195,7 +195,10 @@ class _OrderScreenState extends State<OrderScreen> {
                       "Confirm",
                       style: GoogleFonts.aBeeZee(color: Colors.black),
                     ),
-                  )
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFAAAB1),
+                    ),
+                  ),
                 ],
               ),
             );
@@ -258,7 +261,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   Text(
                     'Delivery by Sep 30, Fri ',
                     style: GoogleFonts.aBeeZee(
-                        color: Color.fromARGB(255, 20, 88, 234), fontSize: 13),
+                        color: Color.fromARGB(255, 0, 0, 0), fontSize: 13),
                   ),
                 ],
               ),
