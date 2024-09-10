@@ -2,6 +2,8 @@ import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
+import 'package:dil_hack_e_commerce/features/pages/account/order_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,7 +79,7 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            //FavoriteButton(),
+                            // FavoriteButton(),
                             IconButton(
                               icon: Icon(Icons.share),
                               onPressed: () {
@@ -285,7 +287,9 @@ class ProductDetailPage extends StatelessWidget {
                           ),
                           label: Text(
                             'Add to Cart',
-                            style: TextStyle(color: Colors.black),
+                            style: GoogleFonts.aBeeZee(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -300,8 +304,19 @@ class ProductDetailPage extends StatelessWidget {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Buy Now'),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrderScreen()),
+                            );
+                          },
+                          child: Text(
+                            'Buy Now',
+                            style: GoogleFonts.aBeeZee(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFFAAAB1),
                             shape: RoundedRectangleBorder(
@@ -321,7 +336,7 @@ class ProductDetailPage extends StatelessWidget {
                 child: Text('Error: ${state.message}'),
               );
             }
-            return Container(); // Default case, should not reach here
+            return Container();
           },
         ),
       ),
