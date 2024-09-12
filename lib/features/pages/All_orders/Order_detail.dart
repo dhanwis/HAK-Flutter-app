@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrderDetailPage extends StatefulWidget {
   @override
@@ -10,7 +11,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ORDER DETAILS"),
+        title: Text(
+          "Order Details",
+          style: GoogleFonts.aBeeZee(),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -41,8 +45,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Women white cotton blend trouser',
-                        style: TextStyle(
+                        'Women white cotton',
+                        style: GoogleFonts.aBeeZee(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
@@ -50,7 +54,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       SizedBox(height: 4),
                       Text(
                         '₹271  •  All issue easy returns',
-                        style: TextStyle(
+                        style: GoogleFonts.aBeeZee(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
@@ -58,7 +62,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       SizedBox(height: 4),
                       Text(
                         'Size: XL',
-                        style: TextStyle(
+                        style: GoogleFonts.aBeeZee(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
@@ -72,7 +76,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             SizedBox(height: 24),
             Text(
               'Order Tracking',
-              style: TextStyle(
+              style: GoogleFonts.aBeeZee(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -105,7 +109,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       children: [
                         Text(
                           "SHOW MORE",
-                          style: TextStyle(
+                          style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.bold,
                             color: Color(0xFFFAAAB1),
                           ),
@@ -133,7 +137,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Timeline Indicator
         Column(
           children: [
             Icon(
@@ -150,21 +153,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ],
         ),
         SizedBox(width: 16),
-
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: GoogleFonts.aBeeZee(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
                 subtitle,
-                style: TextStyle(
+                style: GoogleFonts.aBeeZee(
                   fontSize: 14,
                   color: Colors.grey,
                 ),

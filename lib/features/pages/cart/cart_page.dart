@@ -81,272 +81,282 @@
 //   }
 // }
 
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class CartPage extends StatefulWidget {
-  @override
-  _CartPageState createState() => _CartPageState();
-}
-
-class _CartPageState extends State<CartPage> {
-  List<Product> products = [
-    Product(
-      imageUrl: 'assets/products/pr4.jpeg',
-      productName: 'Gown',
-      productDescription:
-          'Silhouette: A-line, fit-and-flare, sheath, empire waist, ',
-      size: 'XXL',
-      quantity: 1,
-      price: 575,
-      oldPrice: 2499,
-      discount: 77,
-      savings: 1924,
-    ),
-    Product(
-      imageUrl: 'assets/products/pr4.jpeg',
-      productName: 'Georget Saree',
-      productDescription: 'Traditional Indian garment for women.',
-      size: 'XL',
-      quantity: 1,
-      price: 597.00,
-      oldPrice: 2998.00,
-      discount: 80,
-      savings: 2401.00,
-    ),
-    Product(
-      imageUrl: 'assets/products/pr4.jpeg',
-      productName: 'Kanji Silk Saree',
-      productDescription: 'Traditional Indian garment for women.',
-      size: 'XL',
-      quantity: 1,
-      price: 741.00,
-      oldPrice: 1899.00,
-      discount: 61,
-      savings: 1158.00,
-    ),
-  ];
-
-  double totalPrice = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    totalPrice = _calculateTotalPrice();
-  }
-
-  void _removeProduct(int index) {
-    setState(() {
-      products.removeAt(index);
-      totalPrice = _calculateTotalPrice();
-    });
-  }
+class CartPage extends StatelessWidget {
+  const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Cart',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {},
         ),
-        centerTitle: true,
-        leading: const Icon(Icons.arrow_back_ios),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.shopping_bag_outlined,
-              color: Colors.black,
-            ),
-            onPressed: () {},
+        title: Text(
+          'Cart',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: screenWidth * 0.06,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        elevation: 0,
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return ProductCard(
-                  product: products[index],
-                  onRemove: () => _removeProduct(index),
-                );
-              },
+            child: ListView(
+              padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+              children: [
+                Card(
+                  color: Color.fromARGB(248, 239, 238, 239),
+                  elevation: 0,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.01,
+                      vertical: screenHeight * 0.01),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.01,
+                        vertical: screenHeight * 0.01),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'assets/products/pr8.jpeg',
+                              width: screenWidth * 0.25,
+                              height: screenWidth * 0.25,
+                            ),
+                            SizedBox(width: screenWidth * 0.02),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Boys Printed Cotton Blend Regular T-Shirt (Blue)',
+                                    style: GoogleFonts.aBeeZee(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenWidth * 0.04,
+                                    ),
+                                  ),
+                                  SizedBox(height: screenHeight * 0.01),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.star,
+                                          color: Colors.blue,
+                                          size: screenWidth * 0.04),
+                                      Icon(Icons.star,
+                                          color: Colors.blue,
+                                          size: screenWidth * 0.04),
+                                      Icon(Icons.star,
+                                          color: Colors.blue,
+                                          size: screenWidth * 0.04),
+                                      Icon(Icons.star,
+                                          color: Colors.blue,
+                                          size: screenWidth * 0.04),
+                                      Icon(Icons.star_half,
+                                          color: Colors.blue,
+                                          size: screenWidth * 0.04),
+                                      SizedBox(width: screenWidth * 0.01),
+                                      Text('(4.5)',
+                                          style: TextStyle(color: Colors.grey)),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '₹899',
+                                        style: GoogleFonts.aBeeZee(
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      ),
+                                      SizedBox(width: screenWidth * 0.02),
+                                      Text(
+                                        '₹499',
+                                        style: GoogleFonts.aBeeZee(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: screenWidth * 0.045,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: screenHeight * 0.01),
+                                  Text('Delivery by Sept 18',
+                                      style: GoogleFonts.aBeeZee(
+                                          fontSize: screenWidth * 0.03)),
+                                  SizedBox(height: screenHeight * 0.01),
+                                  Text(
+                                    'Free Delivery',
+                                    style: GoogleFonts.aBeeZee(
+                                        color: Colors.green,
+                                        fontSize: screenWidth * 0.03),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Qty dropdown
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('Qty: ',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                DropdownButton<int>(
+                                  value: 1,
+                                  items: [
+                                    DropdownMenuItem(
+                                        value: 1, child: Text('1')),
+                                    DropdownMenuItem(
+                                        value: 2, child: Text('2')),
+                                    DropdownMenuItem(
+                                        value: 3, child: Text('3')),
+                                  ],
+                                  onChanged: (value) {},
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Remove Button
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.delete, color: Colors.black),
+                          label: Text('Remove',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black)),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(248, 239, 238, 239),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey[300]!),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth * 0.02),
+
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.bookmark, color: Colors.black),
+                          label: Text('Save',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color:
+                                      const Color.fromARGB(255, 92, 92, 92))),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(248, 239, 238, 239),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey[300]!),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth * 0.02),
+
+                      Expanded(
+                        child: TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrderScreen()),
+                            );
+                          },
+                          icon: Icon(Icons.flash_on, color: Colors.black),
+                          label: Text('Buy now',
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.black)),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(248, 239, 238, 239),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey[300]!),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8.0),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.grey),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Divider(thickness: 4),
+          Padding(
+            padding: EdgeInsets.all(screenWidth * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'View price details',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text('Total Amount',
+                        style: GoogleFonts.aBeeZee(fontSize: 14)),
                     Text(
-                      '₹${totalPrice.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        elevation: 5,
-                        shadowColor: Colors.black,
+                      '₹499.00',
+                      style: GoogleFonts.aBeeZee(
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.05,
                       ),
-                      child: const Text('Continue'),
                     ),
                   ],
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFAAAB1),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.02,
+                        vertical: screenHeight * 0.01),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OrderScreen()),
+                    );
+                  },
+                  child: Text(
+                    'Proceed to Buy',
+                    style: GoogleFonts.aBeeZee(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  double _calculateTotalPrice() {
-    return products.fold(0, (total, product) => total + product.price);
-  }
-}
-
-class Product {
-  final String imageUrl;
-  final String productName;
-  final String productDescription;
-  final String size;
-  final int quantity;
-  final double price;
-  final double oldPrice;
-  final int discount;
-  final double savings;
-
-  Product({
-    required this.imageUrl,
-    required this.productName,
-    required this.productDescription,
-    required this.size,
-    required this.quantity,
-    required this.price,
-    required this.oldPrice,
-    required this.discount,
-    required this.savings,
-  });
-}
-
-class ProductCard extends StatelessWidget {
-  final Product product;
-  final VoidCallback onRemove;
-
-  const ProductCard({
-    required this.product,
-    required this.onRemove,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Image.asset(
-              product.imageUrl,
-              width: 150,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(width: 8.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.productName,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 17),
-                  ),
-                  Text(product.productDescription),
-                  const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Text(
-                        'Size ${product.size}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        'Qty ${product.quantity}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Text('₹${product.price.toStringAsFixed(0)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        '₹${product.oldPrice.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text('(${product.discount}%)'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  const Text('10 day Return and Exchange'),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      TextButton(
-                        onPressed: onRemove,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red,
-                        ),
-                        child: Text(
-                          'Remove',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
