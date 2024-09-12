@@ -46,8 +46,7 @@ class _PaymentPage2State extends State<PaymentPage2> {
   void openCheckout() async {
     var options = {
       'key': 'your-razorpay-key-id',
-      'amount':
-          50000, // Amount in the smallest currency unit (e.g., paise for INR)
+      'amount': 50000,
       'name': 'Acme Corp.',
       'description': 'Fine T-Shirt',
       'prefill': {'contact': '9123456789', 'email': 'test@razorpay.com'},
