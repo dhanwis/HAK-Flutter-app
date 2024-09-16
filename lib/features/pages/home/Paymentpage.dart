@@ -34,9 +34,9 @@ class PaymentOptions extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildStepCircle(1, "Address", false),
-            _buildLine(),
+            // _buildLine(),
             _buildStepCircle(2, "Order summary", false),
-            _buildLine(),
+            // _buildLine(),
             _buildStepCircle(3, "Payment", true),
           ],
         ),
@@ -124,7 +124,7 @@ class PaymentOptions extends StatelessWidget {
             ),
           ],
         ),
-        const Divider(),
+        // const Divider(),
         const SizedBox(
           height: 10,
         ),
@@ -169,7 +169,7 @@ class PaymentOptions extends StatelessWidget {
             )
           ],
         ),
-        Divider(),
+        // Divider(),
         SizedBox(
           height: 10,
         ),
@@ -206,7 +206,7 @@ class PaymentOptions extends StatelessWidget {
             ),
           ],
         ),
-        Divider(),
+        // Divider(),
         SizedBox(
           height: 10,
         ),
@@ -228,7 +228,7 @@ class PaymentOptions extends StatelessWidget {
             ),
           ],
         ),
-        Divider(),
+        // Divider(),
         SizedBox(
           height: 18,
         ),

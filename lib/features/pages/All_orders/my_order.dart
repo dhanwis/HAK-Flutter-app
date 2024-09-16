@@ -31,29 +31,23 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
+        padding: EdgeInsets.all(screenWidth * 0.06), // Responsive padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search Bar
             _buildSearchBar(screenWidth),
-            SizedBox(height: 18),
-            // Order Status Tabs
+            SizedBox(height: 10),
             _buildStatusTabs(),
             SizedBox(height: 18),
             Divider(),
-
-            // Order Details
             OrderDetails(
               customerName: 'Manjima C',
-              // orderDate: "18 Sep 2024",
               orderId: '54688978954',
               supplier: 'Kidbea',
             ),
             Divider(),
             _buildOrderCard(screenWidth),
             Divider(),
-
             _buildRatingDropdown(),
           ],
         ),
@@ -64,7 +58,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
   Widget _buildSearchBar(double screenWidth) {
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.01, vertical: screenWidth * 0.01),
+          horizontal: screenWidth * 0.01, vertical: screenWidth * 0.001),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(screenWidth * 0.05),

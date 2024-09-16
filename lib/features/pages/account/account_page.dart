@@ -82,10 +82,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               iconColor: Colors.black,
               label: 'Payment & Refund',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyOrdersPage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => MyOrdersPage()
+                // ),
               },
             ),
             Divider(),
@@ -94,7 +94,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               icon: Icons.indeterminate_check_box_sharp,
               iconColor: Colors.black,
               label: 'My Orders',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyOrdersPage()));
+              },
             ),
             ListTileWidget(
               icon: Icons.favorite,

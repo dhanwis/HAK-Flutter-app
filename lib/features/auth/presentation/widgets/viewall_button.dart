@@ -218,9 +218,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 right: 10.0,
                 top: 10.0,
                 child: GestureDetector(
-                  onTap: () {
-                    //  favorite icon tap
-                  },
+                  onTap: () {},
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 15,

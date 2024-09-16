@@ -350,8 +350,7 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFAAAB1),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             ),
           ),
         ],
