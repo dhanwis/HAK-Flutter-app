@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
+import 'package:dil_hack_e_commerce/features/pages/All_orders/my_order.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/bank_upi.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/profile_avatar.dart';
@@ -80,7 +81,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               icon: Icons.payment,
               iconColor: Colors.black,
               label: 'Payment & Refund',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyOrdersPage()),
+                );
+              },
             ),
             Divider(),
             SectionHeader(title: 'My Activity'),

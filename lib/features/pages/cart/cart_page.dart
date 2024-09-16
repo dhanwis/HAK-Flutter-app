@@ -212,7 +212,6 @@ class CartPage extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Qty dropdown
                             Row(
                               children: [
                                 Padding(

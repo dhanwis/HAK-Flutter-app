@@ -110,7 +110,7 @@ class WishlistPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notification_add_outlined),
+            icon: Icon(Icons.notification_add),
             color: Colors.yellow,
             iconSize: 20,
             onPressed: () {},
