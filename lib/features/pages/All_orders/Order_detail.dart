@@ -11,9 +11,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           "Order Details",
-          style: GoogleFonts.aBeeZee(),
+          style: GoogleFonts.aBeeZee(fontSize: 17),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -32,7 +33,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
+                  child: Image.asset(
                     'assets/products/pr6.jpeg',
                     height: 80,
                     width: 80,
@@ -70,7 +71,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                // Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
               ],
             ),
             SizedBox(height: 24),
@@ -78,7 +79,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               'Order Tracking',
               style: GoogleFonts.aBeeZee(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 17,
               ),
             ),
             SizedBox(height: 16),
@@ -101,24 +102,24 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     subtitle: "Expected by 21 September, 2024",
                     isCompleted: false,
                   ),
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "SHOW MORE",
-                          style: GoogleFonts.aBeeZee(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFFAAAB1),
-                          ),
-                        ),
-                        Icon(Icons.keyboard_arrow_down,
-                            color: Color(0xFFFAAAB1)),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(height: 20),
+                  // TextButton(
+                  //   onPressed: () {},
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     children: [
+                  //       Text(
+                  //         "SHOW MORE",
+                  //         style: GoogleFonts.aBeeZee(
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Color(0xFFFAAAB1),
+                  //         ),
+                  //       ),
+                  //       Icon(Icons.keyboard_arrow_down,
+                  //           color: Color(0xFFFAAAB1)),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -161,7 +162,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 title,
                 style: GoogleFonts.aBeeZee(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
               Text(

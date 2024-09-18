@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/pages/All_orders/Order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,7 +38,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           children: [
             _buildSearchBar(screenWidth),
             SizedBox(height: 10),
-            _buildStatusTabs(),
+            _buildStatusTabs(), // Status tabs with spacing
             SizedBox(height: 18),
             Divider(),
             OrderDetails(
@@ -82,11 +83,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
   Widget _buildStatusTabs() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _buildStatusButton('Ordered'),
+        SizedBox(width: 10),
         _buildStatusButton('Shipped'),
+        SizedBox(width: 10),
         _buildStatusButton('Delivered'),
+        SizedBox(width: 10),
         _buildStatusButton('Canceled'),
       ],
     );
@@ -99,11 +103,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         child: Text(
           title,
           style: TextStyle(
-              fontSize: 8, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 5, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
           ),
           side: BorderSide(color: Colors.grey),
         ),
@@ -120,6 +124,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Product Image
               Container(
                 width: screenWidth * 0.15,
                 height: screenWidth * 0.19,
@@ -132,27 +137,52 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
               ),
               SizedBox(width: 18),
+
+              // Product Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Boys Printed Cotton Blend Regular T Shirt (Blue)',
+                      'Women white cotton blend trouser',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
-                    SizedBox(height: 18),
-                    Text(
-                      'Delivery by Sept 18',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          color: Colors.red,
+                          size: 10,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'Delivery  21 Sept 2024',
+                          style: GoogleFonts.aBeeZee(
+                            color: Colors.grey[600],
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  size: screenWidth * 0.05,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OrderDetailPage()));
+                },
               ),
             ],
           ),
@@ -166,7 +196,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     return ExpansionTile(
       title: Text(
         'How was the product?',
-        style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
+        style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold, fontSize: 14),
       ),
       children: [
         SizedBox(height: 10),
@@ -177,7 +207,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
-              itemCount: 5,
+              itemCount: 4,
               itemPadding: EdgeInsets.symmetric(horizontal: 19.0),
               itemBuilder: (context, _) => Icon(
                 Icons.star,
@@ -204,7 +234,6 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       children: [
         _buildRatingLabel('Very Bad', 1),
         _buildRatingLabel('Bad', 2),
-        _buildRatingLabel('Ok-Ok', 3),
         _buildRatingLabel('Good', 4),
         _buildRatingLabel('Very Good', 5),
       ],
@@ -227,13 +256,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 }
 
 class OrderDetails extends StatelessWidget {
-  // final String orderDate;
   final String orderId;
   final String customerName;
   final String supplier;
 
   OrderDetails({
-    // required this.orderDate,
     required this.orderId,
     required this.customerName,
     required this.supplier,
@@ -246,15 +273,6 @@ class OrderDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Padding(
-        //   padding: EdgeInsets.all(15),
-        //   child: Text(
-        //       // orderDate,
-        //       // style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        //       // ),
-        //       ),
-        // ),
-        // // Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
