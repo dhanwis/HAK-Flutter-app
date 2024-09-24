@@ -1,8 +1,6 @@
-// import 'package:flutter/material.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filter_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
+import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -58,7 +56,7 @@ class _FilterSectionState extends State<FilterSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 40,
+              height: 30,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
@@ -99,10 +97,7 @@ class _FilterSectionState extends State<FilterSection> {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: FilterChip(
-        label: Text(
-          _getChipLabel(index),
-          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w100),
-        ),
+        label: _getChipLabel(index),
         selected: isSelected,
         selectedColor: Color(0xFFFAAAB1),
         backgroundColor: Colors.white,
@@ -117,6 +112,49 @@ class _FilterSectionState extends State<FilterSection> {
           onSelected();
         },
       ),
+    );
+  }
+
+  Widget _getChipLabel(int index) {
+    IconData iconData;
+    String labelText;
+
+    switch (index) {
+      case 0:
+        iconData = Icons.filter_list;
+        labelText = 'Filter';
+        break;
+      case 1:
+        iconData = Icons.sort;
+        labelText = 'Sort By';
+        break;
+      case 2:
+        iconData = Icons.category;
+        labelText = 'Categories';
+        break;
+      case 3:
+        iconData = Icons.texture;
+        labelText = 'Material';
+        break;
+      case 4:
+        iconData = Icons.color_lens;
+        labelText = 'Color';
+        break;
+      default:
+        iconData = Icons.help;
+        labelText = '';
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(iconData, size: 16.0),
+        SizedBox(width: 4.0),
+        Text(
+          labelText,
+          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w100, fontSize: 10),
+        ),
+      ],
     );
   }
 
@@ -141,23 +179,6 @@ class _FilterSectionState extends State<FilterSection> {
       case 4:
         _showFilters('Color', colorFilters);
         break;
-    }
-  }
-
-  String _getChipLabel(int index) {
-    switch (index) {
-      case 0:
-        return 'Filter';
-      case 1:
-        return 'Sort By';
-      case 2:
-        return 'Categories';
-      case 3:
-        return 'Material';
-      case 4:
-        return 'Color';
-      default:
-        return '';
     }
   }
 
@@ -193,7 +214,7 @@ class _FilterSectionState extends State<FilterSection> {
             return ListTile(
               title: Text(option),
               trailing: selectedSortOption == option
-                  ? const Icon(Icons.check, color: Colors.blue)
+                  ? const Icon(Icons.check, color: Colors.black)
                   : null,
               onTap: () {
                 setState(() {
@@ -230,8 +251,7 @@ class _FilterSectionState extends State<FilterSection> {
                       IconButton(
                         icon: const Icon(Icons.close),
                         onPressed: () {
-                          setState(
-                              () {}); // Ensure the filter section UI updates
+                          setState(() {});
                           Navigator.pop(context);
                         },
                       ),
@@ -247,7 +267,7 @@ class _FilterSectionState extends State<FilterSection> {
                             setModalState(() {
                               filters[key] = value!;
                             });
-                            setState(() {}); // Update the UI immediately
+                            setState(() {});
                           },
                         );
                       }).toList(),
@@ -261,8 +281,7 @@ class _FilterSectionState extends State<FilterSection> {
                           setModalState(() {
                             filters.updateAll((key, value) => false);
                           });
-                          setState(
-                              () {}); // Reflect the cleared filters in the UI
+                          setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 240, 195, 199),
@@ -275,8 +294,7 @@ class _FilterSectionState extends State<FilterSection> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          setState(
-                              () {}); // Update the UI after applying filters
+                          setState(() {});
                           if (widget.onFilterApplied != null) {
                             widget.onFilterApplied!();
                           }

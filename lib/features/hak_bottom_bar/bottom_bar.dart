@@ -18,43 +18,42 @@ class DilHackBottomNavBar extends StatefulWidget {
 }
 
 class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
+  int currentIndex = 0;
   List<Widget> pages = [
-    // HomePage(),
-    // CartPage(),
-    // WishlistPage(
-    //   userId: userId,
-    // ),
-    // CreateProfilePage(),
+    HomePage(),
+    CartPage(),
+    WishlistPage(),
+    CreateProfilePage(),
   ];
 
-  int currentIndex = 0;
-  String userId = '';
+  // int currentIndex = 0;
+  // String userId = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeUser(); // Decode token and get userId
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _initializeUser(); // Decode token and get userId
+  // }
 
-  Future<void> _initializeUser() async {
-    try {
-      // Decode the token and get userId
-      Map<String, dynamic> decodedToken = await decodeJwt();
-      setState(() {
-        userId = decodedToken[
-            'userId']; // Assuming 'userId' is the key in your token
-        // Initialize pages after userId is obtained
-        pages = [
-          HomePage(),
-          CartPage(),
-          WishlistPage(userId: userId),
-          CreateProfilePage(),
-        ];
-      });
-    } catch (e) {
-      print("Error decoding token: $e");
-    }
-  }
+  // Future<void> _initializeUser() async {
+  //   try {
+  //     // Decode the token and get userId
+  //     Map<String, dynamic> decodedToken = await decodeJwt();
+  //     setState(() {
+  //       userId = decodedToken[
+  //           'userId']; // Assuming 'userId' is the key in your token
+  //       // Initialize pages after userId is obtained
+  //       pages = [
+  //         HomePage(),
+  //         CartPage(),
+  //         WishlistView(userId: userId),
+  //         CreateProfilePage(),
+  //       ];
+  //     });
+  //   } catch (e) {
+  //     print("Error decoding token: $e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

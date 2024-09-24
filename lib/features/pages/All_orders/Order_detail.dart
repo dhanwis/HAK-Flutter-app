@@ -17,7 +17,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           style: GoogleFonts.aBeeZee(fontSize: 17),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back_ios,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -46,10 +48,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Women white cotton',
+                        'Women jeen coat Shirt',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: GoogleFonts.aBeeZee(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 15,
                         ),
                       ),
                       SizedBox(height: 4),
@@ -71,7 +75,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ],
                   ),
                 ),
-                // Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
               ],
             ),
             SizedBox(height: 24),
@@ -79,10 +83,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               'Order Tracking',
               style: GoogleFonts.aBeeZee(
                 fontWeight: FontWeight.bold,
-                fontSize: 17,
+                fontSize: 16,
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 18),
             Expanded(
               child: ListView(
                 children: [

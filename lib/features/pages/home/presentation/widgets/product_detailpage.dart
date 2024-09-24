@@ -4,7 +4,8 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_det
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/ratingreview.dart';
+import 'package:dil_hack_e_commerce/features/pages/user_review/ratingreview.dart';
+import 'package:dil_hack_e_commerce/features/pages/user_review/user_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -274,56 +275,65 @@ class ProductDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: RatingAndReviews(),
                   ),
+                  const Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ReviewPage(),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.shopping_cart,
-                            color: Colors.black,
-                          ),
-                          label: Text(
-                            'Add to Cart',
-                            style: GoogleFonts.aBeeZee(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: BorderSide(
-                              color: Color(0xFFFAAAB1),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.shopping_cart,
+                              color: Colors.black,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            label: Text(
+                              'Add to Cart',
+                              style: GoogleFonts.aBeeZee(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(
+                                color: Color(0xFFFAAAB1),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                            ),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OrderScreen()),
-                            );
-                          },
-                          child: Text(
-                            'Buy Now',
-                            style: GoogleFonts.aBeeZee(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFFAAAB1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderScreen()),
+                              );
+                            },
+                            child: Text(
+                              'Buy Now',
+                              style: GoogleFonts.aBeeZee(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFFAAAB1),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                            ),
                           ),
                         ),
                       ],
@@ -426,7 +436,7 @@ class SimilarProductsSkeletonLoader extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            5, // Number of skeleton items you want to display
+            5,
             (index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: CircleAvatar(

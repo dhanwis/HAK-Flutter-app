@@ -6,6 +6,8 @@ Future<Map<String, dynamic>> decodeJwt() async {
 
   // Fetch the access token asynchronously
   final accessToken = await tokenStorage.getAccessToken();
+  print('token acc');
+  print(accessToken);
 
   // Check if accessToken is null or invalid
   if (accessToken == null || accessToken.isEmpty) {

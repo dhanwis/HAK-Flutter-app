@@ -1,16 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
+import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_state.dart';
 
 class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   final WishlistService wishlistService;
+  String userId = '';
 
   WishlistBloc(this.wishlistService) : super(WishlistInitial()) {
     on<FetchWishlist>((event, emit) async {
       emit(WishlistLoading());
+
+      // Initialize userId before proceeding
+      await _initializeUserId();
+
       try {
-        final wishlist = await wishlistService.fetchWishlist(event.userId);
+        print(
+            'User ID for wishlist: $userId'); // Now this should print correctly
+        final wishlist = await wishlistService.fetchWishlist(userId);
         print('here the wishlist $wishlist');
         emit(WishlistLoaded(wishlist));
       } catch (e) {
@@ -19,11 +27,14 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     });
 
     on<AddToWishlist>((event, emit) async {
+      // Initialize userId before proceeding
+      await _initializeUserId();
+
       print('event bellow');
       print(event);
       try {
-        await wishlistService.addToWishlist(event.userId, event.productId);
-        final wishlist = await wishlistService.fetchWishlist(event.userId);
+        await wishlistService.addToWishlist(userId, event.productId);
+        final wishlist = await wishlistService.fetchWishlist(userId);
 
         print('add  the wishlist $wishlist');
         emit(WishlistLoaded(wishlist));
@@ -33,14 +44,32 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     });
 
     on<RemoveFromWishlist>((event, emit) async {
+      // Initialize userId before proceeding
+      await _initializeUserId();
+
       try {
-        await wishlistService.removeFromWishlist(event.userId, event.productId);
-        final wishlist = await wishlistService.fetchWishlist(event.userId);
+        await wishlistService.removeFromWishlist(userId, event.productId);
+        final wishlist = await wishlistService.fetchWishlist(userId);
         print('remove the wishlist $wishlist');
         emit(WishlistLoaded(wishlist));
       } catch (e) {
         emit(WishlistError(e.toString()));
       }
     });
+  }
+
+  // Method to initialize userId from the token
+  Future<void> _initializeUserId() async {
+    if (userId.isEmpty) {
+      // Ensure that userId is initialized only once
+      try {
+        final decodedToken =
+            await decodeJwt(); // Use your existing decodeJwt method
+        userId = decodedToken['userId']; // Assuming userId is part of the token
+        print('User ID initialized: $userId');
+      } catch (e) {
+        print("Error decoding token: $e");
+      }
+    }
   }
 }

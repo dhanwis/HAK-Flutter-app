@@ -8,8 +8,10 @@ class WishlistService {
   final client = AuthHttpClient(http.Client());
 
   Future<List<dynamic>> fetchWishlist(String userId) async {
+    print(userId);
+    print('checking on connection');
     final response = await client
-        .get(Uri.parse('$baseUrl/customerApp/wishList/get_all/$userId'));
+        .get(Uri.parse('$baseUrl/customerApp/whishList/get_all/$userId'));
     if (response.statusCode == 200) {
       print('all ${response.body}');
       return json.decode(response.body)['products'];
@@ -21,7 +23,7 @@ class WishlistService {
   Future<void> addToWishlist(String userId, String productId) async {
     print('acllnig');
     final response = await client.post(
-      Uri.parse('$baseUrl/customerApp/wishList/add/$userId'),
+      Uri.parse('$baseUrl/customerApp/whishList/add/$userId'),
       body: json.encode({'productId': productId}),
       headers: {'Content-Type': 'application/json'},
     );

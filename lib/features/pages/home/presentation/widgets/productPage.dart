@@ -258,7 +258,6 @@ class _ProductGridState extends State<ProductGrid> {
                                       // ),
 
                                       child: FavoriteButton(
-                                        userId: userId,
                                         productId: product.id,
                                       ),
                                     ),

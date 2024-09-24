@@ -72,6 +72,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search....',
+                hintStyle: TextStyle(fontSize: 10),
                 border: InputBorder.none,
               ),
             ),

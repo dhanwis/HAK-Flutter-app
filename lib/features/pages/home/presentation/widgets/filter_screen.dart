@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Filters'),
+        title: Text(
+          'Filters',
+          style: GoogleFonts.aBeeZee(fontSize: 20),
+        ),
         actions: [
           TextButton(
-            onPressed: () {
-              // Clear filter logic
-            },
+            onPressed: () {},
             child: Text(
               'Clear Filters',
-              style: TextStyle(color: Colors.blue),
+              style: GoogleFonts.aBeeZee(color: Colors.green),
             ),
           ),
         ],
@@ -25,7 +27,7 @@ class FilterScreen extends StatelessWidget {
         ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
-        centerTitle: true,
+        // centerTitle: true,
       ),
       body: Drawer(
         width: 340,
@@ -34,34 +36,39 @@ class FilterScreen extends StatelessWidget {
             padding: EdgeInsets.all(16.0),
             children: [
               ExpansionTile(
-                title: Text('Price'),
-                children: [
-                  // Add your price range selector here
-                ],
+                title: Text(
+                  'Price',
+                  style: GoogleFonts.aBeeZee(fontSize: 15),
+                ),
+                children: [],
               ),
               ExpansionTile(
-                title: Text('Brand'),
-                children: [
-                  // Add brand options here
-                ],
+                title: Text(
+                  'Brand',
+                  style: GoogleFonts.aBeeZee(fontSize: 15),
+                ),
+                children: [],
               ),
               ExpansionTile(
-                title: Text('Color'),
-                children: [
-                  // Add color options here
-                ],
+                title: Text(
+                  'Color',
+                  style: GoogleFonts.aBeeZee(fontSize: 15),
+                ),
+                children: [],
               ),
               ExpansionTile(
-                title: Text('Categories'),
-                children: [
-                  // Add categories options here
-                ],
+                title: Text(
+                  'Categories',
+                  style: GoogleFonts.aBeeZee(fontSize: 15),
+                ),
+                children: [],
               ),
               ExpansionTile(
-                title: Text('Material'),
-                children: [
-                  // Add material options here
-                ],
+                title: Text(
+                  'Material',
+                  style: GoogleFonts.aBeeZee(fontSize: 15),
+                ),
+                children: [],
               ),
             ],
           ),
@@ -70,12 +77,14 @@ class FilterScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {
-            // Apply filter logic
-          },
-          child: Text('Apply'),
+          onPressed: () {},
+          child: Text(
+            'Apply',
+            style: GoogleFonts.aBeeZee(fontSize: 15, color: Colors.black),
+          ),
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
+            backgroundColor: Color(0xFFFAAAB1),
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
