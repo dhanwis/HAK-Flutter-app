@@ -275,10 +275,10 @@ class ProductDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: RatingAndReviews(),
                   ),
-                  const Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ReviewPage(),
-                  ),
+                  // const Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: ReviewPage(),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

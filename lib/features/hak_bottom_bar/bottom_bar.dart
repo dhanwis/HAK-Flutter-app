@@ -22,7 +22,8 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
   List<Widget> pages = [
     HomePage(),
     CartPage(),
-    WishlistPage(),
+    // WishlistPage(),
+    WishlistView(),
     CreateProfilePage(),
   ];
 
