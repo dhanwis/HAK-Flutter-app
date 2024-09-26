@@ -127,7 +127,8 @@ class WishlistPage extends StatelessWidget {
       ),
       body: BlocProvider(
         // Providing WishlistBloc in the widget tree
-        create: (context) => WishlistBloc(WishlistService()),
+        create: (context) =>
+            WishlistBloc(WishlistService())..add(FetchWishlist()),
         child: const WishlistView(),
       ),
     );

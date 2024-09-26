@@ -1,21 +1,31 @@
-abstract class CartState {}
+import 'package:equatable/equatable.dart';
 
-class CartLoadingState extends CartState {}
+abstract class CartState extends Equatable {
+  const CartState();
 
-class CartLoadedState extends CartState {
-  final List<dynamic> cartItems;
-
-  CartLoadedState(this.cartItems);
+  @override
+  List<Object> get props => [];
 }
 
-class CartErrorState extends CartState {
+class CartLoaded extends CartState {
+  final List<dynamic> cartItems;
+
+  CartLoaded(this.cartItems);
+}
+
+class CartInitial extends CartState {}
+
+class CartLoading extends CartState {}
+
+class AddedToCart extends CartState {}
+
+class AlreadyInCart extends CartState {}
+
+class CartError extends CartState {
   final String message;
 
-  CartErrorState(this.message);
-}
+  CartError(this.message);
 
-class CartUpdatedState extends CartState {
-  final List<dynamic> cartItems;
-
-  CartUpdatedState(this.cartItems);
+  @override
+  List<Object> get props => [message];
 }

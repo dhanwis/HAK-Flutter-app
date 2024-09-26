@@ -1,11 +1,13 @@
+import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/user_review/ratingreview.dart';
-import 'package:dil_hack_e_commerce/features/pages/user_review/user_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -23,334 +25,354 @@ class ProductDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: BlocProvider(
-        create: (context) => ProductDetailBloc(
-          productApi: ProductbyidApi(),
-          similarProductsApi: GetSimilarProductsApi(),
-        )..add(FetchProductDetails(productId)),
-        child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
-          builder: (context, state) {
-            if (state is ProductDetailLoading) {
-              return SkeletonLoader();
-            } else if (state is ProductDetailLoaded) {
-              final actualPrice =
-                  state.product.variations.first.skus.first.actualPrice;
-              final formattedPrice = NumberFormat('#,##0').format(actualPrice);
+    // return Scaffold(
+    //   body:
+    // );
 
-              List<String> sizes = state.product.variations.isNotEmpty
-                  ? state.product.variations.first.skus
-                      .map((sku) => sku.size)
-                      .toList()
-                  : [];
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => ProductDetailBloc(
+                    productApi: ProductbyidApi(),
+                    similarProductsApi: GetSimilarProductsApi(),
+                  )..add(FetchProductDetails(productId))),
+          BlocProvider(create: (context) => CartBloc(CartService())),
+        ],
+        child: Scaffold(
+          body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+            builder: (context, state) {
+              if (state is ProductDetailLoading) {
+                return SkeletonLoader();
+              } else if (state is ProductDetailLoaded) {
+                final actualPrice =
+                    state.product.variations.first.skus.first.actualPrice;
+                final formattedPrice =
+                    NumberFormat('#,##0').format(actualPrice);
 
-              return ListView(
-                children: [
-                  Container(
-                    height: height * 0.6,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.product.variations.first.images.length,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          height: height * 0.6,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              state.product.variations.first.images[index],
+                List<String> sizes = state.product.variations.isNotEmpty
+                    ? state.product.variations.first.skus
+                        .map((sku) => sku.size)
+                        .toList()
+                    : [];
+
+                return ListView(
+                  children: [
+                    Container(
+                      height: height * 0.6,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.product.variations.first.images.length,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            height: height * 0.6,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                state.product.variations.first.images[index],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            capitalizeFirstLetter(state.product.productName),
-                            style: GoogleFonts.aBeeZee(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            // FavoriteButton(),
-                            IconButton(
-                              icon: Icon(Icons.share),
-                              onPressed: () {
-                                final String productUrl =
-                                    'https://yourwebsite.com/products/${state.product.id}';
-                                final String productDescription =
-                                    state.product.productDescription;
-                                final String shareText =
-                                    '${state.product.productName}\n$productDescription\n$productUrl';
-                                Share.share(shareText);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            capitalizeFirstLetter(
-                                state.product.productDescription),
-                            style: GoogleFonts.aBeeZee(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          '₹$formattedPrice',
-                          style: GoogleFonts.aBeeZee(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Similar Products',
-                      style: GoogleFonts.aBeeZee(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  if (state.similarProducts.isEmpty)
-                    SimilarProductsSkeletonLoader()
-                  else
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: List.generate(
-                            state.similarProducts.length,
-                            (index) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailPage(
-                                        productId:
-                                            state.similarProducts[index].id,
-                                      ),
-                                    ),
-                                  );
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              capitalizeFirstLetter(state.product.productName),
+                              style: GoogleFonts.aBeeZee(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              // FavoriteButton(),
+                              IconButton(
+                                icon: Icon(Icons.share),
+                                onPressed: () {
+                                  final String productUrl =
+                                      'https://yourwebsite.com/products/${state.product.id}';
+                                  final String productDescription =
+                                      state.product.productDescription;
+                                  final String shareText =
+                                      '${state.product.productName}\n$productDescription\n$productUrl';
+                                  Share.share(shareText);
                                 },
-                                child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    state.similarProducts[index].variations
-                                        .first.images.first,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              capitalizeFirstLetter(
+                                  state.product.productDescription),
+                              style: GoogleFonts.aBeeZee(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            '₹$formattedPrice',
+                            style: GoogleFonts.aBeeZee(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Similar Products',
+                        style: GoogleFonts.aBeeZee(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    if (state.similarProducts.isEmpty)
+                      SimilarProductsSkeletonLoader()
+                    else
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: List.generate(
+                              state.similarProducts.length,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProductDetailPage(
+                                          productId:
+                                              state.similarProducts[index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                      state.similarProducts[index].variations
+                                          .first.images.first,
+                                    ),
+                                    backgroundColor: Colors.grey.shade200,
+                                    radius: 30,
                                   ),
-                                  backgroundColor: Colors.grey.shade200,
-                                  radius: 30,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 10),
-                    child: RatingBar.builder(
-                      initialRating: 4,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      itemCount: 5,
-                      itemSize: 20,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 4),
-                      itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        color: Colors.green,
-                      ),
-                      onRatingUpdate: (index) {},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Select Size',
-                          style: GoogleFonts.aBeeZee(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
+                      child: RatingBar.builder(
+                        initialRating: 4,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        itemCount: 5,
+                        itemSize: 20,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Colors.green,
                         ),
-                        SizedBox(height: 10),
-                        SizeSelector(sizes: sizes),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Product Details',
-                      style: GoogleFonts.aBeeZee(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        onRatingUpdate: (index) {},
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Color',
-                      value: state.product.variations.isNotEmpty
-                          ? state.product.variations.first.color
-                          : 'N/A',
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Weight',
-                      value: state.product.productWeight.toString(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Brand',
-                      value: state.product.productBrand,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Type',
-                      value: state.product.productType,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Publish Date',
-                      value: DateFormat('dd-MM-yyyy')
-                          .format(state.product.productPublishDatetime),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DetailRow(
-                      label: 'Total Stock',
-                      value: state.product.variations.isNotEmpty &&
-                              state.product.variations[0].skus.isNotEmpty
-                          ? state.product.variations[0].skus[0].quantity
-                              .toString()
-                          : 'N/A',
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RatingAndReviews(),
-                  ),
-                  // const Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: ReviewPage(),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.shopping_cart,
-                              color: Colors.black,
-                            ),
-                            label: Text(
-                              'Add to Cart',
-                              style: GoogleFonts.aBeeZee(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              side: BorderSide(
-                                color: Color(0xFFFAAAB1),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Select Size',
+                            style: GoogleFonts.aBeeZee(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
+                          SizedBox(height: 10),
+                          SizeSelector(sizes: sizes),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Product Details',
+                        style: GoogleFonts.aBeeZee(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
                         ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrderScreen()),
-                              );
-                            },
-                            child: Text(
-                              'Buy Now',
-                              style: GoogleFonts.aBeeZee(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFFAAAB1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Color',
+                        value: state.product.variations.isNotEmpty
+                            ? state.product.variations.first.color
+                            : 'N/A',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Weight',
+                        value: state.product.productWeight.toString(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Brand',
+                        value: state.product.productBrand,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Type',
+                        value: state.product.productType,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Publish Date',
+                        value: DateFormat('dd-MM-yyyy')
+                            .format(state.product.productPublishDatetime),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DetailRow(
+                        label: 'Total Stock',
+                        value: state.product.variations.isNotEmpty &&
+                                state.product.variations[0].skus.isNotEmpty
+                            ? state.product.variations[0].skus[0].quantity
+                                .toString()
+                            : 'N/A',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RatingAndReviews(),
+                    ),
+                    // const Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: ReviewPage(),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            // child: ElevatedButton.icon(
+                            //   onPressed: () {
+                            //     BlocProvider.of<CartBloc>(context)
+                            //         .add(AddToCartEvent(productId));
+                            //   },
+                            //   icon: Icon(
+                            //     Icons.shopping_cart,
+                            //     color: Colors.black,
+                            //   ),
+                            //   label: Text(
+                            //     'Add to Cart',
+                            //     style: GoogleFonts.aBeeZee(
+                            //         color: Colors.black,
+                            //         fontWeight: FontWeight.bold),
+                            //   ),
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.white,
+                            //     side: BorderSide(
+                            //       color: Color(0xFFFAAAB1),
+                            //     ),
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(8),
+                            //     ),
+                            //     padding: EdgeInsets.symmetric(
+                            //         horizontal: 24, vertical: 12),
+                            //   ),
+                            // ),
+                            child: AddToCartButton(
+                              productId:
+                                  productId, // Replace product.id with the actual product ID variable if different
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OrderScreen()),
+                                );
+                              },
+                              child: Text(
+                                'Buy Now',
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFFAAAB1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            } else if (state is ProductDetailError) {
-              return Center(
-                child: Text('Error: ${state.message}'),
-              );
-            }
-            return Container();
-          },
-        ),
-      ),
-    );
+                  ],
+                );
+              } else if (state is ProductDetailError) {
+                return Center(
+                  child: Text('Error: ${state.message}'),
+                );
+              }
+              return Container();
+            },
+          ),
+        ));
+    // BlocProvider(
+    //   create: (context) => ProductDetailBloc(
+    //     productApi: ProductbyidApi(),
+    //     similarProductsApi: GetSimilarProductsApi(),
+    //   )..add(FetchProductDetails(productId)),
   }
 }
 

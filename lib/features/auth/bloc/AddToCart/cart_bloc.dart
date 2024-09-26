@@ -1,48 +1,77 @@
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_event.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
+import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
+import 'cart_event.dart';
+import 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartService cartService;
+  String userId = '';
 
-  CartBloc(this.cartService) : super(CartLoadingState());
+  CartBloc(this.cartService) : super(CartInitial()) {
+    on<FetchCartEvent>((event, emit) async {
+      await _initializeUserId();
+      emit(CartLoading());
+      try {
+        print('cart items');
+        final cartItems = await cartService.fetchCart(event.userId);
+        print(cartItems);
+        emit(CartLoaded(cartItems));
+      } catch (e) {
+        emit(CartError('Failed to fetch cart'));
+      }
+    });
 
-  @override
-  Stream<CartState> mapEventToState(CartEvent event) async* {
-    if (event is FetchCartEvent) {
-      yield CartLoadingState();
+    on<AddToCartEvent>((event, emit) async {
+      await _initializeUserId();
+
+      print('event bellow');
+      print(event);
+
       try {
-        final cartItems = await cartService.fetchCart(event.userId);
-        yield CartLoadedState(cartItems);
+        bool isAlreadyInCart =
+            await cartService.isProductInCart(userId, event.productId);
+
+        if (isAlreadyInCart) {
+          print('already in cart');
+          emit(AlreadyInCart());
+        } else {
+          await cartService.addToCart(userId, event.productId, 1);
+          print('added to acrt');
+          emit(AddedToCart());
+        }
       } catch (e) {
-        yield CartErrorState('Failed to fetch cart');
+        print('error ');
+        print(e);
+        emit(CartError('Failed to add to cart'));
       }
-    } else if (event is AddToCartEvent) {
+    });
+
+    on<CheckCartStatusEvent>((event, emit) async {
+      await _initializeUserId();
+      emit(CartLoading());
       try {
-        await cartService.addToCart(
-            event.userId, event.productId, event.quantity);
-        final cartItems = await cartService.fetchCart(event.userId);
-        yield CartUpdatedState(cartItems);
+        bool isAlreadyInCart =
+            await cartService.isProductInCart(userId, event.productId);
+        if (isAlreadyInCart) {
+          emit(AlreadyInCart());
+        } else {
+          emit(CartInitial());
+        }
       } catch (e) {
-        yield CartErrorState('Failed to add product to cart');
+        emit(CartError('Error checking cart status'));
       }
-    } else if (event is RemoveFromCartEvent) {
+    });
+  }
+
+  Future<void> _initializeUserId() async {
+    if (userId.isEmpty) {
       try {
-        await cartService.removeFromCart(event.userId, event.productId);
-        final cartItems = await cartService.fetchCart(event.userId);
-        yield CartUpdatedState(cartItems);
+        final decodedToken =
+            await decodeJwt(); // Use your existing decodeJwt method
+        userId = decodedToken['userId']; // Assuming userId is part of the token
       } catch (e) {
-        yield CartErrorState('Failed to remove product from cart');
-      }
-    } else if (event is UpdateCartEvent) {
-      try {
-        await cartService.updateCart(
-            event.userId, event.productId, event.quantity);
-        final cartItems = await cartService.fetchCart(event.userId);
-        yield CartUpdatedState(cartItems);
-      } catch (e) {
-        yield CartErrorState('Failed to update cart');
+        print("Error decoding token: $e");
       }
     }
   }

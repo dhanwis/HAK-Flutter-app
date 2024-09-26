@@ -16,10 +16,8 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
       await _initializeUserId();
 
       try {
-        print(
-            'User ID for wishlist: $userId'); // Now this should print correctly
         final wishlist = await wishlistService.fetchWishlist(userId);
-        print('here the wishlist $wishlist');
+
         emit(WishlistLoaded(wishlist));
       } catch (e) {
         emit(WishlistError(e.toString()));
@@ -30,13 +28,10 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
       // Initialize userId before proceeding
       await _initializeUserId();
 
-      print('event bellow');
-      print(event);
       try {
         await wishlistService.addToWishlist(userId, event.productId);
         final wishlist = await wishlistService.fetchWishlist(userId);
 
-        print('add  the wishlist $wishlist');
         emit(WishlistLoaded(wishlist));
       } catch (e) {
         emit(WishlistError(e.toString()));
@@ -46,7 +41,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     on<RemoveFromWishlist>((event, emit) async {
       // Initialize userId before proceeding
       await _initializeUserId();
-
+      print('working deelete');
       try {
         await wishlistService.removeFromWishlist(userId, event.productId);
         final wishlist = await wishlistService.fetchWishlist(userId);

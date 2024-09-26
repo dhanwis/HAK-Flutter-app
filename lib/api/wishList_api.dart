@@ -8,8 +8,6 @@ class WishlistService {
   final client = AuthHttpClient(http.Client());
 
   Future<List<dynamic>> fetchWishlist(String userId) async {
-    print(userId);
-    print('checking on connection');
     final response = await client
         .get(Uri.parse('$baseUrl/customerApp/whishList/get_all/$userId'));
     if (response.statusCode == 200) {
@@ -21,7 +19,6 @@ class WishlistService {
   }
 
   Future<void> addToWishlist(String userId, String productId) async {
-    print('acllnig');
     final response = await client.post(
       Uri.parse('$baseUrl/customerApp/whishList/add/$userId'),
       body: json.encode({'productId': productId}),
@@ -34,8 +31,10 @@ class WishlistService {
   }
 
   Future<void> removeFromWishlist(String userId, String productId) async {
+    print('delete try');
     final response = await client.delete(
         Uri.parse('$baseUrl/customerApp/wishList/delete/$userId/$productId'));
+    print(response);
     if (response.statusCode != 200) {
       throw Exception('Failed to remove from wishlist');
     }
