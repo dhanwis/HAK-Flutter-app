@@ -47,9 +47,9 @@ class MyApp extends StatelessWidget {
             ..add(FetchProductsEvent()),
         ),
 
-        // BlocProvider(
-        //   create: (context) => WishlistBloc(WishlistService()),
-        // ),
+        BlocProvider(
+          create: (context) => WishlistBloc(WishlistService()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
