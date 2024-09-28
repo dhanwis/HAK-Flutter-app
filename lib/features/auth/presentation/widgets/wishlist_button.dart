@@ -16,27 +16,29 @@ class FavoriteButton extends StatefulWidget {
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false; // Initial value for favorite status
+  bool isFavorite = false; // Initial value for isFavorite
 
   @override
   void initState() {
     super.initState();
-    print('starting');
-
-    // Dispatch event to check initial favorite status when the button is created
+    // Dispatch the CheckIfFavorited event to get the initial state
     BlocProvider.of<WishlistBloc>(context)
         .add(CheckIfFavorited(widget.productId));
   }
 
-  void _toggleFavorite() {
+  void _toggleFavorite() async {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+
     if (isFavorite) {
-      // If already favorited, dispatch event to remove from wishlist
-      BlocProvider.of<WishlistBloc>(context)
-          .add(RemoveFromWishlist(widget.productId));
-    } else {
-      // If not favorited, dispatch event to add to wishlist
+      // Dispatch AddToWishlist event
       BlocProvider.of<WishlistBloc>(context)
           .add(AddToWishlist(widget.productId));
+    } else {
+      // Dispatch RemoveFromWishlist event
+      BlocProvider.of<WishlistBloc>(context)
+          .add(RemoveFromWishlist(widget.productId));
     }
   }
 
@@ -44,24 +46,12 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   Widget build(BuildContext context) {
     return BlocConsumer<WishlistBloc, WishlistState>(
       listener: (context, state) {
-        // Listen for changes in favorite status and update `isFavorite`
-        if (state is WishlistFavoritedStatus) {
-          print('state is WishlistFavoritedStatus');
+        if (state is WishlistFavoritedStatus &&
+            state.productId == widget.productId) {
+          // Ensure we're updating only for the current product
           setState(() {
-            if (widget.productId == state.productId) {
-              print('yes matched');
-              isFavorite = state.isFavorited;
-            }
-          });
-        }
-
-        // Listen for changes when a product is added or removed from wishlist
-        if (state is WishlistUpdated) {
-          print('updated');
-          setState(() {
-            if (widget.productId == state.productId) {
-              isFavorite = state.isFavorited;
-            }
+            isFavorite =
+                state.isFavorited; // Update isFavorite based on the state
           });
         }
       },

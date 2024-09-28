@@ -13,10 +13,9 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
       await _initializeUserId();
 
       try {
-        print('bellow try');
         final isFavorited =
             await wishlistService.checkisFavour(userId, event.productId);
-        print('is fav $isFavorited');
+
         emit(WishlistFavoritedStatus(
             isFavorited: isFavorited,
             productId: event.productId)); // isFavorited should now be a bool

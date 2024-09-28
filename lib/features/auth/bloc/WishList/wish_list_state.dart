@@ -30,15 +30,15 @@ class WishlistFavoritedStatus extends WishlistState {
   });
 }
 
-class WishlistUpdated extends WishlistState {
-  final bool isFavorited;
-  final String productId;
+// class WishlistUpdated extends WishlistState {
+//   final bool isFavorited;
+//   final String productId;
 
-  WishlistUpdated({
-    required this.isFavorited,
-    required this.productId,
-  });
-}
+//   WishlistUpdated({
+//     required this.isFavorited,
+//     required this.productId,
+//   });
+// }
 
 class WishlistError extends WishlistState {
   final String message;
