@@ -20,6 +20,26 @@ class WishlistLoaded extends WishlistState {
   List<Object> get props => [wishlist];
 }
 
+class WishlistFavoritedStatus extends WishlistState {
+  final bool isFavorited;
+  final String productId; // Add productId to state
+
+  WishlistFavoritedStatus({
+    required this.isFavorited,
+    required this.productId,
+  });
+}
+
+class WishlistUpdated extends WishlistState {
+  final bool isFavorited;
+  final String productId;
+
+  WishlistUpdated({
+    required this.isFavorited,
+    required this.productId,
+  });
+}
+
 class WishlistError extends WishlistState {
   final String message;
 

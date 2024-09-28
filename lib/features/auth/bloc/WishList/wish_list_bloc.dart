@@ -9,6 +9,22 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   String userId = '';
 
   WishlistBloc(this.wishlistService) : super(WishlistInitial()) {
+    on<CheckIfFavorited>((event, emit) async {
+      await _initializeUserId();
+
+      try {
+        print('bellow try');
+        final isFavorited =
+            await wishlistService.checkisFavour(userId, event.productId);
+        print('is fav $isFavorited');
+        emit(WishlistFavoritedStatus(
+            isFavorited: isFavorited,
+            productId: event.productId)); // isFavorited should now be a bool
+      } catch (error) {
+        emit(WishlistError(error.toString()));
+      }
+    });
+
     on<FetchWishlist>((event, emit) async {
       emit(WishlistLoading());
 
@@ -41,7 +57,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     on<RemoveFromWishlist>((event, emit) async {
       // Initialize userId before proceeding
       await _initializeUserId();
-      print('working deelete');
+      print('working delete');
       try {
         await wishlistService.removeFromWishlist(userId, event.productId);
         final wishlist = await wishlistService.fetchWishlist(userId);

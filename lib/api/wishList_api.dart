@@ -7,9 +7,22 @@ class WishlistService {
   final String baseUrl = AppConstants.BASE_URL;
   final client = AuthHttpClient(http.Client());
 
+  Future<bool> checkisFavour(String userId, String productId) async {
+    final response = await client.get(Uri.parse(
+        '$baseUrl/customerApp/wishList/check_wishList?userId=$userId&productId=$productId'));
+
+    if (response.statusCode == 200) {
+      final decodedResponse = json.decode(response.body);
+      print('Response: ${response.body}');
+      return decodedResponse['isFavorited'] ?? false; // Return bool directly
+    } else {
+      throw Exception('Failed to check wishlist');
+    }
+  }
+
   Future<List<dynamic>> fetchWishlist(String userId) async {
     final response = await client
-        .get(Uri.parse('$baseUrl/customerApp/whishList/get_all/$userId'));
+        .get(Uri.parse('$baseUrl/customerApp/wishList/get_all/$userId'));
     if (response.statusCode == 200) {
       print('all ${response.body}');
       return json.decode(response.body)['products'];
@@ -20,7 +33,7 @@ class WishlistService {
 
   Future<void> addToWishlist(String userId, String productId) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/customerApp/whishList/add/$userId'),
+      Uri.parse('$baseUrl/customerApp/wishList/add/$userId'),
       body: json.encode({'productId': productId}),
       headers: {'Content-Type': 'application/json'},
     );

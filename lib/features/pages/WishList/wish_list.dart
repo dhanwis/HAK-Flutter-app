@@ -127,8 +127,7 @@ class WishlistPage extends StatelessWidget {
       ),
       body: BlocProvider(
         // Providing WishlistBloc in the widget tree
-        create: (context) =>
-            WishlistBloc(WishlistService())..add(FetchWishlist()),
+        create: (context) => WishlistBloc(WishlistService()),
         child: const WishlistView(),
       ),
     );
@@ -348,7 +347,7 @@ class WishlistView extends StatelessWidget {
 
     return BlocBuilder<WishlistBloc, WishlistState>(
       builder: (context, state) {
-        print('state');
+        print('state a');
         print(state);
         if (state is WishlistLoading) {
           return _buildSkeletonLoader(context); // Show skeleton loader

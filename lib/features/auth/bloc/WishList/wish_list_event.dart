@@ -14,6 +14,13 @@ class FetchWishlist extends WishlistEvent {
   List<Object> get props => [];
 }
 
+class CheckIfFavorited extends WishlistEvent {
+  // final String userId;
+  final String productId;
+
+  CheckIfFavorited(this.productId);
+}
+
 class AddToWishlist extends WishlistEvent {
   //final String userId;
   final String productId;
