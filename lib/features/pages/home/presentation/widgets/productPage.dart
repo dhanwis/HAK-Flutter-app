@@ -16,6 +16,7 @@ class ProductGrid extends StatefulWidget {
 class _ProductGridState extends State<ProductGrid> {
   List<Product> products = [];
   int currentPage = 1;
+
   bool isLoadingMore = false;
   bool hasMoreProducts = true;
   bool isLoading = true; // Initial loading state

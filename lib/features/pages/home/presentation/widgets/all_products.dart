@@ -62,6 +62,7 @@ class _AllProductsState extends State<AllProducts> {
           //     },
           //   ),
           // );
+
           return Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -79,7 +80,7 @@ class _AllProductsState extends State<AllProducts> {
                   ),
                 ),
                 Container(
-                  height: 1000,
+                  height: 2000,
                   child: ProductGrid(),
                 )
               ],

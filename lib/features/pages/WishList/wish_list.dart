@@ -91,7 +91,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_state.dart';
 import 'package:shimmer/shimmer.dart';
 
