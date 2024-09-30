@@ -36,7 +36,7 @@ class ProductDetailPage extends StatelessWidget {
                     productApi: ProductbyidApi(),
                     similarProductsApi: GetSimilarProductsApi(),
                   )..add(FetchProductDetails(productId))),
-          BlocProvider(create: (context) => CartBloc(CartService())),
+          //  BlocProvider(create: (context) => CartBloc(CartService())),
         ],
         child: Scaffold(
           body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
@@ -323,7 +323,7 @@ class ProductDetailPage extends StatelessWidget {
                             //         horizontal: 24, vertical: 12),
                             //   ),
                             // ),
-                            child: AddToCartButton(
+                            child: AddToCartButtonState(
                               productId:
                                   productId, // Replace product.id with the actual product ID variable if different
                             ),

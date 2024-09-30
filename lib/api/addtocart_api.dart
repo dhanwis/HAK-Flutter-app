@@ -9,10 +9,11 @@ class CartService {
   final client = AuthHttpClient(http.Client());
 
   Future<List<dynamic>> fetchCart(String userId) async {
-    print('listing al cart');
     final response = await client
         .get(Uri.parse('$baseUrl/customerApp/cart/get_all/$userId'));
-    print(response);
+    print('response');
+    print(response.body);
+
     if (response.statusCode == 200) {
       return json.decode(response.body)['products'];
     } else {
@@ -28,7 +29,7 @@ class CartService {
       headers: {'Content-Type': 'application/json'},
     );
     print('print result');
-    print(response);
+    print(response.body);
     if (response.statusCode != 201) {
       throw Exception('Failed to add to cart');
     }
@@ -56,8 +57,9 @@ class CartService {
 
   /// Check if a product is in the user's cart
   Future<bool> isProductInCart(String userId, String productId) async {
+    print('is any same');
     final cartItems = await fetchCart(userId);
     // Check if any item in the cart matches the productId
-    return cartItems.any((item) => item['productId'] == productId);
+    return cartItems.any((item) => item['_id'] == productId);
   }
 }

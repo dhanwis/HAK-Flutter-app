@@ -13,36 +13,40 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _initializeUserId();
       emit(CartLoading());
       try {
-        print('cart items');
         final cartItems = await cartService.fetchCart(event.userId);
-        print(cartItems);
         emit(CartLoaded(cartItems));
       } catch (e) {
         emit(CartError('Failed to fetch cart'));
       }
     });
 
+    // on<AddToCartEvent>((event, emit) async {
+    //   await _initializeUserId();
+
+    //   try {
+    //     // Directly add to the cart
+    //     await cartService.addToCart(userId, event.productId, 1);
+    //     emit(AddedToCart()); // You may want to emit cart updated state here
+    //   } catch (e) {
+    //     emit(CartError('Failed to add to cart'));
+    //   }
+    // });
     on<AddToCartEvent>((event, emit) async {
       await _initializeUserId();
 
-      print('event bellow');
-      print(event);
-
       try {
-        bool isAlreadyInCart =
-            await cartService.isProductInCart(userId, event.productId);
+        // Directly add to the cart
+        final response =
+            await cartService.addToCart(userId, event.productId, 1);
 
-        if (isAlreadyInCart) {
-          print('already in cart');
-          emit(AlreadyInCart());
+        // Check for the response message
+        if (response['message'] == 'Product quantity updated') {
+          emit(
+              AlreadyInCart()); // Emit a state indicating the product is already in the cart
         } else {
-          await cartService.addToCart(userId, event.productId, 1);
-          print('added to acrt');
-          emit(AddedToCart());
+          emit(AddedToCart()); // Emit a state indicating the product was added
         }
       } catch (e) {
-        print('error ');
-        print(e);
         emit(CartError('Failed to add to cart'));
       }
     });
