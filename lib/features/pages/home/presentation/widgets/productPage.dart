@@ -16,7 +16,6 @@ class ProductGrid extends StatefulWidget {
 class _ProductGridState extends State<ProductGrid> {
   List<Product> products = [];
   int currentPage = 1;
-
   bool isLoadingMore = false;
   bool hasMoreProducts = true;
   bool isLoading = true; // Initial loading state
@@ -156,6 +155,7 @@ class _ProductGridState extends State<ProductGrid> {
           final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
 
           return CustomScrollView(
+            controller: _scrollController,
             slivers: [
               if (isLoading)
                 SliverToBoxAdapter(
@@ -172,10 +172,9 @@ class _ProductGridState extends State<ProductGrid> {
                       if (index == products.length) {
                         if (isLoadingMore) {
                           return Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFFFAAAB1),
-                            ),
-                          );
+                              child: CircularProgressIndicator(
+                            color: Color(0xFFFAAAB1),
+                          ));
                         }
                         return SizedBox.shrink();
                       }
@@ -246,11 +245,13 @@ class _ProductGridState extends State<ProductGrid> {
                                 Positioned(
                                   right: 8.0,
                                   top: 10.0,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 16,
-                                    child: FavoriteButton(
-                                      productId: product.id,
+                                  child: GestureDetector(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 16,
+                                      child: FavoriteButton(
+                                        productId: product.id,
+                                      ),
                                     ),
                                   ),
                                 ),

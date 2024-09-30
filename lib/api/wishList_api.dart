@@ -32,6 +32,7 @@ class WishlistService {
   }
 
   Future<void> addToWishlist(String userId, String productId) async {
+    print('object');
     final response = await client.post(
       Uri.parse('$baseUrl/customerApp/wishList/add/$userId'),
       body: json.encode({'productId': productId}),

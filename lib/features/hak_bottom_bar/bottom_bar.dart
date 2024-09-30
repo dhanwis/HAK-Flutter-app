@@ -23,7 +23,7 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
     HomePage(),
     CartPage(),
     // WishlistPage(),
-    WishlistView(),
+    WishlistPage(),
     CreateProfilePage(),
   ];
 

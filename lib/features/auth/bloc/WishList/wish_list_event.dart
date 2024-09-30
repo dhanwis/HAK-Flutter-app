@@ -1,42 +1,27 @@
 import 'package:equatable/equatable.dart';
 
-abstract class WishlistEvent extends Equatable {
-  const WishlistEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-class FetchWishlist extends WishlistEvent {
-  const FetchWishlist();
-
-  @override
-  List<Object> get props => [];
-}
-
-class CheckIfFavorited extends WishlistEvent {
-  // final String userId;
-  final String productId;
-
-  CheckIfFavorited(this.productId);
-}
+// wishlist_event.dart
+abstract class WishlistEvent {}
 
 class AddToWishlist extends WishlistEvent {
-  //final String userId;
   final String productId;
 
-  const AddToWishlist(this.productId);
-
-  @override
-  List<Object> get props => [productId];
+  AddToWishlist(this.productId);
 }
 
 class RemoveFromWishlist extends WishlistEvent {
-  //final String userId;
   final String productId;
 
-  const RemoveFromWishlist(this.productId);
+  RemoveFromWishlist(this.productId);
+}
+
+class FetchWishlistItems extends WishlistEvent {
+  // final String userId;
+
+  // FetchWishlistItems(this.userId);
+
+  FetchWishlistItems();
 
   @override
-  List<Object> get props => [productId];
+  List<Object> get props => [];
 }

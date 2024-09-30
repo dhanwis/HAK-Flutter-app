@@ -9,11 +9,40 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   String userId = '';
 
   WishlistBloc(this.wishlistService) : super(WishlistInitial()) {
-    on<FetchWishlist>((event, emit) async {
-      print('fetchng');
+    // Handler for AddToWishlist event
+    on<AddToWishlist>((event, emit) async {
+      print('click to add w');
+      await _initializeUserId();
+
+      try {
+        await wishlistService.addToWishlist(userId, event.productId);
+        final wishlist = await wishlistService.fetchWishlist(userId);
+
+        emit(WishlistLoaded(wishlist));
+      } catch (e) {
+        emit(WishlistError(e.toString()));
+      }
+    });
+
+    // Handler for RemoveFromWishlist event
+    on<RemoveFromWishlist>((event, emit) async {
+      await _initializeUserId();
+      print('working delete');
+      try {
+        await wishlistService.removeFromWishlist(userId, event.productId);
+        final wishlist = await wishlistService.fetchWishlist(userId);
+        print('remove the wishlist $wishlist');
+        emit(WishlistLoaded(wishlist));
+      } catch (e) {
+        emit(WishlistError(e.toString()));
+      }
+    });
+
+    // Handler for FetchWishlistItems event
+    on<FetchWishlistItems>((event, emit) async {
+      print('fetch wishlist');
       emit(WishlistLoading());
 
-      // Initialize userId before proceeding
       await _initializeUserId();
 
       try {
@@ -24,52 +53,8 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         emit(WishlistError(e.toString()));
       }
     });
-
-    on<CheckIfFavorited>((event, emit) async {
-      await _initializeUserId();
-      print('WishlistFavoritedStatus');
-      try {
-        final isFavorited =
-            await wishlistService.checkisFavour(userId, event.productId);
-
-        emit(WishlistFavoritedStatus(
-            isFavorited: isFavorited,
-            productId: event.productId)); // isFavorited should now be a bool
-      } catch (error) {
-        emit(WishlistError(error.toString()));
-      }
-    });
-
-    on<AddToWishlist>((event, emit) async {
-      await _initializeUserId();
-      try {
-        await wishlistService.addToWishlist(userId, event.productId);
-        final wishlist = await wishlistService.fetchWishlist(userId);
-
-        emit(WishlistLoaded(wishlist)); // Update the entire wishlist
-        emit(WishlistFavoritedStatus(
-            isFavorited: true, productId: event.productId));
-      } catch (e) {
-        emit(WishlistError(e.toString()));
-      }
-    });
-
-    on<RemoveFromWishlist>((event, emit) async {
-      await _initializeUserId();
-      try {
-        await wishlistService.removeFromWishlist(userId, event.productId);
-        final wishlist = await wishlistService.fetchWishlist(userId);
-
-        emit(WishlistLoaded(wishlist)); // Update the entire wishlist
-        emit(WishlistFavoritedStatus(
-            isFavorited: false, productId: event.productId));
-      } catch (e) {
-        emit(WishlistError(e.toString()));
-      }
-    });
   }
 
-  // Method to initialize userId from the token
   Future<void> _initializeUserId() async {
     if (userId.isEmpty) {
       // Ensure that userId is initialized only once

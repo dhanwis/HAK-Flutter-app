@@ -4,57 +4,47 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_state.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FavoriteButton extends StatefulWidget {
+class FavoriteButton extends StatelessWidget {
   final String productId;
 
-  FavoriteButton({required this.productId});
-
-  @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
-}
-
-class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Check if the product is already in the wishlist when initializing the widget
-    BlocProvider.of<WishlistBloc>(context)
-        .add(CheckIfFavorited(widget.productId));
-  }
-
-  void _toggleFavorite() {
-    if (isFavorite) {
-      // Remove from wishlist
-      BlocProvider.of<WishlistBloc>(context)
-          .add(RemoveFromWishlist(widget.productId));
-    } else {
-      // Add to wishlist
-      BlocProvider.of<WishlistBloc>(context)
-          .add(AddToWishlist(widget.productId));
-    }
-  }
+  const FavoriteButton({required this.productId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WishlistBloc, WishlistState>(
-      listener: (context, state) {
-        // Listen for specific state changes to update the button
-        if (state is WishlistFavoritedStatus &&
-            state.productId == widget.productId) {
-          setState(() {
-            isFavorite = state.isFavorited;
-          });
+    print('FavoriteButton is being built');
+    return BlocBuilder<WishlistBloc, WishlistState>(
+      builder: (context, state) {
+        print('State in button: $state');
+        bool isWishlisted = false;
+
+        if (state is WishlistLoaded) {
+          print('Wishlist is loaded');
+
+          // Assuming state.wishlist is a list of product objects, not just product IDs
+          // Check if any product in the wishlist has the same product_id as the current productId
+          isWishlisted =
+              state.wishlist.any((product) => product['_id'] == productId);
         }
+
+        return IconButton(
+          icon: Icon(
+            isWishlisted ? Icons.favorite : Icons.favorite_border,
+            color: isWishlisted ? Colors.red : Colors.grey,
+          ),
+          onPressed: () {
+            print('Wishlist button pressed');
+            if (isWishlisted) {
+              print('Removing from wishlist');
+              // Remove from wishlist
+              context.read<WishlistBloc>().add(RemoveFromWishlist(productId));
+            } else {
+              print('Adding to wishlist');
+              // Add to wishlist
+              context.read<WishlistBloc>().add(AddToWishlist(productId));
+            }
+          },
+        );
       },
-      child: IconButton(
-        icon: Icon(
-          isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: isFavorite ? Colors.red : Colors.black,
-        ),
-        onPressed: _toggleFavorite,
-      ),
     );
   }
 }
