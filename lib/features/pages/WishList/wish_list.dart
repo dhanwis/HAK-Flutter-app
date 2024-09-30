@@ -83,6 +83,7 @@
 // // //   }
 // // // }
 
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
@@ -94,40 +95,74 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.d
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_state.dart';
 import 'package:shimmer/shimmer.dart';
 
-class WishlistPage extends StatelessWidget {
-  const WishlistPage({Key? key}) : super(key: key);
+// class WishlistPage extends StatelessWidget {
+//   const WishlistPage({Key? key}) : super(key: key);
 
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.white,
+//         title: Text(
+//           'Wishlist',
+//           style: GoogleFonts.aBeeZee(
+//             color: Colors.black,
+//             fontSize: 17,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         iconTheme: IconThemeData(color: Colors.black),
+//         actions: [
+//           IconButton(
+//             icon: Icon(Icons.notification_add),
+//             color: const Color.fromARGB(255, 204, 187, 35),
+//             iconSize: 20,
+//             onPressed: () {},
+//           ),
+//           IconButton(
+//             icon: Icon(Icons.shopping_cart, color: Colors.black),
+//             onPressed: () {},
+//           ),
+//         ],
+//       ),
+//       body: BlocProvider(
+//         // Providing WishlistBloc in the widget tree
+//         create: (context) =>
+//             WishlistBloc(WishlistService())..add(FetchWishlist()),
+//         child: const WishlistView(),
+//       ),
+//     );
+//   }
+// }
+
+class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Wishlist',
-          style: GoogleFonts.aBeeZee(
-            color: Colors.black,
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        iconTheme: IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notification_add),
-            color: const Color.fromARGB(255, 204, 187, 35),
-            iconSize: 20,
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_cart, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+        title: Text('Wishlist'),
       ),
-      body: BlocProvider(
-        // Providing WishlistBloc in the widget tree
-        create: (context) => WishlistBloc(WishlistService()),
-        child: const WishlistView(),
+      body: BlocBuilder<WishlistBloc, WishlistState>(
+        builder: (context, state) {
+          if (state is WishlistLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is WishlistLoaded) {
+            return ListView.builder(
+              itemCount: state.wishlist.length,
+              itemBuilder: (context, index) {
+                final product = state.wishlist[index];
+                return ListTile(
+                  title: Text(product['name']),
+                  trailing: FavoriteButton(productId: product['id']),
+                );
+              },
+            );
+          } else if (state is WishlistError) {
+            return Center(child: Text('Error: ${state.message}'));
+          } else {
+            return Center(child: Text('No items in wishlist'));
+          }
+        },
       ),
     );
   }

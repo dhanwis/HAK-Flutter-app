@@ -7,64 +7,54 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FavoriteButton extends StatefulWidget {
   final String productId;
 
-  FavoriteButton({
-    required this.productId,
-  });
+  FavoriteButton({required this.productId});
 
   @override
   _FavoriteButtonState createState() => _FavoriteButtonState();
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false; // Initial value for isFavorite
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
-    // Dispatch the CheckIfFavorited event to get the initial state
+    // Check if the product is already in the wishlist when initializing the widget
     BlocProvider.of<WishlistBloc>(context)
         .add(CheckIfFavorited(widget.productId));
   }
 
-  void _toggleFavorite() async {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-
+  void _toggleFavorite() {
     if (isFavorite) {
-      // Dispatch AddToWishlist event
-      BlocProvider.of<WishlistBloc>(context)
-          .add(AddToWishlist(widget.productId));
-    } else {
-      // Dispatch RemoveFromWishlist event
+      // Remove from wishlist
       BlocProvider.of<WishlistBloc>(context)
           .add(RemoveFromWishlist(widget.productId));
+    } else {
+      // Add to wishlist
+      BlocProvider.of<WishlistBloc>(context)
+          .add(AddToWishlist(widget.productId));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WishlistBloc, WishlistState>(
+    return BlocListener<WishlistBloc, WishlistState>(
       listener: (context, state) {
+        // Listen for specific state changes to update the button
         if (state is WishlistFavoritedStatus &&
             state.productId == widget.productId) {
-          // Ensure we're updating only for the current product
           setState(() {
-            isFavorite =
-                state.isFavorited; // Update isFavorite based on the state
+            isFavorite = state.isFavorited;
           });
         }
       },
-      builder: (context, state) {
-        return IconButton(
-          icon: Icon(
-            isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: isFavorite ? Colors.red : Colors.black,
-            size: 18,
-          ),
-          onPressed: _toggleFavorite,
-        );
-      },
+      child: IconButton(
+        icon: Icon(
+          isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: isFavorite ? Colors.red : Colors.black,
+        ),
+        onPressed: _toggleFavorite,
+      ),
     );
   }
 }
