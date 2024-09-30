@@ -7,6 +7,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart'
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 

@@ -7,12 +7,6 @@ class WishlistInitial extends WishlistState {}
 
 class WishlistLoading extends WishlistState {}
 
-// class WishlistLoaded extends WishlistState {
-//   final List<String> wishlistItems; // Store wishlist product IDs
-
-//   WishlistLoaded(this.wishlistItems);
-// }
-
 class WishlistLoaded extends WishlistState {
   final List<dynamic> wishlist;
 

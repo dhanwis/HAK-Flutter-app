@@ -11,7 +11,6 @@ class FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('FavoriteButton is being built');
     return BlocBuilder<WishlistBloc, WishlistState>(
       builder: (context, state) {
         print('State in button: $state');
