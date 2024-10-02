@@ -9,28 +9,40 @@ class CartService {
   final client = AuthHttpClient(http.Client());
 
   Future<List<dynamic>> fetchCart(String userId) async {
+    print('starts');
     final response = await client
         .get(Uri.parse('$baseUrl/customerApp/cart/get_all/$userId'));
-    print('response');
-    print(response.body);
 
     if (response.statusCode == 200) {
-      return json.decode(response.body)['products'];
-    } else {
-      throw Exception('Failed to load cart');
+      print('fetching cart from server');
+      print('response body: ${response.body}');
+
+      final Map<String, dynamic> decodedResponse = json.decode(response.body);
+      // Assuming your items are under "cartItems"
+      return decodedResponse['items']; // Adjust this based on your response
+    } else if (response.statusCode == 400) {
+      final decodedResponse = json.decode(response.body);
+      if (decodedResponse['message'] == "This product is already in the cart") {
+        throw Exception(decodedResponse['message']);
+      }
     }
+
+    throw Exception('Failed to load cart');
   }
 
-  Future<void> addToCart(String userId, String productId, int quantity) async {
-    print('try yo cart');
+  Future<Map<String, dynamic>> addToCart(
+      String userId, String productId, int quantity) async {
+    print('try to cart');
     final response = await client.post(
       Uri.parse('$baseUrl/customerApp/cart/add/$userId'),
       body: json.encode({'productId': productId, 'quantity': quantity}),
       headers: {'Content-Type': 'application/json'},
     );
-    print('print result');
-    print(response.body);
-    if (response.statusCode != 201) {
+
+    if (response.statusCode == 201) {
+      // Return the decoded response body (assuming it contains a map)
+      return json.decode(response.body) as Map<String, dynamic>;
+    } else {
       throw Exception('Failed to add to cart');
     }
   }
@@ -57,9 +69,12 @@ class CartService {
 
   /// Check if a product is in the user's cart
   Future<bool> isProductInCart(String userId, String productId) async {
-    print('is any same');
-    final cartItems = await fetchCart(userId);
+    print('Checking if product is in cart');
+
+    // Fetch the entire cart as a List<Map<String, dynamic>>
+    final List cartItems = await fetchCart(userId);
+
     // Check if any item in the cart matches the productId
-    return cartItems.any((item) => item['_id'] == productId);
+    return cartItems.any((item) => item['product']['_id'] == productId);
   }
 }

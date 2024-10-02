@@ -7,12 +7,6 @@ abstract class CartEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchCartEvent extends CartEvent {
-  final String userId;
-
-  FetchCartEvent(this.userId);
-}
-
 class AddToCartEvent extends CartEvent {
   final String productId;
 
@@ -22,11 +16,28 @@ class AddToCartEvent extends CartEvent {
   List<Object> get props => [productId];
 }
 
-class CheckCartStatusEvent extends CartEvent {
+// class CheckCartStatusEvent extends CartEvent {
+//   final String productId;
+
+//   CheckCartStatusEvent(this.productId);
+
+//   @override
+//   List<Object> get props => [productId];
+// }
+
+class RemoveFromCart extends CartEvent {
   final String productId;
 
-  CheckCartStatusEvent(this.productId);
+  RemoveFromCart(this.productId);
+}
+
+class FetchCartEvent extends CartEvent {
+  // final String userId;
+
+  // FetchCartEvent(this.userId);
+
+  FetchCartEvent();
 
   @override
-  List<Object> get props => [productId];
+  List<Object> get props => [];
 }

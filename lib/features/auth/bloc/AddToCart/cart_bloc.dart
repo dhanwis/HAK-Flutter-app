@@ -9,61 +9,51 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   String userId = '';
 
   CartBloc(this.cartService) : super(CartInitial()) {
-    on<FetchCartEvent>((event, emit) async {
-      await _initializeUserId();
-      emit(CartLoading());
-      try {
-        final cartItems = await cartService.fetchCart(event.userId);
-        emit(CartLoaded(cartItems));
-      } catch (e) {
-        emit(CartError('Failed to fetch cart'));
-      }
-    });
-
-    // on<AddToCartEvent>((event, emit) async {
-    //   await _initializeUserId();
-
-    //   try {
-    //     // Directly add to the cart
-    //     await cartService.addToCart(userId, event.productId, 1);
-    //     emit(AddedToCart()); // You may want to emit cart updated state here
-    //   } catch (e) {
-    //     emit(CartError('Failed to add to cart'));
-    //   }
-    // });
     on<AddToCartEvent>((event, emit) async {
       await _initializeUserId();
 
       try {
-        // Directly add to the cart
+        // Call the service to add the product to the cart and get a response
         final response =
             await cartService.addToCart(userId, event.productId, 1);
 
-        // Check for the response message
-        if (response['message'] == 'Product quantity updated') {
-          emit(
-              AlreadyInCart()); // Emit a state indicating the product is already in the cart
+        // Check if the response contains the "This product is already in the cart" message
+        if (response['message'] == 'This product is already in the cart') {
+          // Emit a state indicating that the product is already in the cart
+          emit(AlreadyInCart());
         } else {
-          emit(AddedToCart()); // Emit a state indicating the product was added
+          // Emit a state indicating the product was successfully added to the cart
+          emit(AddedToCart());
         }
       } catch (e) {
-        emit(CartError('Failed to add to cart'));
+        emit(CartError('Failed to add to cart: ${e.toString()}'));
       }
     });
 
-    on<CheckCartStatusEvent>((event, emit) async {
+    on<RemoveFromCart>((event, emit) async {
+      await _initializeUserId();
+      print('working delete');
+      try {
+        await cartService.removeFromCart(userId, event.productId);
+        final carts = await cartService.fetchCart(userId);
+        print('remove the carts $carts');
+        emit(CartLoaded(carts));
+      } catch (e) {
+        emit(CartError(e.toString()));
+      }
+    });
+
+    on<FetchCartEvent>((event, emit) async {
+      print('call now');
       await _initializeUserId();
       emit(CartLoading());
       try {
-        bool isAlreadyInCart =
-            await cartService.isProductInCart(userId, event.productId);
-        if (isAlreadyInCart) {
-          emit(AlreadyInCart());
-        } else {
-          emit(CartInitial());
-        }
+        print('fetch all cats');
+        final cartItems = await cartService.fetchCart(userId);
+        print('cartItems cating $cartItems');
+        emit(CartLoaded(cartItems));
       } catch (e) {
-        emit(CartError('Error checking cart status'));
+        emit(CartError('Failed to fetch cart $e'));
       }
     });
   }
