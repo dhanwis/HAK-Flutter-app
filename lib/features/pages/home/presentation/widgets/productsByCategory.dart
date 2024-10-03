@@ -4,6 +4,8 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.d
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
+import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
@@ -70,13 +72,24 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                       icon: Icon(Icons.favorite),
                       color: Colors.red,
                       iconSize: 20,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WishlistPage()),
+                        );
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.shopping_cart),
                       color: Colors.black,
                       iconSize: 20,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CartPage()),
+                        );
+                      },
                     ),
                   ],
                 ),

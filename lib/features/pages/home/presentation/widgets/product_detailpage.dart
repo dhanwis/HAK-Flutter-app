@@ -44,10 +44,25 @@ class ProductDetailPage extends StatelessWidget {
               if (state is ProductDetailLoading) {
                 return SkeletonLoader();
               } else if (state is ProductDetailLoaded) {
+                // final actualPrice =
+                //     state.product.variations.first.skus.first.actualPrice;
+                // final formattedPrice =
+                //     NumberFormat('#,##0').format(actualPrice);
+
                 final actualPrice =
-                    state.product.variations.first.skus.first.actualPrice;
+                    state.product.variations.first.skus.isNotEmpty
+                        ? state.product.variations.first.skus.first.actualPrice
+                        : 0;
+                final discountedPrice = state
+                        .product.variations.first.skus.isNotEmpty
+                    ? state.product.variations.first.skus.first.discountedPrice
+                    : null;
+
                 final formattedPrice =
                     NumberFormat('#,##0').format(actualPrice);
+                final formattedDiscount = discountedPrice != null
+                    ? NumberFormat('#,##0').format(discountedPrice)
+                    : '';
 
                 List<String> sizes = state.product.variations.isNotEmpty
                     ? state.product.variations.first.skus
@@ -67,9 +82,6 @@ class ProductDetailPage extends StatelessWidget {
                             height: height * 0.6,
                             child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                // child: Image.network(
-                                //   state.product.variations.first.images[index],
-                                // ),
                                 child: Image.network(
                                   state.product.variations.first.images[index],
                                   fit: BoxFit.cover,
@@ -142,11 +154,22 @@ class ProductDetailPage extends StatelessWidget {
                         children: [
                           Text(
                             '₹$formattedPrice',
-                            style: GoogleFonts.aBeeZee(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                              decoration: TextDecoration.lineThrough,
                             ),
                           ),
+                          if (formattedDiscount.isNotEmpty)
+                            Text(
+                              '₹$formattedDiscount with 1 Special Offer',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.green,
+                              ),
+                            ),
                         ],
                       ),
                     ),

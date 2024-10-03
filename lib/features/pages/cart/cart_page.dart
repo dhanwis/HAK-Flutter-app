@@ -50,6 +50,7 @@ class CartPage extends StatelessWidget {
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
+          print('state in cart $state');
           if (state is CartLoading) {
             // Show the loading indicator while the wishlist is being fetched
             return Center(
@@ -81,7 +82,8 @@ class CartPage extends StatelessWidget {
             //return Center(child: Text(state.message));
             return _emptyUI();
           }
-          return Center(child: Text("Something went wrong!"));
+          print('Something went wrong on cart!');
+          return Center(child: Text("Something went wrong on cart!"));
         },
       ),
     );

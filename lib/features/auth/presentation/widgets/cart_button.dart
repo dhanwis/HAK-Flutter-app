@@ -3,6 +3,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_event.dart
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,11 +18,12 @@ class AddToCartButtonState extends StatelessWidget {
     return BlocConsumer<CartBloc, CartState>(
       listener: (context, state) {
         if (state is AddedToCart) {
-          print('yes add tocart');
+          print('yes add to cart');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product added to cart successfully'),
               backgroundColor: Colors.green,
+              duration: Duration(seconds: 1), // Set the duration to 1 second
             ),
           );
         } else if (state is CartError) {
@@ -29,6 +31,7 @@ class AddToCartButtonState extends StatelessWidget {
             SnackBar(
               content: Text(state.message),
               backgroundColor: Colors.red,
+              duration: Duration(seconds: 2), // Set the duration to 2 seconds
             ),
           );
         }
@@ -37,28 +40,27 @@ class AddToCartButtonState extends StatelessWidget {
         bool isInCart = false;
 
         if (state is AlreadyInCart) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('Product is already in the cart'),
-          //     backgroundColor: Colors.orange,
-          //   ),
-          // );
           isInCart = true;
         }
-        // Use a local variable to check if the product is in the cart
-        isInCart = context.select<CartBloc, bool>(
-          (cartBloc) => cartBloc.isProductInCart(productId),
-        );
 
         return Expanded(
           child: ElevatedButton.icon(
             onPressed: () {
               if (state is! CartLoading) {
                 if (isInCart) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CartPage()),
+                  HapticFeedback
+                      .lightImpact(); // You can use other feedback types as well
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Product is already in the cart'),
+                      backgroundColor: Colors.orange,
+                    ),
                   );
+
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => CartPage()),
+                  // );
                 } else {
                   BlocProvider.of<CartBloc>(context)
                       .add(AddToCartEvent(productId));

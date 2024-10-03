@@ -75,7 +75,7 @@ class WishlistPage extends StatelessWidget {
             // Show an error message if there's an error fetching the wishlist
             return _emptyUI(context);
           }
-          return Center(child: Text("Something went wrong!"));
+          return Center(child: Text("Something went wrong on wislist !"));
         },
         //enna k
       ),
