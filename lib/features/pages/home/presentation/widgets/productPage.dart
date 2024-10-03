@@ -4,6 +4,7 @@ import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -172,9 +173,18 @@ class _ProductGridState extends State<ProductGrid> {
                       if (index == products.length) {
                         if (isLoadingMore) {
                           return Center(
-                              child: CircularProgressIndicator(
-                            color: Color(0xFFFAAAB1),
-                          ));
+                            child: Column(
+                              mainAxisSize: MainAxisSize
+                                  .min, // Centers the column vertically
+                              children: [
+                                Center(
+                                    child: SpinKitFadingCircle(
+                                  color: Color(0xFFFAAAB1),
+                                  size: 40.0, // Adjust the size as needed
+                                )),
+                              ],
+                            ),
+                          );
                         }
                         return SizedBox.shrink();
                       }
@@ -245,13 +255,11 @@ class _ProductGridState extends State<ProductGrid> {
                                 Positioned(
                                   right: 8.0,
                                   top: 10.0,
-                                  child: GestureDetector(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: 16,
-                                      child: FavoriteButton(
-                                        productId: product.id,
-                                      ),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 16,
+                                    child: FavoriteButton(
+                                      productId: product.id,
                                     ),
                                   ),
                                 ),

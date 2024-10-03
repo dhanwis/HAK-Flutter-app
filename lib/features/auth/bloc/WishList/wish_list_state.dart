@@ -1,5 +1,3 @@
-import 'package:equatable/equatable.dart';
-
 // wishlist_state.dart
 abstract class WishlistState {}
 

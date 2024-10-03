@@ -2,7 +2,7 @@ import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/loading_dilhak.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
-import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/model.dart';
+
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/login_button.dart';
 import 'package:dil_hack_e_commerce/features/hak_bottom_bar/bottom_bar.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
 import 'package:pinput/pinput.dart';
 
@@ -43,10 +42,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
     final width = MediaQuery.of(context).size.width;
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        print('auth otpvalidate state');
-        print(state);
         if (state is OtpValidatedState) {
-          print('schecking');
           Future.delayed(const Duration(milliseconds: 300), () {
             Navigator.pushAndRemoveUntil(context,
                 createRoute(const DilHackBottomNavBar()), (route) => false);

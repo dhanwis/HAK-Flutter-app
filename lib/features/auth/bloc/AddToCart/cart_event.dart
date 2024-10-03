@@ -16,15 +16,6 @@ class AddToCartEvent extends CartEvent {
   List<Object> get props => [productId];
 }
 
-// class CheckCartStatusEvent extends CartEvent {
-//   final String productId;
-
-//   CheckCartStatusEvent(this.productId);
-
-//   @override
-//   List<Object> get props => [productId];
-// }
-
 class RemoveFromCart extends CartEvent {
   final String productId;
 
@@ -32,10 +23,6 @@ class RemoveFromCart extends CartEvent {
 }
 
 class FetchCartEvent extends CartEvent {
-  // final String userId;
-
-  // FetchCartEvent(this.userId);
-
   FetchCartEvent();
 
   @override

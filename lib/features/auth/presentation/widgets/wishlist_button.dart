@@ -29,6 +29,7 @@ class FavoriteButton extends StatelessWidget {
           icon: Icon(
             isWishlisted ? Icons.favorite : Icons.favorite_border,
             color: isWishlisted ? Colors.red : Colors.grey,
+            size: 18,
           ),
           onPressed: () {
             print('Wishlist button pressed');

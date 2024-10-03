@@ -42,9 +42,10 @@ class _DilHackBottomNavBarState extends State<DilHackBottomNavBar> {
             currentIndex = value;
 
             if (currentIndex == 1) {
+              context.read<CartBloc>().add(FetchCartEvent());
+            } else if (currentIndex == 2) {
               // Trigger Wishlist and Cart events when navigating to CartPage
               context.read<WishlistBloc>().add(FetchWishlistItems());
-              context.read<CartBloc>().add(FetchCartEvent());
             }
           });
         },

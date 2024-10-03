@@ -20,7 +20,7 @@ class _WishlistViewState extends State<WishlistView> {
   @override
   void initState() {
     super.initState();
-    print('to call');
+
     // Make sure to add the FetchWishlistItems event when the widget is initialized
     context.read<WishlistBloc>().add(FetchWishlistItems());
   }
@@ -34,11 +34,17 @@ class _WishlistViewState extends State<WishlistView> {
 class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wishlist"),
+        title: Text(
+          "Wishlist",
+          style: GoogleFonts.aBeeZee(
+              fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.white,
       ),
       body: BlocBuilder<WishlistBloc, WishlistState>(
         builder: (context, state) {
@@ -71,6 +77,7 @@ class WishlistPage extends StatelessWidget {
           }
           return Center(child: Text("Something went wrong!"));
         },
+        //enna k
       ),
     );
   }
@@ -154,6 +161,7 @@ class WishlistPage extends StatelessWidget {
           ),
           SizedBox(
             height: 20,
+            width: 10,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 120, right: 120),
@@ -230,9 +238,9 @@ class WishlistPage extends StatelessWidget {
                   child: firstImage != null
                       ? Image.network(
                           '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
-                          height: screenHeight * 0.20,
+                          height: screenHeight * 0.28,
                           width: double.infinity,
-                          fit: BoxFit.cover,
+                          // fit: BoxFit.cover,
                         )
                       : Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -305,13 +313,13 @@ class WishlistPage extends StatelessWidget {
                             rating.toString(),
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 5.0,
+                              fontSize: 12.0,
                             ),
                           ),
                           const Icon(
                             Icons.star,
                             color: Colors.white,
-                            size: 10.0,
+                            size: 12.0,
                           ),
                         ],
                       ),
@@ -326,7 +334,3 @@ class WishlistPage extends StatelessWidget {
     );
   }
 }
-//njn eedn work cheyn ind pareno ketta aa prayaa
-//mnji wislist page edthu, empty azha kanunna ce
-
-

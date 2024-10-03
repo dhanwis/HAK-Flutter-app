@@ -32,7 +32,6 @@ class CartService {
 
   Future<Map<String, dynamic>> addToCart(
       String userId, String productId, int quantity) async {
-    print('try to cart');
     final response = await client.post(
       Uri.parse('$baseUrl/customerApp/cart/add/$userId'),
       body: json.encode({'productId': productId, 'quantity': quantity}),
@@ -42,6 +41,9 @@ class CartService {
     if (response.statusCode == 201) {
       // Return the decoded response body (assuming it contains a map)
       return json.decode(response.body) as Map<String, dynamic>;
+    } else if (response.statusCode == 400) {
+      // Return a specific map indicating the product is already in the cart
+      return {'message': 'This product is already in the cart'};
     } else {
       throw Exception('Failed to add to cart');
     }

@@ -1,5 +1,3 @@
-import 'package:equatable/equatable.dart';
-
 // wishlist_event.dart
 abstract class WishlistEvent {}
 
@@ -16,10 +14,6 @@ class RemoveFromWishlist extends WishlistEvent {
 }
 
 class FetchWishlistItems extends WishlistEvent {
-  // final String userId;
-
-  // FetchWishlistItems(this.userId);
-
   FetchWishlistItems();
 
   @override

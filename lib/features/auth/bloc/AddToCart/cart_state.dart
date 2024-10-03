@@ -13,6 +13,8 @@ class CartLoaded extends CartState {
   CartLoaded(this.cartItems);
 }
 
+class CartIdle extends CartState {}
+
 class CartInitial extends CartState {}
 
 class CartLoading extends CartState {}
@@ -20,6 +22,8 @@ class CartLoading extends CartState {}
 class AddedToCart extends CartState {}
 
 class AlreadyInCart extends CartState {}
+
+class NavigateToCart extends CartState {}
 
 class CartError extends CartState {
   final String message;

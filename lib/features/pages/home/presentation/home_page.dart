@@ -1,10 +1,15 @@
 import 'package:dil_hack_e_commerce/api/category_api.dart';
+import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_event.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productPage.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
@@ -46,19 +51,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return BlocProvider(
-      create: (context) =>
-          CategoryBloc(categoryApi: CategoryApi())..add(FetchCategoriesEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CategoryBloc(categoryApi: CategoryApi())
+            ..add(FetchCategoriesEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              WishlistBloc(WishlistService())..add(FetchWishlistItems()),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Palette.backgroundColor,
         body: CustomScrollView(
           slivers: [
+            // Top Bar with Search and AppBar
             SliverAppBar(
               title: TopRow(),
               centerTitle: false,
               floating: true,
               backgroundColor: Colors.transparent,
             ),
+            // Search Bar Widget
             SliverToBoxAdapter(
               child: AppSearchBar(
                 width: width,
@@ -70,13 +85,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            // Display Search Results if the searchTerm is not empty
             if (searchTerm.isNotEmpty)
               SliverToBoxAdapter(
-                child: Container(
+                child: SizedBox(
                   height: 800,
                   child: buildSearchResults(),
                 ),
               ),
+            // Category List
             SliverToBoxAdapter(
               child: BlocBuilder<CategoryBloc, CategoryState>(
                 builder: (context, state) {
@@ -167,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            // FutureBuilder for New Arrivals (Example: New Arrivals List)
             FutureBuilder<List<Product>>(
               future: futureProducts,
               builder: (context, snapshot) {
@@ -196,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return SliverToBoxAdapter(
-                    child: Center(),
+                    child: Center(child: Text("No Products Available")),
                   );
                 } else {
                   List<Product> products = snapshot.data!;
@@ -263,9 +281,6 @@ class _HomePageState extends State<HomePage> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    // child: Container(
-                                    //   margin: const EdgeInsets.symmetric(
-                                    //       horizontal: 1),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -329,23 +344,79 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            // Offer Carousel Widget
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: OfferCarousel(),
               ),
             ),
+            // Product Grid Display from ProductBloc
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: AllProducts(),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                //child: NewArrivalsSection(),
-                child: Container(),
+              child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is ProductsLoading) {
+                    return Skeletonizer(
+                      enabled: true,
+                      child: SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor: Colors.grey.shade200,
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  width: 80,
+                                  height: 15,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (state is ProductsError) {
+                    return Center(child: Text('Error: ${state.message}'));
+                  } else if (state is ProductsLoaded) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          child: Text(
+                            'All Products',
+                            style: GoogleFonts.aBeeZee(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        // SliverToBoxAdapter(
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8.0),
+                        //     child: ProductGrid(products: state.products),
+                        //   ),
+                        // ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              0.6, // Adjust the height as needed
+                          child: ProductGrid(),
+                        )
+                      ],
+                    );
+                  } else {
+                    return Center();
+                  }
+                },
               ),
             ),
           ],

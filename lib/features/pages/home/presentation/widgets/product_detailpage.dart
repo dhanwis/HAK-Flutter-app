@@ -296,36 +296,8 @@ class ProductDetailPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
-                            // child: ElevatedButton.icon(
-                            //   onPressed: () {
-                            //     BlocProvider.of<CartBloc>(context)
-                            //         .add(AddToCartEvent(productId));
-                            //   },
-                            //   icon: Icon(
-                            //     Icons.shopping_cart,
-                            //     color: Colors.black,
-                            //   ),
-                            //   label: Text(
-                            //     'Add to Cart',
-                            //     style: GoogleFonts.aBeeZee(
-                            //         color: Colors.black,
-                            //         fontWeight: FontWeight.bold),
-                            //   ),
-                            //   style: ElevatedButton.styleFrom(
-                            //     backgroundColor: Colors.white,
-                            //     side: BorderSide(
-                            //       color: Color(0xFFFAAAB1),
-                            //     ),
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(8),
-                            //     ),
-                            //     padding: EdgeInsets.symmetric(
-                            //         horizontal: 24, vertical: 12),
-                            //   ),
-                            // ),
                             child: AddToCartButtonState(
-                              productId:
-                                  productId, // Replace product.id with the actual product ID variable if different
+                              productId: productId,
                             ),
                           ),
                           SizedBox(width: 8),
@@ -341,8 +313,9 @@ class ProductDetailPage extends StatelessWidget {
                               child: Text(
                                 'Buy Now',
                                 style: GoogleFonts.aBeeZee(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFFAAAB1),

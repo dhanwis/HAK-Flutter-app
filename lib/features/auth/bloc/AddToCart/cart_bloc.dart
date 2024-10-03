@@ -7,22 +7,38 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartService cartService;
   String userId = '';
+  List<String> cartItemIds =
+      []; // This will hold the IDs of products in the cart
 
   CartBloc(this.cartService) : super(CartInitial()) {
+    // Fetch the initial state of the cart when the BLoC is instantiated
+    on<FetchCartEvent>((event, emit) async {
+      print('Fetching cart items');
+      await _initializeUserId();
+      emit(CartLoading());
+      try {
+        final cartItems = await cartService.fetchCart(userId);
+        print('Fetched cart items: $cartItems');
+        //cartItemIds = cartItems.map((item) => item['productId']).toList(); // Assuming each item has a productId
+        emit(CartLoaded(cartItems));
+      } catch (e) {
+        emit(CartError('Failed to fetch cart $e'));
+      }
+    });
+
+    // Handling the AddToCartEvent
     on<AddToCartEvent>((event, emit) async {
       await _initializeUserId();
 
       try {
-        // Call the service to add the product to the cart and get a response
         final response =
             await cartService.addToCart(userId, event.productId, 1);
 
-        // Check if the response contains the "This product is already in the cart" message
         if (response['message'] == 'This product is already in the cart') {
-          // Emit a state indicating that the product is already in the cart
-          emit(AlreadyInCart());
+          emit(NavigateToCart()); // Emit NavigateToCart state
         } else {
-          // Emit a state indicating the product was successfully added to the cart
+          // Add the product ID to the local list of cart items
+          cartItemIds.add(event.productId);
           emit(AddedToCart());
         }
       } catch (e) {
@@ -30,30 +46,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
+    // Handling the RemoveFromCart event
     on<RemoveFromCart>((event, emit) async {
       await _initializeUserId();
-      print('working delete');
+      print('Attempting to remove item from cart');
       try {
         await cartService.removeFromCart(userId, event.productId);
+        cartItemIds.remove(
+            event.productId); // Remove the product ID from the local list
         final carts = await cartService.fetchCart(userId);
-        print('remove the carts $carts');
+        print('Updated cart after removal: $carts');
         emit(CartLoaded(carts));
       } catch (e) {
         emit(CartError(e.toString()));
-      }
-    });
-
-    on<FetchCartEvent>((event, emit) async {
-      print('call now');
-      await _initializeUserId();
-      emit(CartLoading());
-      try {
-        print('fetch all cats');
-        final cartItems = await cartService.fetchCart(userId);
-        print('cartItems cating $cartItems');
-        emit(CartLoaded(cartItems));
-      } catch (e) {
-        emit(CartError('Failed to fetch cart $e'));
       }
     });
   }
@@ -68,5 +73,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         print("Error decoding token: $e");
       }
     }
+  }
+
+  // New method to check if the product is in the cart
+  bool isProductInCart(String productId) {
+    return cartItemIds.contains(productId);
   }
 }

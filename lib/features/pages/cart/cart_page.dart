@@ -5,6 +5,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -31,22 +32,17 @@ class CartPageState extends State<CartView> {
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('calling cart page');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
         title: Text(
           'Cart',
-          style: TextStyle(
+          style: GoogleFonts.aBeeZee(
             color: Colors.black,
-            fontSize: screenWidth * 0.06,
+            fontSize: screenWidth * 0.05,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -54,10 +50,13 @@ class CartPage extends StatelessWidget {
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          print('state list $state');
           if (state is CartLoading) {
             // Show the loading indicator while the wishlist is being fetched
-            return Center(child: Text("Loading"));
+            return Center(
+                child: SpinKitFadingCircle(
+              color: Color(0xFFFAAAB1),
+              size: 50.0, // Adjust the size as needed
+            ));
           } else if (state is CartLoaded) {
             //nee print full kaliyane ippo, ok,
             // Show the wishlist items when they are loaded
@@ -142,7 +141,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
+                          Image.network(
                             '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
                             width: screenWidth * 0.25,
                             height: screenWidth * 0.25,
@@ -160,9 +159,8 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem,
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  //hee settt mutt muttt poone boothe
                                 ), // ipo okylle
-                                //njn on cart dlt chyt , nookt emty ui verunindoon aaaa nokk sewtt
+
                                 SizedBox(height: screenHeight * 0.01),
                                 Row(
                                   children: [

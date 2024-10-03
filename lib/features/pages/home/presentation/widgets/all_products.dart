@@ -42,6 +42,7 @@ class _AllProductsState extends State<AllProducts> {
             (state.products == null || state.products!.isEmpty)) {
           return Center(child: CircularProgressIndicator());
         } else if (state is ProductsLoaded) {
+          print('wordked success');
           // return Expanded(
           //   child: ListView.builder(
           //     controller: _scrollController,

@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
@@ -158,18 +159,13 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                       ),
                                     ),
                                     Positioned(
-                                      right: 10.0,
+                                      right: 8.0,
                                       top: 10.0,
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: const CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 15,
-                                          child: Icon(
-                                            Icons.favorite_border,
-                                            color: Colors.black,
-                                            size: 20,
-                                          ),
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 16,
+                                        child: FavoriteButton(
+                                          productId: product.id,
                                         ),
                                       ),
                                     ),
