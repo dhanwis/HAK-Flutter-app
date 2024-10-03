@@ -162,6 +162,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
   }
 
   Widget _buildProductCard(Product product) {
+    final screenSize = MediaQuery.of(context).size;
     final firstVariation =
         product.variations.isNotEmpty ? product.variations.first : null;
     final imageUrl = firstVariation?.images.isNotEmpty == true
@@ -203,14 +204,19 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                       ? Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.height * 0.28,
-                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                            // If the image fails to load, display a placeholder image
+                            return Image.asset(
+                              'assets/images/logo.png', // Your fallback image asset
+                              fit: BoxFit.cover,
+                            );
+                          },
                         )
                       : Container(
-                          height: MediaQuery.of(context).size.height * 0.25,
+                          height: screenSize.height * 0.25,
                           width: double.infinity,
                           color: Colors.grey[200],
-                          child: Icon(Icons.image),
+                          child: const Icon(Icons.image),
                         ),
                 ),
               ),

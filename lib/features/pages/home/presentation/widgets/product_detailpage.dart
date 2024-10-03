@@ -66,11 +66,21 @@ class ProductDetailPage extends StatelessWidget {
                           return SizedBox(
                             height: height * 0.6,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.network(
-                                state.product.variations.first.images[index],
-                              ),
-                            ),
+                                padding: const EdgeInsets.all(8.0),
+                                // child: Image.network(
+                                //   state.product.variations.first.images[index],
+                                // ),
+                                child: Image.network(
+                                  state.product.variations.first.images[index],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // If the image fails to load, display a placeholder image
+                                    return Image.asset(
+                                      'assets/images/logo.png', // Your fallback image asset
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                )),
                           );
                         },
                       ),

@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/All_orders/my_order.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/bank_upi.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/profile_avatar.dart';
@@ -103,14 +104,17 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               icon: Icons.favorite,
               iconColor: Colors.black,
               label: 'Wishlisted Products',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WishlistPage()));
+              },
             ),
-            ListTileWidget(
-              icon: Icons.share,
-              iconColor: Colors.black,
-              label: 'Shared Products',
-              onTap: () {},
-            ),
+            // ListTileWidget(
+            //   icon: Icons.share,
+            //   iconColor: Colors.black,
+            //   label: 'Shared Products',
+            //   onTap: () {},
+            // ),
 
             ListTileWidget(
                 icon: Icons.logout_outlined,

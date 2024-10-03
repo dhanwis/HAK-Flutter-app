@@ -17,6 +17,7 @@ class AddToCartButtonState extends StatelessWidget {
     return BlocConsumer<CartBloc, CartState>(
       listener: (context, state) {
         if (state is AddedToCart) {
+          print('yes add tocart');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product added to cart successfully'),
@@ -33,8 +34,19 @@ class AddToCartButtonState extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        bool isInCart = false;
+
+        if (state is AlreadyInCart) {
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Product is already in the cart'),
+          //     backgroundColor: Colors.orange,
+          //   ),
+          // );
+          isInCart = true;
+        }
         // Use a local variable to check if the product is in the cart
-        final isInCart = context.select<CartBloc, bool>(
+        isInCart = context.select<CartBloc, bool>(
           (cartBloc) => cartBloc.isProductInCart(productId),
         );
 

@@ -17,14 +17,13 @@ class FavoriteButton extends StatelessWidget {
         bool isWishlisted = false;
 
         if (state is WishlistLoaded) {
-          //bn868969@gmail.com
           print('Wishlist is loaded');
 
           // Assuming state.wishlist is a list of product objects, not just product IDs
           // Check if any product in the wishlist has the same product_id as the current productId
           isWishlisted =
               state.wishlist.any((product) => product['_id'] == productId);
-        }
+        } else if (state is WishlistInitial) {}
 
         return IconButton(
           icon: Icon(
