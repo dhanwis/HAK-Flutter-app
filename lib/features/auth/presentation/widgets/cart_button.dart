@@ -1,7 +1,6 @@
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
-import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +16,7 @@ class AddToCartButtonState extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CartBloc, CartState>(
       listener: (context, state) {
-        if (state is NavigateToCart) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CartPage()),
-          );
-        } else if (state is AddedToCart) {
+        if (state is AddedToCart) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Product added to cart successfully'),

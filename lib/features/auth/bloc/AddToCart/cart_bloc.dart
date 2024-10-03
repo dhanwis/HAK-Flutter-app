@@ -28,6 +28,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     // Handling the AddToCartEvent
     on<AddToCartEvent>((event, emit) async {
+      print('clic to add');
       await _initializeUserId();
 
       try {
@@ -35,9 +36,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             await cartService.addToCart(userId, event.productId, 1);
 
         if (response['message'] == 'This product is already in the cart') {
-          emit(NavigateToCart()); // Emit NavigateToCart state
+          print('trye it does');
+          emit(AlreadyInCart());
         } else {
           // Add the product ID to the local list of cart items
+          print('try to adding again');
           cartItemIds.add(event.productId);
           emit(AddedToCart());
         }

@@ -1,9 +1,12 @@
 import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
+import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
+import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
@@ -47,6 +50,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductBloc(productApi: GetAllProductApi())
             ..add(FetchProductsEvent()),
+        ),
+
+        BlocProvider(
+          create: (context) => ProductDetailBloc(
+            productApi: ProductbyidApi(),
+            similarProductsApi: GetSimilarProductsApi(),
+          ),
         ),
 
         BlocProvider(

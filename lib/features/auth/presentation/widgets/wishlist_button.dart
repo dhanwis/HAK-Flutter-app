@@ -17,6 +17,7 @@ class FavoriteButton extends StatelessWidget {
         bool isWishlisted = false;
 
         if (state is WishlistLoaded) {
+          //bn868969@gmail.com
           print('Wishlist is loaded');
 
           // Assuming state.wishlist is a list of product objects, not just product IDs
