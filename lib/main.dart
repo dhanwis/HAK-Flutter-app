@@ -24,6 +24,10 @@ import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'api/category_api.dart';
+import 'features/auth/bloc/Categories/category_bloc.dart';
+import 'features/auth/bloc/Categories/category_event.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Hive.initFlutter();
@@ -63,7 +67,15 @@ class MyApp extends StatelessWidget {
           create: (context) => WishlistBloc(WishlistService()),
         ),
 
-        BlocProvider(create: (context) => CartBloc(CartService()))
+        BlocProvider(create: (context) => CartBloc(CartService())),
+        BlocProvider(
+          create: (context) => CategoryBloc(categoryApi: CategoryApi())
+            ..add(FetchCategoriesEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+          WishlistBloc(WishlistService())..add(FetchWishlistItems()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
