@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
+import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
@@ -6,6 +7,8 @@ import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
@@ -23,6 +26,10 @@ import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 //import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'api/category_api.dart';
+import 'features/auth/bloc/Categories/category_bloc.dart';
+import 'features/auth/bloc/Categories/category_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +55,11 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
+          create: (context) => NewArrivalsBloc(GetAllNewArrivalsApi())
+            ..add(const FetchNewArrivalsEvent()),
+        ),
+
+        BlocProvider(
           create: (context) => ProductBloc(productApi: GetAllProductApi())
             ..add(FetchProductsEvent()),
         ),
@@ -59,11 +71,15 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
+        BlocProvider(create: (context) => CartBloc(CartService())),
         BlocProvider(
-          create: (context) => WishlistBloc(WishlistService()),
+          create: (context) => CategoryBloc(categoryApi: CategoryApi())
+            ..add(FetchCategoriesEvent()),
         ),
-
-        BlocProvider(create: (context) => CartBloc(CartService()))
+        BlocProvider(
+          create: (context) =>
+              WishlistBloc(WishlistService())..add(FetchWishlistItems()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -70,9 +70,6 @@ class ProductDetailPage extends StatelessWidget {
                         .toList()
                     : [];
 
-                print('objectres');
-                print(state.product.variations.first.color);
-
                 return ListView(
                   children: [
                     Container(
@@ -269,6 +266,7 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DetailRow(

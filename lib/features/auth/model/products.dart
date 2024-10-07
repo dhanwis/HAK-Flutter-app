@@ -87,13 +87,14 @@ class Product {
 
 class Variation {
   final String id;
+  // final String color;
   final ColorSchema color; // Update this line
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.color, // Update this line
+    required this.color,
     required this.images,
     required this.skus,
   });
@@ -113,9 +114,32 @@ class Variation {
       skusList = skusJson.map((v) => Sku.fromJson(v)).toList();
     }
 
+    // Check if 'color' is a Map or String, and handle accordingly
+    ColorSchema colorSchema;
+    if (json['color'] is Map<String, dynamic>) {
+      colorSchema = ColorSchema.fromJson(json['color']);
+    } else if (json['color'] is String) {
+      // If 'color' is a String, you can either parse it or create a default ColorSchema object
+      // Assuming you just want to create a default ColorSchema
+      colorSchema = ColorSchema(
+        id: '',
+        value: json['color'],
+        label: json['color'],
+        colorCode: '',
+      );
+    } else {
+      // If 'color' is null or any other type, create a default ColorSchema object
+      colorSchema = ColorSchema(
+        id: '',
+        value: '',
+        label: '',
+        colorCode: '',
+      );
+    }
+
     return Variation(
       id: json['_id']?.toString() ?? '',
-      color: ColorSchema.fromJson(json['color'] ?? {}), // Update this line
+      color: colorSchema, // Use the updated ColorSchema object
       images: imagesList,
       skus: skusList,
     );

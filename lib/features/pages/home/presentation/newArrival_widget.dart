@@ -14,10 +14,153 @@ import 'package:skeletonizer/skeletonizer.dart';
 class NewArrivalsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // return BlocBuilder<NewArrivalsBloc, NewArrivalsState>(
+    //   builder: (context, state) {
+    //     print('state is here $state');
+    //     if (state is NewArrivalsLoading) {
+    //       return Skeletonizer(
+    //         enabled: true,
+    //         child: SizedBox(
+    //           height: 330,
+    //           child: ListView.builder(
+    //             scrollDirection: Axis.horizontal,
+    //             itemCount: 5,
+    //             itemBuilder: (context, index) => Padding(
+    //               padding: const EdgeInsets.all(8.0),
+    //               child: Container(
+    //                 width: 150,
+    //                 color: Colors.grey.shade200,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     } else if (state is NewArrivalsError) {
+    //       return Center(child: Text('Error: ${state.error}'));
+    //     } else if (state is NewArrivalsLoaded) {
+    //       List<Product> products = state.products;
+    //       return Column(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.symmetric(horizontal: 20),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 Text(
+    //                   'New Arrivals',
+    //                   style: GoogleFonts.aBeeZee(
+    //                     fontWeight: FontWeight.w800,
+    //                     fontSize: 18,
+    //                   ),
+    //                 ),
+    //                 GestureDetector(
+    //                   onTap: () {
+    //                     Navigator.push(
+    //                       context,
+    //                       MaterialPageRoute(
+    //                         builder: (context) => ViewAllButton(
+    //                           products: products,
+    //                         ),
+    //                       ),
+    //                     );
+    //                   },
+    //                   child: Text(
+    //                     'View All',
+    //                     style: GoogleFonts.aBeeZee(
+    //                       fontWeight: FontWeight.w800,
+    //                       fontSize: 18,
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             height: 330,
+    //             child: ListView.builder(
+    //               scrollDirection: Axis.horizontal,
+    //               itemCount: products.length,
+    //               itemBuilder: (context, index) {
+    //                 String imageUrl = products[index].variations[0].images[0];
+    //                 String formattedPrice = NumberFormat('#,##0').format(
+    //                     products[index].variations[0].skus[0].actualPrice);
+    //                 return GestureDetector(
+    //                   onTap: () {
+    //                     Navigator.push(
+    //                       context,
+    //                       MaterialPageRoute(
+    //                         builder: (context) => ProductDetailPage(
+    //                             productId: products[index].id),
+    //                       ),
+    //                     );
+    //                   },
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.all(8.0),
+    //                     child: Container(
+    //                       margin: const EdgeInsets.symmetric(horizontal: 5),
+    //                       child: Column(
+    //                         crossAxisAlignment: CrossAxisAlignment.start,
+    //                         children: [
+    //                           Expanded(
+    //                             child: ClipRRect(
+    //                               borderRadius: BorderRadius.circular(4),
+    //                               child: Image.network(
+    //                                 imageUrl,
+    //                                 fit: BoxFit.cover,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Padding(
+    //                             padding: const EdgeInsets.only(top: 4),
+    //                             child: Text(
+    //                               products[index].productBrand,
+    //                               style: GoogleFonts.aBeeZee(
+    //                                 color: Colors.grey,
+    //                                 fontSize: 14,
+    //                                 fontWeight: FontWeight.w500,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Padding(
+    //                             padding: const EdgeInsets.only(top: 1),
+    //                             child: Text(
+    //                               products[index].productName.toUpperCase(),
+    //                               maxLines: 1,
+    //                               overflow: TextOverflow.ellipsis,
+    //                               style: GoogleFonts.aBeeZee(
+    //                                 fontSize: 13,
+    //                                 fontWeight: FontWeight.w600,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           Text(
+    //                             '₹ $formattedPrice',
+    //                             style: GoogleFonts.aBeeZee(
+    //                               color: Colors.green,
+    //                               fontSize: 14,
+    //                               fontWeight: FontWeight.w500,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 );
+    //               },
+    //             ),
+    //           ),
+    //         ],
+    //       );
+    //     } else {
+    //       return Center();
+    //     }
+    //   },
+    // );
+
     return BlocBuilder<NewArrivalsBloc, NewArrivalsState>(
       builder: (context, state) {
-        print('state is here $state');
         if (state is NewArrivalsLoading) {
+          // Show the skeleton loader while loading.
           return Skeletonizer(
             enabled: true,
             child: SizedBox(
@@ -50,7 +193,7 @@ class NewArrivalsWidget extends StatelessWidget {
                       'New Arrivals',
                       style: GoogleFonts.aBeeZee(
                         fontWeight: FontWeight.w800,
-                        fontSize: 18,
+                        fontSize: 15,
                       ),
                     ),
                     GestureDetector(
@@ -68,7 +211,7 @@ class NewArrivalsWidget extends StatelessWidget {
                         'View All',
                         style: GoogleFonts.aBeeZee(
                           fontWeight: FontWeight.w800,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       ),
                     ),
@@ -76,28 +219,26 @@ class NewArrivalsWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 330,
+                height: 240,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    String imageUrl = products[index].variations[0].images[0];
-                    String formattedPrice = NumberFormat('#,##0').format(
-                        products[index].variations[0].skus[0].actualPrice);
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(
-                                productId: products[index].id),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      String imageUrl = products[index].variations[0].images[0];
+                      String formattedPrice = NumberFormat('#,##0').format(
+                          products[index].variations[0].skus[0].actualPrice);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(
+                                  productId: products[index].id),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -116,7 +257,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                   products[index].productBrand,
                                   style: GoogleFonts.aBeeZee(
                                     color: Colors.grey,
-                                    fontSize: 14,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -128,7 +269,7 @@ class NewArrivalsWidget extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.aBeeZee(
-                                    fontSize: 13,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -137,23 +278,20 @@ class NewArrivalsWidget extends StatelessWidget {
                                 '₹ $formattedPrice',
                                 style: GoogleFonts.aBeeZee(
                                   color: Colors.green,
-                                  fontSize: 14,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    }),
               ),
             ],
           );
-        } else {
-          return Center();
         }
+        return Container(); // Return an empty container for any other state.
       },
     );
   }

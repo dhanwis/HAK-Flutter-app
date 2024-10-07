@@ -7,4 +7,6 @@ abstract class NewArrivalsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchNewArrivalsEvent extends NewArrivalsEvent {}
+class FetchNewArrivalsEvent extends NewArrivalsEvent {
+  const FetchNewArrivalsEvent();
+}
