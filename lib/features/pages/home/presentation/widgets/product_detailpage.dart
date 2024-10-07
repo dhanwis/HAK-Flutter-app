@@ -70,6 +70,9 @@ class ProductDetailPage extends StatelessWidget {
                         .toList()
                     : [];
 
+                print('objectres');
+                print(state.product.variations.first.color);
+
                 return ListView(
                   children: [
                     Container(
@@ -272,9 +275,11 @@ class ProductDetailPage extends StatelessWidget {
                         label: 'Color',
                         value: state.product.variations.isNotEmpty
                             ? state.product.variations.first.color
+                                .value // Access only the value
                             : 'N/A',
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DetailRow(

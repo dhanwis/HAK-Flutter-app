@@ -16,6 +16,7 @@ class NewArrivalsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NewArrivalsBloc, NewArrivalsState>(
       builder: (context, state) {
+        print('state is here $state');
         if (state is NewArrivalsLoading) {
           return Skeletonizer(
             enabled: true,

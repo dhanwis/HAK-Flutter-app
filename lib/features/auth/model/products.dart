@@ -87,13 +87,13 @@ class Product {
 
 class Variation {
   final String id;
-  final String color;
+  final ColorSchema color; // Update this line
   final List<String> images;
   final List<Sku> skus;
 
   Variation({
     required this.id,
-    required this.color,
+    required this.color, // Update this line
     required this.images,
     required this.skus,
   });
@@ -115,9 +115,32 @@ class Variation {
 
     return Variation(
       id: json['_id']?.toString() ?? '',
-      color: json['color']?.toString() ?? '',
+      color: ColorSchema.fromJson(json['color'] ?? {}), // Update this line
       images: imagesList,
       skus: skusList,
+    );
+  }
+}
+
+class ColorSchema {
+  final String id;
+  final String value;
+  final String label;
+  final String colorCode;
+
+  ColorSchema({
+    required this.id,
+    required this.value,
+    required this.label,
+    required this.colorCode,
+  });
+
+  factory ColorSchema.fromJson(Map<String, dynamic> json) {
+    return ColorSchema(
+      id: json['_id']?.toString() ?? '',
+      value: json['value']?.toString() ?? '',
+      label: json['label']?.toString() ?? '',
+      colorCode: json['colorCode']?.toString() ?? '',
     );
   }
 }
