@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'filter_screen.dart';
 
 class FilterSection extends StatefulWidget {
   final VoidCallback? onFilterApplied;
@@ -14,13 +13,12 @@ class FilterSection extends StatefulWidget {
 class _FilterSectionState extends State<FilterSection> {
   List<int> _selectedIndices = [];
   final List<String> sortOptions = [
-    'Relevance',
-    'Popularity',
+    'Newest',
     'Price -- Low to High',
     'Price -- High to Low',
   ];
 
-  String selectedSortOption = 'Relevance';
+  String selectedSortOption = '';
 
   final Map<String, bool> priceFilters = {
     'Rs. 299 and below': false,
@@ -59,7 +57,7 @@ class _FilterSectionState extends State<FilterSection> {
               height: 30,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   return _buildFilterChip(
                     index,
@@ -80,13 +78,13 @@ class _FilterSectionState extends State<FilterSection> {
     final bool isSelected;
 
     switch (index) {
-      case 2:
+      case 1:
         isSelected = _hasSelectedAnyFilters(categoryFilters);
         break;
-      case 3:
+      case 2:
         isSelected = _hasSelectedAnyFilters(materialFilters);
         break;
-      case 4:
+      case 3:
         isSelected = _hasSelectedAnyFilters(colorFilters);
         break;
       default:
@@ -120,23 +118,23 @@ class _FilterSectionState extends State<FilterSection> {
     String labelText;
 
     switch (index) {
+      // case 0:
+      //   iconData = Icons.filter_list;
+      //   labelText = 'Filter';
+      //   break;
       case 0:
-        iconData = Icons.filter_list;
-        labelText = 'Filter';
-        break;
-      case 1:
         iconData = Icons.sort;
         labelText = 'Sort By';
         break;
-      case 2:
+      case 1:
         iconData = Icons.category;
         labelText = 'Categories';
         break;
-      case 3:
+      case 2:
         iconData = Icons.texture;
         labelText = 'Material';
         break;
-      case 4:
+      case 3:
         iconData = Icons.color_lens;
         labelText = 'Color';
         break;
@@ -159,49 +157,25 @@ class _FilterSectionState extends State<FilterSection> {
   }
 
   bool _hasSelectedAnyFilters(Map<String, bool> filters) {
+    print('treu mane $filters');
     return filters.values.contains(true);
   }
 
   void _handleChipSelection(int index) {
     switch (index) {
       case 0:
-        _navigateToFilterScreen();
-        break;
-      case 1:
         _showSortOptions();
         break;
-      case 2:
+      case 1:
         _showFilters('Categories', categoryFilters);
         break;
-      case 3:
+      case 2:
         _showFilters('Material', materialFilters);
         break;
-      case 4:
+      case 3:
         _showFilters('Color', colorFilters);
         break;
     }
-  }
-
-  void _navigateToFilterScreen() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => FilterScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(-1.0, 0.0);
-          const end = Offset(0.0, 0.0);
-          const curve = Curves.easeInOut;
-
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
   }
 
   void _showSortOptions() {
