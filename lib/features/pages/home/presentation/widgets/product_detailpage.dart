@@ -155,18 +155,18 @@ class ProductDetailPage extends StatelessWidget {
                           Text(
                             '₹$formattedPrice',
                             style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 14.0,
                               color: Colors.black,
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
                           if (formattedDiscount.isNotEmpty)
                             Text(
-                              '₹$formattedDiscount with 1 Special Offer',
+                              '  ₹$formattedDiscount with 1 Special Offer',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: TextStyle(
-                                fontSize: 12.0,
+                              style: GoogleFonts.aBeeZee(
+                                fontSize: 16.0,
                                 color: Colors.green,
                               ),
                             ),

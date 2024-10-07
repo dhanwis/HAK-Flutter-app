@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -162,7 +163,6 @@ class _ViewAllButtonState extends State<ViewAllButton> {
   }
 
   Widget _buildProductCard(Product product) {
-    final screenSize = MediaQuery.of(context).size;
     final firstVariation =
         product.variations.isNotEmpty ? product.variations.first : null;
     final imageUrl = firstVariation?.images.isNotEmpty == true
@@ -204,36 +204,24 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                       ? Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            // If the image fails to load, display a placeholder image
-                            return Image.asset(
-                              'assets/images/logo.png', // Your fallback image asset
-                              fit: BoxFit.cover,
-                            );
-                          },
+                          height: MediaQuery.of(context).size.height * 0.28,
+                          width: double.infinity,
                         )
                       : Container(
-                          height: screenSize.height * 0.25,
+                          height: MediaQuery.of(context).size.height * 0.25,
                           width: double.infinity,
                           color: Colors.grey[200],
-                          child: const Icon(Icons.image),
+                          child: Icon(Icons.image),
                         ),
                 ),
               ),
               Positioned(
-                right: 10.0,
+                right: 8.0,
                 top: 10.0,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 15,
-                    child: Icon(
-                      Icons.favorite_border,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                  ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 16,
+                  child: FavoriteButton(productId: product.id),
                 ),
               ),
             ],
