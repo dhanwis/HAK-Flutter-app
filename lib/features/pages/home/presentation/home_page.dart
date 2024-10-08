@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dil_hack_e_commerce/api/category_api.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
@@ -14,6 +16,7 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/pro
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
@@ -23,6 +26,9 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/Ban
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/search.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../../../api/products_api.dart';
+import '../../../../constants/decodeJwt.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,12 +40,74 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<Product>> futureProducts;
   String searchTerm = '';
+  List<Product> products = [];
+  int currentPage = 1;
+  bool isLoadingMore = false;
+  bool hasMoreProducts = true;
+  bool isLoading = true; // Initial loading state
+  final ScrollController _scrollController = ScrollController();
+
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
     futureProducts = GetAllNewArrivalsApi().fetchNewArrivals();
+    _fetchProducts();
+    _initializeUser();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        log("end of the line");
+        _fetchProducts();
+      }
+    });
   }
+
+  Future<void> _initializeUser() async {
+    try {
+      // Decode the token and get userId
+      Map<String, dynamic> decodedToken = await decodeJwt();
+      setState(() {
+        userId = decodedToken[
+        'userId']; // Assuming 'userId' is the key in your token
+        // Initialize pages after userId is obtained
+      });
+    } catch (e) {
+      print("Error decoding token: $e");
+    }
+  }
+
+  Future<void> _fetchProducts() async {
+    if (isLoadingMore || !hasMoreProducts) return;
+
+    setState(() {
+      isLoadingMore = true;
+    });
+
+    try {
+      final newProducts =
+      await GetAllProductApi().fetchProducts(page: currentPage);
+      if (newProducts.isEmpty) {
+        setState(() {
+          hasMoreProducts = false;
+        });
+      } else {
+        setState(() {
+          products.addAll(newProducts);
+          currentPage++;
+        });
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message)
+    } finally {
+      setState(() {
+        isLoadingMore = false;
+        isLoading = false; // Stop loading after fetching products
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +116,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: CustomScrollView(
+controller: _scrollController,
         slivers: [
           // Top Bar with Search and AppBar
           SliverAppBar(
@@ -213,6 +282,7 @@ class _HomePageState extends State<HomePage> {
               if (state is ProductsLoaded) {
                 return ProductGrid();
               }
+
               return SliverToBoxAdapter(child: Text("data"));
             },
           )
@@ -221,6 +291,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
 
 
