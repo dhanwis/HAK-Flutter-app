@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
               if (state is ProductsLoaded) {
                 return ProductGrid();
               }
-              return Text("data");
+              return SliverToBoxAdapter(child: Text("data"));
             },
           )
           // Product Grid Display from ProductBloc
