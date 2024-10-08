@@ -1,4 +1,7 @@
+import 'package:dil_hack_e_commerce/features/auth/bloc/FilteredProduct/filter_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/FilteredProduct/filter_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FilterSection extends StatefulWidget {
@@ -14,9 +17,17 @@ class _FilterSectionState extends State<FilterSection> {
   List<int> _selectedIndices = [];
   final List<String> sortOptions = [
     'Newest',
-    'Price -- Low to High',
-    'Price -- High to Low',
+    'lowToHigh',
+    'highToLow',
   ];
+
+  Map<String, dynamic> a = {
+    'priceSort': null,
+    'newest': null,
+    'category': null,
+    'color': null,
+    'size': null,
+  };
 
   String selectedSortOption = '';
 
@@ -34,9 +45,11 @@ class _FilterSectionState extends State<FilterSection> {
     'Bodycon Dress': false,
   };
 
-  final Map<String, bool> materialFilters = {
-    'Cotton': false,
-    'Silk': false,
+  final Map<String, bool> sizeFilters = {
+    'S': false,
+    'L': false,
+    'XL': false,
+    'XXL': false,
   };
 
   final Map<String, bool> colorFilters = {
@@ -82,7 +95,7 @@ class _FilterSectionState extends State<FilterSection> {
         isSelected = _hasSelectedAnyFilters(categoryFilters);
         break;
       case 2:
-        isSelected = _hasSelectedAnyFilters(materialFilters);
+        isSelected = _hasSelectedAnyFilters(sizeFilters);
         break;
       case 3:
         isSelected = _hasSelectedAnyFilters(colorFilters);
@@ -132,7 +145,7 @@ class _FilterSectionState extends State<FilterSection> {
         break;
       case 2:
         iconData = Icons.texture;
-        labelText = 'Material';
+        labelText = 'Size';
         break;
       case 3:
         iconData = Icons.color_lens;
@@ -157,7 +170,6 @@ class _FilterSectionState extends State<FilterSection> {
   }
 
   bool _hasSelectedAnyFilters(Map<String, bool> filters) {
-    print('treu mane $filters');
     return filters.values.contains(true);
   }
 
@@ -170,7 +182,7 @@ class _FilterSectionState extends State<FilterSection> {
         _showFilters('Categories', categoryFilters);
         break;
       case 2:
-        _showFilters('Material', materialFilters);
+        _showFilters('Size', sizeFilters);
         break;
       case 3:
         _showFilters('Color', colorFilters);
@@ -193,8 +205,29 @@ class _FilterSectionState extends State<FilterSection> {
               onTap: () {
                 setState(() {
                   selectedSortOption = option;
+                  print('option $option');
+                  Navigator.pop(context); // Pop the dialog first
+
+                  // Ensure that the context is available here for BlocProvider
+                  switch (option) {
+                    case 'highToLow':
+                    case 'lowToHigh':
+                      a['priceSort'] = option;
+                      // Access the context that has the BlocProvider
+                      BlocProvider.of<FilterBloc>(context, listen: false)
+                          .add(UpdatePriceSort(option));
+                      break;
+
+                    case 'newest':
+                      a['newest'] = true;
+                      BlocProvider.of<FilterBloc>(context, listen: false)
+                          .add(const UpdateNewest(true));
+                      break;
+
+                    default:
+                      break;
+                  }
                 });
-                Navigator.pop(context);
               },
             );
           }).toList(),
@@ -247,34 +280,81 @@ class _FilterSectionState extends State<FilterSection> {
                       }).toList(),
                     ),
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     ElevatedButton(
+                  //       onPressed: () {
+                  //         setModalState(() {
+                  //           filters.updateAll((key, value) => false);
+                  //         });
+                  //         setState(() {});
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //         backgroundColor: Color.fromARGB(255, 240, 195, 199),
+                  //       ),
+                  //       child: Text(
+                  //         'Clear',
+                  //         style: GoogleFonts.aBeeZee(color: Colors.black),
+                  //       ),
+                  //     ),
+                  //     ElevatedButton(
+                  //       onPressed: () {
+                  //         Navigator.pop(context);
+                  //         setState(() {});
+                  //         if (widget.onFilterApplied != null) {
+                  //           widget.onFilterApplied!();
+                  //         }
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //         backgroundColor: Color(0xFFFAAAB1),
+                  //       ),
+                  //       child: Text(
+                  //         'Apply',
+                  //         style: GoogleFonts.aBeeZee(color: Colors.black),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Clear Button
                       ElevatedButton(
                         onPressed: () {
-                          setModalState(() {
+                          setState(() {
+                            // Reset all filters
                             filters.updateAll((key, value) => false);
                           });
-                          setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 240, 195, 199),
+                          backgroundColor:
+                              const Color.fromARGB(255, 240, 195, 199),
                         ),
                         child: Text(
                           'Clear',
                           style: GoogleFonts.aBeeZee(color: Colors.black),
                         ),
                       ),
+
+                      // Apply Button
                       ElevatedButton(
                         onPressed: () {
+                          // When Apply is clicked, close the modal and trigger the filter action
                           Navigator.pop(context);
-                          setState(() {});
+
+                          // Dispatch an event to the BLoC to apply filters and make the API call
+                          BlocProvider.of<FilterBloc>(context)
+                              .add(ApplyFiltersEvent(filters));
+
+                          // If there's a callback provided, call it after applying the filters
                           if (widget.onFilterApplied != null) {
                             widget.onFilterApplied!();
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFAAAB1),
+                          backgroundColor: const Color(0xFFFAAAB1),
                         ),
                         child: Text(
                           'Apply',

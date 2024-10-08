@@ -178,27 +178,6 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                                   child:
                                                       const Icon(Icons.image),
                                                 ),
-
-                                          // child: imageUrl.isNotEmpty
-                                          //     ? Image.network(
-                                          //         imageUrl,
-                                          //         fit: BoxFit.cover,
-                                          //         errorBuilder: (context, error,
-                                          //             stackTrace) {
-                                          //           // If the image fails to load, display a placeholder image
-                                          //           return Image.asset(
-                                          //             'assets/images/logo.png',
-                                          //             fit: BoxFit.cover,
-                                          //           );
-                                          //         },
-                                          //       )
-                                          //     : Container(
-                                          //         height:
-                                          //             screenSize.height * 0.25,
-                                          //         width: double.infinity,
-                                          //         color: Colors.grey[200],
-                                          //         child: const Icon(Icons.image),
-                                          //       ),
                                         ),
                                       ),
                                       Positioned(

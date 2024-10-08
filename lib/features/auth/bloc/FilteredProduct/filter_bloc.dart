@@ -1,28 +1,78 @@
+import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/api/filter_api.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
 import 'filter_event.dart';
 import 'filter_state.dart';
 
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
-  final FilteredProduct _productApi;
+  FilterBloc() : super(const FilterState()) {
+    on<UpdatePriceSort>((event, emit) {
+      final newState = state.copyWith(priceSort: event.priceSort);
 
-  FilterBloc(this._productApi) : super(FilterInitial()) {
-    on<ApplyFilter>(_onApplyFilter);
-  }
+      emit(newState);
+      _fetchProductsBasedOnFilters(newState);
+    });
 
-  Future<void> _onApplyFilter(
-      ApplyFilter event, Emitter<FilterState> emit) async {
-    emit(FilterLoading());
-    try {
-      print('object is loading');
-      // Fetch products based on the applied filters
-      final products = await _productApi.fetchFilteredProducts(
-        event.filters['categoryId'],
+    on<UpdateNewest>((event, emit) {
+      final newState = state.copyWith(newest: event.newest);
+      emit(newState);
+      _fetchProductsBasedOnFilters(newState);
+    });
+
+    on<UpdateCategory>((event, emit) {
+      final newState = state.copyWith(category: event.category);
+      emit(newState);
+      _fetchProductsBasedOnFilters(newState);
+    });
+
+    on<UpdateColor>((event, emit) {
+      final newState = state.copyWith(color: event.color);
+      emit(newState);
+      _fetchProductsBasedOnFilters(newState);
+    });
+
+    on<UpdateSize>((event, emit) {
+      final newState = state.copyWith(size: event.size);
+      emit(newState);
+      _fetchProductsBasedOnFilters(newState);
+    });
+
+    on<ApplyFiltersEvent>((event, emit) {
+      // Update state with the provided filters
+      final newState = state.copyWith(
+        priceSort: event.filters['priceSort'],
+        newest: event.filters['newest'],
+        category: event.filters['category'],
+        color: event.filters['color'],
+        size: event.filters['size'],
       );
-      emit(FilterLoaded(products));
-    } catch (e) {
-      print('er $e');
-      emit(FilterError('Failed to load filtered products: ${e.toString()}'));
-    }
+
+      emit(newState);
+
+      // Make the API call based on the applied filters
+      _fetchProductsBasedOnFilters(newState);
+    });
+  }
+}
+
+// Function to fetch products based on the current filter state
+void _fetchProductsBasedOnFilters(FilterState filterState) async {
+  final filterData = {
+    'priceSort': filterState.priceSort,
+    'newest': filterState.newest,
+    'category': filterState.category,
+    'color': filterState.color,
+    'size': filterState.size,
+  };
+
+  print('filter data $filterData');
+
+  final filteredProducts =
+      await FilteredProduct().fetchFilteredProducts(filterData);
+  if (filteredProducts.isNotEmpty) {
+    //emit(CategoriesLoaded(products));
+  } else {
+    print('no products found');
+    // emit(NewArrivalsError('No products found'));
   }
 }
