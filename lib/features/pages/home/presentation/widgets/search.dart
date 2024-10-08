@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/const/colors_class.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
@@ -27,67 +28,24 @@ class AppSearchBar extends StatefulWidget {
 class _AppSearchBarState extends State<AppSearchBar> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Center(
-                child: Container(
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color.fromARGB(99, 202, 201, 202),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Theme(
-                      data: ThemeData(
-                        textSelectionTheme: TextSelectionThemeData(
-                          cursorColor: Colors.grey, // Cursor color
-                          // Selection handle color
-                        ),
-                      ),
-                      child: TextFormField(
-                        cursorHeight: 20, // Cursor height
-                        onChanged: (value) {
-                          widget.onSearchTermChanged(value);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search Here ..',
-                          hintStyle: GoogleFonts.aBeeZee(
-                            textStyle:
-                                TextStyle(color: Colors.grey, fontSize: 13),
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: const Color.fromARGB(99, 202, 201, 202),
+      ),
+      child: TextFormField(
+        cursorColor: ColorsClass.grey,
+        onChanged: (value) {
+          widget.onSearchTermChanged(value);
+        },
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          hintText: 'Search Here ..',
+          hintStyle: GoogleFonts.aBeeZee(
+            textStyle: TextStyle(color: Colors.grey, fontSize: 13),
           ),
-
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: Container(
-          //     height: 50,
-          //     decoration: BoxDecoration(
-          //         color: const Color.fromARGB(255, 235, 228, 228),
-          //         borderRadius: BorderRadius.circular(15)),
-          //     width: 60,
-          //     child: const Center(
-          //       child: Icon(
-          //         Icons.mic,
-          //         color: Colors.grey,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-        ],
+          border: InputBorder.none,
+        ),
       ),
     );
   }
