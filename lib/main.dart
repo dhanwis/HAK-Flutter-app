@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
 import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
+import 'package:dil_hack_e_commerce/api/productByCategory.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
@@ -7,6 +8,7 @@ import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/getProductByCategorybloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/FilteredProduct/filter_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
@@ -56,14 +58,17 @@ class MyApp extends StatelessWidget {
         ),
 
         BlocProvider(
-          create: (context) => NewArrivalsBloc(GetAllNewArrivalsApi())
-            ..add(const FetchNewArrivalsEvent()),
+          create: (context) => NewArrivalsBloc(GetAllNewArrivalsApi()),
         ),
 
         BlocProvider(
           create: (context) => ProductBloc(productApi: GetAllProductApi())
             ..add(FetchProductsEvent()),
         ),
+
+        BlocProvider(
+            create: (context) =>
+                ProductByCategoryBloc(GetProductsByCategory())),
 
         BlocProvider(
           create: (context) => FilterBloc(),

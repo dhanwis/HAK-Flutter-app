@@ -1,6 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/api/filter_api.dart';
+import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_state.dart';
 import 'filter_event.dart';
 import 'filter_state.dart';
 
@@ -65,14 +69,17 @@ void _fetchProductsBasedOnFilters(FilterState filterState) async {
     'size': filterState.size,
   };
 
-  print('filter data $filterData');
-
   final filteredProducts =
       await FilteredProduct().fetchFilteredProducts(filterData);
+
+  print('filtered prooo $filteredProducts');
+
   if (filteredProducts.isNotEmpty) {
-    //emit(CategoriesLoaded(products));
+    // Dispatch an event to NewArrivalsBloc to update its state
+    //newArrivalsBloc.add(UpdateNewArrivalsEvent(filteredProducts));
+    NewArrivalsBloc(GetAllNewArrivalsApi())
+        .add(UpdateNewArrivalsEvent(filteredProducts));
   } else {
-    print('no products found');
-    // emit(NewArrivalsError('No products found'));
+    print('No products found');
   }
 }

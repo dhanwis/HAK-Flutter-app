@@ -1,3 +1,18 @@
+// import 'package:equatable/equatable.dart';
+
+// abstract class ProductByCategoryEvent extends Equatable {
+//   @override
+//   List<Object> get props => [];
+// }
+
+// class FetchProductByCategoryEvent extends ProductByCategoryEvent {
+//   final String categoryId;
+
+//   FetchProductByCategoryEvent(this.categoryId);
+// }
+
+// class RefreshProductByCategoryEvent extends ProductByCategoryEvent {}
+
 import 'package:equatable/equatable.dart';
 
 abstract class ProductByCategoryEvent extends Equatable {
@@ -5,13 +20,11 @@ abstract class ProductByCategoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchProductByCategoryEvent extends ProductByCategoryEvent {
-  final int page;
+class FetchProductsByCategory extends ProductByCategoryEvent {
+  final String categoryId;
 
-  FetchProductByCategoryEvent({this.page = 1});
+  FetchProductsByCategory(this.categoryId);
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [categoryId];
 }
-
-class RefreshProductByCategoryEvent extends ProductByCategoryEvent {}

@@ -16,6 +16,9 @@ class FilteredProduct {
       final response = await client.get(Uri.parse(
           '${AppConstants.BASE_URL}/customerApp/data/filter/hak?$queryString'));
 
+      print('response below can see');
+      print(response.body);
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         // Handle the filtered products data

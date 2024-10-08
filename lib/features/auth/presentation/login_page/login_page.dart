@@ -1,6 +1,7 @@
 import 'package:dil_hack_e_commerce/core/const/snackbar.dart';
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/loading_dilhak.dart';
+import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/otp_page.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/login_image.dart';
@@ -58,10 +59,15 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (state is OtpSendingErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
-              IconSnackBar.show(
-                context,
-                label: state.msg,
-                snackBarType: SnackBarType.fail,
+              // IconSnackBar.show(
+              //   context,
+              //   label: state.msg,
+              //   snackBarType: SnackBarType.fail,
+              // ),
+              SnackBar(
+                content: Text(state.msg),
+                backgroundColor: Palette.appTheme,
+                duration: Duration(seconds: 1), // Set the duration to 1 second
               ),
             );
           }

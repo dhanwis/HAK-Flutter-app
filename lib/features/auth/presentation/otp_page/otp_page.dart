@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/core/sized_boxes.dart';
 import 'package:dil_hack_e_commerce/core/theme/loading_dilhak.dart';
+import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 
@@ -49,10 +50,16 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           });
           Future.delayed(Duration.zero, () {
             ScaffoldMessenger.of(context).showSnackBar(
+              // SnackBar(
+              //   // ignore: use_build_context_synchronously
+              //   content: IconSnackBar.show(context,
+              //       label: 'OTP validated SuccessFully',
+              //       snackBarType: SnackBarType.success),
+              // ),
               SnackBar(
-                content: IconSnackBar.show(context,
-                    label: 'OTP validated SuccessFully',
-                    snackBarType: SnackBarType.success),
+                content: Text('OTP validated SuccessFully'),
+                backgroundColor: Palette.appTheme,
+                duration: Duration(seconds: 1), // Set the duration to 1 second
               ),
             );
           });
