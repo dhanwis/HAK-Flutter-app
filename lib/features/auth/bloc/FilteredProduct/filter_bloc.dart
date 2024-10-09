@@ -76,9 +76,6 @@ void _fetchProductsBasedOnFilters(FilterState filterState) async {
 
   if (filteredProducts.isNotEmpty) {
     // Dispatch an event to NewArrivalsBloc to update its state
-    //newArrivalsBloc.add(UpdateNewArrivalsEvent(filteredProducts));
-    NewArrivalsBloc(GetAllNewArrivalsApi())
-        .add(UpdateNewArrivalsEvent(filteredProducts));
   } else {
     print('No products found');
   }
