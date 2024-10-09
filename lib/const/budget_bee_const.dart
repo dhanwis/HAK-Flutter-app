@@ -1,0 +1,3 @@
+
+enum TType {income, expenses}
+

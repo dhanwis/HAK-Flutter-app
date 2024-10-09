@@ -164,7 +164,7 @@ class NewArrivalsWidget extends StatelessWidget {
           return Skeletonizer(
             enabled: true,
             child: SizedBox(
-              height: 330,
+              height: 200,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,

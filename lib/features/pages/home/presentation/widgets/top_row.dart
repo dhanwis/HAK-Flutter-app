@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/const/colors_class.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/pages/account/account_page.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,9 @@ class TopRow extends StatelessWidget {
           padding: const EdgeInsets.only(left: 5),
           child: Image.asset(
             'assets/images/logo-2.png',
+            height: 20,
             color: Colors.black,
-            height: screenSize.height * 0.05,
+
           ),
         ),
         Row(
