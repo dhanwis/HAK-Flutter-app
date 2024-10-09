@@ -50,9 +50,7 @@ class _ProductGridState extends State<ProductGrid> {
             'userId']; // Assuming 'userId' is the key in your token
         // Initialize pages after userId is obtained
       });
-    } catch (e) {
-      print("Error decoding token: $e");
-    }
+    } catch (e) {}
   }
 
   Future<void> _fetchProducts() async {

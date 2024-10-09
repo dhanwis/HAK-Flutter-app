@@ -47,7 +47,6 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
       child: Scaffold(
         body: BlocBuilder<ProductByCategoryBloc, ProductByCategoryState>(
           builder: (context, state) {
-            print('state hee cate $state');
             if (state is ProductByCategoryLoading) {
               return _buildSkeletonLoader(); // Show skeleton loader while loading
             } else if (state is ProductByCategoryError) {

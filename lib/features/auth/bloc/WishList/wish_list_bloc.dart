@@ -11,7 +11,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   WishlistBloc(this.wishlistService) : super(WishlistInitial()) {
     // Handler for AddToWishlist event
     on<AddToWishlist>((event, emit) async {
-      print('click to add w');
       await _initializeUserId();
 
       try {
@@ -27,11 +26,11 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     // Handler for RemoveFromWishlist event
     on<RemoveFromWishlist>((event, emit) async {
       await _initializeUserId();
-      print('working delete');
+
       try {
         await wishlistService.removeFromWishlist(userId, event.productId);
         final wishlist = await wishlistService.fetchWishlist(userId);
-        print('remove the wishlist $wishlist');
+
         emit(WishlistLoaded(wishlist));
       } catch (e) {
         emit(WishlistError(e.toString()));
@@ -40,7 +39,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
 
     // Handler for FetchWishlistItems event
     on<FetchWishlistItems>((event, emit) async {
-      print('fetch wishlist');
       emit(WishlistLoading());
 
       await _initializeUserId();
@@ -62,10 +60,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         final decodedToken =
             await decodeJwt(); // Use your existing decodeJwt method
         userId = decodedToken['userId']; // Assuming userId is part of the token
-        print('User ID initialized: $userId');
-      } catch (e) {
-        print("Error decoding token: $e");
-      }
+      } catch (e) {}
     }
   }
 }

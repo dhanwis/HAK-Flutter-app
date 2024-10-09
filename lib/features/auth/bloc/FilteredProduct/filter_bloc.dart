@@ -72,11 +72,7 @@ void _fetchProductsBasedOnFilters(FilterState filterState) async {
   final filteredProducts =
       await FilteredProduct().fetchFilteredProducts(filterData);
 
-  print('filtered prooo $filteredProducts');
-
   if (filteredProducts.isNotEmpty) {
     // Dispatch an event to NewArrivalsBloc to update its state
-  } else {
-    print('No products found');
-  }
+  } else {}
 }

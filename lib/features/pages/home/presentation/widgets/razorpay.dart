@@ -35,12 +35,10 @@ class _PaymentPage2State extends State<PaymentPage2> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Handle payment error
-    print('Payment failed: ${response.message}');
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Handle external wallet selection
-    print('External wallet: ${response.walletName}');
   }
 
   void openCheckout() async {
@@ -57,9 +55,7 @@ class _PaymentPage2State extends State<PaymentPage2> {
 
     try {
       _razorpay.open(options);
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   Future<void> verifyPayment(PaymentSuccessResponse response) async {
@@ -79,10 +75,7 @@ class _PaymentPage2State extends State<PaymentPage2> {
     );
 
     if (verificationResponse.statusCode == 200) {
-      print('Payment verified successfully');
-    } else {
-      print('Failed to verify payment: ${verificationResponse.body}');
-    }
+    } else {}
   }
 
   @override

@@ -205,7 +205,7 @@ class _FilterSectionState extends State<FilterSection> {
               onTap: () {
                 setState(() {
                   selectedSortOption = option;
-                  print('option $option');
+
                   Navigator.pop(context); // Pop the dialog first
 
                   // Ensure that the context is available here for BlocProvider

@@ -129,12 +129,12 @@ class TopRow extends StatelessWidget {
                     radius: screenSize.width * 0.05,
                     backgroundColor: Palette.appTheme,
                     backgroundImage: userImg != null
-                        ? AssetImage(
-                            '$userImage/$userImg',
+                        ? NetworkImage(
+                            'http://192.168.1.36:8000/userImg/$userImg', // Use NetworkImage for URLs
                           )
                         : const AssetImage(
-                            'assets/images/manji.jpeg',
-                          ),
+                            'assets/images/manji.jpeg', // Local asset fallback
+                          ) as ImageProvider, // Cast to ImageProvider to avoid type error
                   ),
                 ),
               ],

@@ -97,19 +97,14 @@ class ApiService {
   // }
 
   Future<CustomerProfile> getProfileData(id) async {
-    print('id here id == $id');
     final response = await client.get(
       Uri.parse(
           '${AppConstants.BASE_URL}/auth_customer/customer/ProfileDataXYZ/$id'),
     );
 
-    print('response from user ');
-    print(response.body);
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print('user data');
-      print(data);
+
       return CustomerProfile.fromJson(json.decode(response.body));
     } else {
       throw Exception();

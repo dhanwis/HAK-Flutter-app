@@ -16,17 +16,14 @@ class NewArrivalsBloc extends Bloc<NewArrivalsEvent, NewArrivalsState> {
   ) async {
     try {
       emit(NewArrivalsLoading());
-      print('loding new arrival');
 
       final products = await newArrivalsApi.fetchNewArrivals();
       if (products.isNotEmpty) {
-        print('loading products');
         emit(NewArrivalsLoaded(products));
       } else {
         emit(NewArrivalsError('No products found'));
       }
     } catch (error) {
-      print('Error: $error');
       emit(NewArrivalsError('Failed to load new arrivals: $error'));
     }
   }

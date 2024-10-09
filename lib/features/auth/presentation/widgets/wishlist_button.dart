@@ -13,12 +13,9 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WishlistBloc, WishlistState>(
       builder: (context, state) {
-        print('State in button: $state');
         bool isWishlisted = false;
 
         if (state is WishlistLoaded) {
-          print('Wishlist is loaded');
-
           // Assuming state.wishlist is a list of product objects, not just product IDs
           // Check if any product in the wishlist has the same product_id as the current productId
           isWishlisted =
@@ -32,13 +29,10 @@ class FavoriteButton extends StatelessWidget {
             size: 18,
           ),
           onPressed: () {
-            print('Wishlist button pressed');
             if (isWishlisted) {
-              print('Removing from wishlist');
               // Remove from wishlist
               context.read<WishlistBloc>().add(RemoveFromWishlist(productId));
             } else {
-              print('Adding to wishlist');
               // Add to wishlist
               context.read<WishlistBloc>().add(AddToWishlist(productId));
             }

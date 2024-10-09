@@ -22,9 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = await TokenStorage().getAccessToken();
 
     if (token != null && token.isNotEmpty) {
-      print('token checking');
-      print(token);
-
       Timer(
         const Duration(seconds: 3),
         () {
@@ -37,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
         },
       );
     } else {
-      print('no token');
       Timer(const Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,

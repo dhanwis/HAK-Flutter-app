@@ -84,9 +84,7 @@ class _HomePageState extends State<HomePage> {
       if (userId.isNotEmpty) {
         context.read<ProfileBloc>().add(FetchProfile(userId));
       }
-    } catch (e) {
-      print("Error decoding token: $e");
-    }
+    } catch (e) {}
   }
 
   Future<void> _fetchProducts() async {

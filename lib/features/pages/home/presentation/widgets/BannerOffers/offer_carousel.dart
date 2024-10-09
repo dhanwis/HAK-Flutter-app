@@ -26,7 +26,6 @@ class _OfferCarouselState extends State<OfferCarousel> {
   }
 
   Future<void> _fetchBanners() async {
-    print('try to get offer');
     try {
       final banners = await _bannerService.fetchBanners();
       setState(() {

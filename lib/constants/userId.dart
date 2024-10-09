@@ -10,10 +10,7 @@ class UserIdProvider {
             await decodeJwt(); // Use your existing decodeJwt method
         _userId =
             decodedToken['userId']; // Assuming userId is part of the token
-        print('User ID initialized: $_userId');
-      } catch (e) {
-        print("Error decoding token: $e");
-      }
+      } catch (e) {}
     }
     return _userId;
   }

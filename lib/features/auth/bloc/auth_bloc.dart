@@ -102,12 +102,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(OtpValidatedState(token: accessToken));
         //emit(AuthAuthenticated(userId: event.userId));
-        print('OtpValidatedState emitted');
       } else {
         throw Exception('Unexpected status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error occurred: $e');
       emit(OtpValidatingErrorState());
     }
   }

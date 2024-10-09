@@ -7,12 +7,10 @@ import 'package:http/http.dart' as http;
 class GetAllNewArrivalsApi {
   final client = AuthHttpClient(http.Client());
   Future<List<Product>> fetchNewArrivals() async {
-    print('object is on fire');
     final response = await client.get(
         Uri.parse('${AppConstants.BASE_URL}/customerApp/product/new-arrivals'));
 
     if (response.statusCode == 200) {
-      print(response.body);
       final jsonResponse = json.decode(response.body);
       final List productsJson = jsonResponse;
       return productsJson.map((product) => Product.fromJson(product)).toList();

@@ -48,7 +48,6 @@ class WishlistPage extends StatelessWidget {
       ),
       body: BlocBuilder<WishlistBloc, WishlistState>(
         builder: (context, state) {
-          print('state list $state');
           if (state is WishlistLoading) {
             // Show the loading indicator while the wishlist is being fetched
             return _buildSkeletonLoader(context);

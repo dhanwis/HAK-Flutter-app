@@ -6,6 +6,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_state.da
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -30,22 +31,43 @@ class _ProfilePageState extends State<ProfilePage> {
   //final _stateController = TextEditingController();
   String? _selectedState;
   //XFile? _image;
-  List<String> _stateController = [
-    // Ensure this is populated correctly
-    'Kasargod',
-    'Kannur',
-    'Kozhikode',
-    'Wayanad',
-    'Malapuram',
-    'Palakad',
-    'Trissur',
-    'Eranakulam',
-    'idukki',
-    'pathanamthitta',
-    'Kottayam',
-    'Alapuzha',
-    'Kollam',
-    'Thiruvananthapuram',
+  final List<String> _stateController = [
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli and Daman and Diu',
+    'Lakshadweep',
+    'Delhi',
+    'Puducherry',
+    'Ladakh',
+    'Jammu and Kashmir',
   ];
 
   Future<String?> getUserIdFromJwt() async {
@@ -54,7 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
       return decodedToken[
           'userId']; // Assuming 'userId' is a key in the token payload
     } catch (error) {
-      print('Error decoding JWT: $error');
       return null; // Handle error appropriately
     }
   }
@@ -62,7 +83,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // Fetch the userId when the widget is initialized
     getUserId();
   }
 
@@ -70,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final fetchedUserId = await getUserIdFromJwt();
     setState(() {
       userId = fetchedUserId;
+      BlocProvider.of<ProfileBloc>(context).add(FetchProfile(userId!));
     });
   }
 
@@ -283,18 +304,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProfileBloc(ApiService()),
-      // Provide ProfileBloc here
       child: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => DilHackBottomNavBar()),
-          //     );
-          //   },
-          //   icon: const Icon(Icons.arrow_back),
-          // ),
           title: Text(
             "My Profile",
             style: GoogleFonts.aBeeZee(
@@ -312,11 +323,23 @@ class _ProfilePageState extends State<ProfilePage> {
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const CircularProgressIndicator();
+                    return const Center(
+                        child: SpinKitFadingCircle(
+                      color: Color(0xFFFAAAB1),
+                      size: 50.0, // Adjust the size as needed
+                    ));
                   }
 
                   if (state is ProfileLoaded) {
-                    // Use state.profile to access loaded profile data
+                    // Populate the controllers with profile data
+                    _nameController.text = state.profile
+                        .username; // Adjust according to your profile model
+                    _phoneController.text = state.profile.phoneNumber;
+                    _emailController.text = state.profile.email;
+                    _pincodeController.text = state.profile.pincode;
+                    _cityController.text = state.profile.city;
+                    _selectedState = state.profile.state;
+
                     return _buildProfileForm(context);
                   }
 

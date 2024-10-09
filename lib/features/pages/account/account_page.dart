@@ -38,9 +38,7 @@ class _AccountPageState extends State<AccountPage> {
         userId = decodedToken[
             'userId']; // Assuming 'userId' is the key in your token
       });
-    } catch (e) {
-      print("Error decoding token: $e");
-    }
+    } catch (e) {}
   }
 
   @override
