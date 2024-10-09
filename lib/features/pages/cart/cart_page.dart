@@ -5,7 +5,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -18,7 +18,6 @@ class CartPageState extends State<CartView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('n cart page');
     // Fetch cart when the widget is initialized or dependencies change
     context.read<CartBloc>().add(FetchCartEvent());
   }
@@ -32,9 +31,6 @@ class CartPageState extends State<CartView> {
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -42,7 +38,7 @@ class CartPage extends StatelessWidget {
           'Cart',
           style: GoogleFonts.aBeeZee(
             color: Colors.black,
-            fontSize: screenWidth * 0.05,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -50,218 +46,190 @@ class CartPage extends StatelessWidget {
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          print('state in cart $state');
           if (state is CartLoading) {
-            // Show the loading indicator while the wishlist is being fetched
             return Center(
-                child: SpinKitFadingCircle(
-              color: Color(0xFFFAAAB1),
-              size: 50.0, // Adjust the size as needed
-            ));
+              child: CircularProgressIndicator(),
+            );
           } else if (state is CartLoaded) {
-            //nee print full kaliyane ippo, ok,
-            // Show the wishlist items when they are loaded
             if (state.cartItems.isEmpty) {
-              return Center(child: Text("No items in your wishlist"));
+              return Center(child: Text("No items in your cart"));
             }
-
-            return GridView.builder(
-              itemCount: state.cartItems.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.55,
-              ),
-              itemBuilder: (context, index) {
-                final product = state.cartItems[index];
-                // final screenHeight = MediaQuery.of(context).size.height;
-                return _cartUI(context, product, screenHeight, screenWidth);
-              },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.cartItems.length,
+                    itemBuilder: (context, index) {
+                      final product = state.cartItems[index];
+                      return _cartUI(context, product);
+                    },
+                  ),
+                ),
+                _bottomSection(context, state.cartItems),
+              ],
             );
           } else if (state is CartError) {
-            // Show an error message if there's an error fetching the wishlist
-            //return Center(child: Text(state.message));
-            return _emptyUI();
+            return Center(child: Text("Something went wrong"));
           }
-          print('Something went wrong on cart!');
-          return Center(child: Text("Something went wrong on cart!"));
+          return Center(child: Text("Something went wrong"));
         },
       ),
     );
   }
-}
 
-Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem,
-    double screenHeight, double screenWidth) {
-  final Map<String, dynamic> product = cartItem['product'] ?? {};
+  Widget _bottomSection(BuildContext context, List<dynamic> cartItems) {
+    // Calculate total price based on items in the cart
+    final totalPrice = cartItems.fold<double>(
+      0,
+      (sum, item) {
+        final sku = item['product']['variations'][0]['skus'][0];
+        final discountedPrice = sku?['discountedPrice'] ?? 0;
+        return sum + discountedPrice;
+      },
+    );
 
-  // Extract variations and images
-  final firstVariation = product['variations']?.isNotEmpty == true
-      ? product['variations'][0]
-      : null;
-  final firstImage =
-      firstVariation != null && firstVariation['images']?.isNotEmpty == true
-          ? firstVariation['images'][0]
-          : null;
-  final sku =
-      firstVariation != null && firstVariation['skus']?.isNotEmpty == true
-          ? firstVariation['skus'][0]
-          : null;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, -2))
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Total Amount: ₹${totalPrice.toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Handle Proceed to Buy action
+            },
+            child: Text("Proceed to Buy"),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.pink, // Text color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  // Extract product details
-  final productName = product['product_name'] ?? 'Unknown Product';
-  final productId = product['product_id'] ?? 'Unknown Product';
-  final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
-  final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
-  final rating = product['rating'] ?? 10;
-  final ratingCount = product['ratingCount']?.toString() ?? '0';
+  Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
+    final product = cartItem['product'];
+    final firstVariation =
+        product['variations'].isNotEmpty ? product['variations'][0] : null;
+    final firstImage =
+        firstVariation != null && firstVariation['images'].isNotEmpty
+            ? firstVariation['images'][0]
+            : null;
+    final sku = firstVariation != null && firstVariation['skus'].isNotEmpty
+        ? firstVariation['skus'][0]
+        : null;
 
-  return Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.02, vertical: screenHeight * 0.02),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: screenHeight * 0.6, // Limit max height
-        ),
-        child: Column(
+    final productName = product['product_name'] ?? 'Unknown Product';
+    final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
+    final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
+    final rating = product['rating'] ?? 0;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image and Info
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product Image
-                SizedBox(
-                  width: screenWidth * 0.3,
-                  height: screenWidth * 0.3,
-                  child: Image.network(
-                    '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(width: screenWidth * 0.02),
-                // Product Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        productName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: GoogleFonts.aBeeZee(
-                          fontSize: screenHeight * 0.02,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Row(
-                        children: List.generate(
-                          5,
-                          (index) => Icon(
-                            index < rating ? Icons.star : Icons.star_border,
-                            color: Colors.blue,
-                            size: screenWidth * 0.04,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text(
-                        '₹$actualPrice',
-                        style: TextStyle(
-                          fontSize: screenHeight * 0.018,
-                          color: Colors.black54,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-                      if (discountedPrice.isNotEmpty)
-                        Text(
-                          '₹$discountedPrice with 1 Special Offer',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.018,
-                            color: Colors.green,
-                          ),
-                        ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text('Free Delivery by Sept 18',
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontSize: screenHeight * 0.018)),
-                    ],
-                  ),
-                ),
-              ],
+            Container(
+              width: 100,
+              height: 100,
+              child: firstImage != null
+                  ? Image.network(
+                      '${AppConstants.BASE_URL}/ProductImg/$productName/$firstImage',
+                      fit: BoxFit.cover,
+                    )
+                  : Placeholder(),
             ),
-            SizedBox(height: screenHeight * 0.02),
-
-            // Action Buttons Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Remove Button
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.delete, color: Colors.black),
-                    label: Text('Remove',
-                        style: TextStyle(fontSize: 12, color: Colors.black)),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Colors.grey[300]!),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    productName,
+                    style: GoogleFonts.aBeeZee(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: List.generate(
+                      5,
+                      (index) => Icon(
+                        index < rating ? Icons.star : Icons.star_border,
+                        color: Colors.blue,
+                        size: 16,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: screenWidth * 0.02),
-
-                // Save Button
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.bookmark, color: Colors.black),
-                    label: Text('Save',
-                        style: TextStyle(fontSize: 12, color: Colors.black)),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Colors.grey[300]!),
-                      ),
+                  SizedBox(height: 5),
+                  Text(
+                    '₹$actualPrice',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      decoration: TextDecoration.lineThrough,
                     ),
                   ),
-                ),
-                SizedBox(width: screenWidth * 0.02),
-
-                // Buy Now Button
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.shopping_cart, color: Colors.black),
-                    label: Text('Buy now',
-                        style: TextStyle(fontSize: 12, color: Colors.black)),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Colors.grey[300]!),
-                      ),
+                  Text(
+                    '₹$discountedPrice',
+                    style: TextStyle(
+                      color: Colors.green,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                  Text(
+                    'Free Delivery by Sept 18',
+                    style: TextStyle(color: Colors.green, fontSize: 12),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      _cartButton('Remove', Colors.red, () {}),
+                      SizedBox(width: 8),
+                      _cartButton('Save', Colors.grey, () {}),
+                      SizedBox(width: 8),
+                      _cartButton('Buy Now', Colors.pink, () {}),
+                    ],
+                  )
+                ],
+              ),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _cartButton(String text, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(text),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        minimumSize: Size(80, 35),
+      ),
+    );
+  }
 }
 
 Widget _emptyUI() {
@@ -313,3 +281,4 @@ Widget _emptyUI() {
     ),
   );
 }
+//extra branch add akkua manjima 0.1//pull nu mumb extra branch create aakua // pazhebranch kerit pull.....
