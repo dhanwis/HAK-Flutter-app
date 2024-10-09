@@ -56,7 +56,7 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Widget _buildSkeletonLoader() {
     return Skeletonizer(
       child: Container(
-        height: 230,
+        height: 180,
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(

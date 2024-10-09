@@ -1,7 +1,5 @@
-import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';

@@ -1,4 +1,3 @@
-// lib/models/customer_profile_model.dart
 class CustomerProfile {
   final String id;
   final String username;
@@ -7,7 +6,7 @@ class CustomerProfile {
   final String pincode;
   final String city;
   final String state;
-  final String? userImg;
+  final String? userImg; // Nullable field for user image
 
   CustomerProfile({
     required this.id,
@@ -16,20 +15,20 @@ class CustomerProfile {
     required this.phoneNumber,
     required this.pincode,
     required this.city,
-    required this.state, // Nullable field
+    required this.state,
     this.userImg,
   });
 
   factory CustomerProfile.fromJson(Map<String, dynamic> json) {
     return CustomerProfile(
-      id: json['_id'],
-      username: json['username'],
-      email: json['email'],
-      phoneNumber: json['phoneNumber'],
-      pincode: json['pincode'],
-      city: json['city'],
-      state: json['state'],
-      userImg: json['userImg'] ?? "",
+      id: json['_id'] ?? "", // Provide default value if null
+      username: json['username'] ?? "", // Use empty string if null
+      email: json['email'] ?? "", // Use empty string if null
+      phoneNumber: json['phoneNumber'] ?? "", // Use empty string if null
+      pincode: json['pincode'] ?? "", // Use empty string if null
+      city: json['city'] ?? "", // Use empty string if null
+      state: json['state'] ?? "", // Use empty string if null
+      userImg: json['userImg'], // Nullable, so no need to provide default value
     );
   }
 

@@ -53,6 +53,8 @@ class AddToCartButtonState extends StatelessWidget {
                     SnackBar(
                       content: Text('Product is already in the cart'),
                       backgroundColor: Colors.orange,
+                      duration:
+                          Duration(seconds: 1), // Set the duration to 1 second
                     ),
                   );
 
@@ -71,7 +73,8 @@ class AddToCartButtonState extends StatelessWidget {
               color: Colors.black,
             ),
             label: Text(
-              isInCart ? 'Go to Cart' : 'Add to Cart',
+              // isInCart ? 'Go to Cart' : 'Add to Cart',
+              'Add to Cart',
               style: GoogleFonts.aBeeZee(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

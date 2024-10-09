@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/constants/userId.dart';
 import 'package:dil_hack_e_commerce/database_support/database_support.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/otp.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
@@ -15,6 +16,7 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
+    //on<AppStarted>(_onAppStarted);
     on<SendOtpEvent>(_sendOtp);
     on<SubmitOtpEvent>(_submitOtp);
     //on<ChangeMobileNumberEvent>(_changeMobileNumber);
@@ -23,6 +25,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ApiLinks apiLinks = ApiLinks();
   String? _phoneNumber;
   String? _verificationSid;
+
+  // Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
+  //   await UserIdProvider
+  //       .initializeUserId(); // Initialize the user ID from the token
+
+  //   if (UserIdProvider.userId != null) {
+  //     emit(AuthAuthenticated(userId: UserIdProvider.userId!));
+  //   } else {
+  //     emit(AuthUnauthenticated());
+  //   }
+  // }
 
   Future<void> _sendOtp(SendOtpEvent event, Emitter<AuthState> emit) async {
     Dio dioClient = Dio();
@@ -36,7 +49,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthInitial());
 
-      print(response);
       if (response.statusCode == 201) {
         final verificationSid = response.data['verificationSid'];
 
@@ -81,18 +93,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (response.statusCode == 200) {
-        print('Response data: ${response.data}');
         final tokenData = AuthResponse.fromJson(response.data);
 
         String? accessToken = tokenData.access;
         String? refreshToken = tokenData.refresh;
 
-        print('AccessToken: $accessToken');
-        print('RefreshToken: $refreshToken');
-
         await tokenStorage.saveTokens(accessToken!, refreshToken!);
 
         emit(OtpValidatedState(token: accessToken));
+        //emit(AuthAuthenticated(userId: event.userId));
         print('OtpValidatedState emitted');
       } else {
         throw Exception('Unexpected status code: ${response.statusCode}');

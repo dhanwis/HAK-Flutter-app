@@ -3,6 +3,7 @@ import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
@@ -40,6 +42,10 @@ class MyApp extends StatelessWidget {
         // AuthBloc Provider
         BlocProvider(
           create: (context) => AuthBloc(),
+        ),
+
+        BlocProvider(
+          create: (context) => ProfileBloc(ApiService()),
         ),
 
         BlocProvider(

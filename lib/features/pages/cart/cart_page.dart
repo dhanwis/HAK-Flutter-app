@@ -5,6 +5,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -48,12 +49,15 @@ class CartPage extends StatelessWidget {
         builder: (context, state) {
           if (state is CartLoading) {
             return Center(
-              child: CircularProgressIndicator(),
-            );
+                child: SpinKitFadingCircle(
+              color: Color(0xFFFAAAB1),
+              size: 50.0, // Adjust the size as needed
+            ));
           } else if (state is CartLoaded) {
-            if (state.cartItems.isEmpty) {
-              return Center(child: Text("No items in your cart"));
-            }
+            // if (state.cartItems.isEmpty) {
+            //   return Center(child: Text("No items in your wishlist"));
+            // }
+
             return Column(
               children: [
                 Expanded(
@@ -65,171 +69,361 @@ class CartPage extends StatelessWidget {
                     },
                   ),
                 ),
-                _bottomSection(context, state.cartItems),
               ],
             );
           } else if (state is CartError) {
-            return Center(child: Text("Something went wrong"));
+            return _emptyUI();
           }
           return Center(child: Text("Something went wrong"));
         },
       ),
     );
   }
+}
+//   Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
+//     final product = cartItem['product'];
+//     final firstVariation =
+//         product['variations'].isNotEmpty ? product['variations'][0] : null;
+//     final firstImage =
+//         firstVariation != null && firstVariation['images'].isNotEmpty
+//             ? firstVariation['images'][0]
+//             : null;
+//     final sku = firstVariation != null && firstVariation['skus'].isNotEmpty
+//         ? firstVariation['skus'][0]
+//         : null;
 
-  Widget _bottomSection(BuildContext context, List<dynamic> cartItems) {
-    // Calculate total price based on items in the cart
-    final totalPrice = cartItems.fold<double>(
-      0,
-      (sum, item) {
-        final sku = item['product']['variations'][0]['skus'][0];
-        final discountedPrice = sku?['discountedPrice'] ?? 0;
-        return sum + discountedPrice;
-      },
-    );
+//     final productId = product['product_id'] ?? 'Unknown Product';
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, -2))
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     final productName = product['product_name'] ?? 'Unknown Product';
+//     final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
+//     final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
+//     final rating = product['rating'] ?? 0;
+
+//     return Card(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(15),
+//       ),
+//       elevation: 5,
+//       margin: EdgeInsets.all(10),
+//       child: Padding(
+//         padding: EdgeInsets.all(15), // Adjust padding for better spacing
+//         child: Row(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Product Image
+//             Container(
+//               width: 100,
+//               height: 100,
+//               decoration: BoxDecoration(
+//                 borderRadius:
+//                     BorderRadius.circular(10), // Rounded corners for image
+//                 border: Border.all(color: Colors.grey.shade300),
+//               ),
+//               child: ClipRRect(
+//                 borderRadius: BorderRadius.circular(10),
+//                 child: firstImage != null
+//                     ? Image.network(
+//                         '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
+//                         fit: BoxFit.cover,
+//                       )
+//                     : Icon(Icons.image,
+//                         color: Colors.grey.shade400,
+//                         size: 60), // Better placeholder
+//               ),
+//             ),
+//             SizedBox(width: 15),
+
+//             // Product Details
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   // Product Name
+//                   Text(
+//                     productName,
+//                     style: GoogleFonts.aBeeZee(
+//                       fontSize: 18, // Increased font size for better visibility
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black87,
+//                     ),
+//                   ),
+//                   SizedBox(height: 8),
+
+//                   // Rating Stars
+//                   Row(
+//                     children: List.generate(
+//                       5,
+//                       (index) => Icon(
+//                         index < rating ? Icons.star : Icons.star_border,
+//                         color: Colors.blueAccent,
+//                         size: 16,
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(height: 10),
+
+//                   // Product Price
+//                   Row(
+//                     children: [
+//                       Text(
+//                         '₹$actualPrice',
+//                         style: TextStyle(
+//                           color: Colors.black54,
+//                           decoration: TextDecoration.lineThrough,
+//                           fontSize: 14,
+//                         ),
+//                       ),
+//                       SizedBox(width: 10),
+//                       Text(
+//                         '₹$discountedPrice',
+//                         style: TextStyle(
+//                           color: Colors.green,
+//                           fontSize: 16,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: 8),
+
+//                   // Delivery Information
+//                   Text(
+//                     'Free Delivery by Sept 18',
+//                     style: TextStyle(
+//                       color: Colors.green,
+//                       fontSize: 12,
+//                       fontWeight: FontWeight.w500,
+//                     ),
+//                   ),
+//                   SizedBox(height: 12),
+
+//                   // Action Buttons
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.start,
+//                     children: [
+//                       Expanded(
+//                         child: _cartButton('Remove', Colors.red, () {
+//                           // Remove action
+//                         }),
+//                       ),
+//                       SizedBox(width: 10),
+//                       Expanded(
+//                         child: _cartButton('Buy Now', Colors.blueAccent, () {
+//                           // Buy Now action
+//                         }),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _cartButton(String text, Color color, VoidCallback onPressed) {
+//     return ElevatedButton(
+//       onPressed: onPressed,
+//       child: Text(text),
+//       style: ElevatedButton.styleFrom(
+//         foregroundColor: Colors.white,
+//         backgroundColor: color,
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         minimumSize: Size(80, 35),
+//       ),
+//     );
+//   }
+// }
+
+Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
+  final product = cartItem['product'];
+  final firstVariation =
+      product['variations'].isNotEmpty ? product['variations'][0] : null;
+  final firstImage =
+      firstVariation != null && firstVariation['images'].isNotEmpty
+          ? firstVariation['images'][0]
+          : null;
+  final sku = firstVariation != null && firstVariation['skus'].isNotEmpty
+      ? firstVariation['skus'][0]
+      : null;
+
+  final productId = product['product_id'] ?? 'Unknown Product';
+  final productName = product['product_name'] ?? 'Unknown Product';
+  final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
+  final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
+  final rating = product['rating'] ?? 0;
+
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20), // More rounded corners
+    ),
+    elevation: 5,
+    margin:
+        EdgeInsets.symmetric(vertical: 10, horizontal: 15), // Adjusted margin
+    child: Padding(
+      padding: EdgeInsets.all(15), // Adequate padding for card content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Total Amount: ₹${totalPrice.toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Handle Proceed to Buy action
-            },
-            child: Text("Proceed to Buy"),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.pink, // Text color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Product Image Section
+              Container(
+                width: 90,
+                height: 120, // Adjusted size to match image ratio
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(8), // Small curve for image
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: firstImage != null
+                      ? Image.network(
+                          '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
+                          fit: BoxFit.cover,
+                        )
+                      : Icon(
+                          Icons.image,
+                          color: Colors.grey.shade400,
+                          size: 60,
+                        ), // Placeholder icon for missing image
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+              SizedBox(width: 15), // Spacing between image and details
 
-  Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
-    final product = cartItem['product'];
-    final firstVariation =
-        product['variations'].isNotEmpty ? product['variations'][0] : null;
-    final firstImage =
-        firstVariation != null && firstVariation['images'].isNotEmpty
-            ? firstVariation['images'][0]
-            : null;
-    final sku = firstVariation != null && firstVariation['skus'].isNotEmpty
-        ? firstVariation['skus'][0]
-        : null;
-
-    final productName = product['product_name'] ?? 'Unknown Product';
-    final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
-    final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
-    final rating = product['rating'] ?? 0;
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: EdgeInsets.all(10),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              child: firstImage != null
-                  ? Image.network(
-                      '${AppConstants.BASE_URL}/ProductImg/$productName/$firstImage',
-                      fit: BoxFit.cover,
-                    )
-                  : Placeholder(),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    productName,
-                    style: GoogleFonts.aBeeZee(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    children: List.generate(
-                      5,
-                      (index) => Icon(
-                        index < rating ? Icons.star : Icons.star_border,
-                        color: Colors.blue,
-                        size: 16,
+              // Product Details Section
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product Name
+                    Text(
+                      productName,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '₹$actualPrice',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      decoration: TextDecoration.lineThrough,
-                    ),
-                  ),
-                  Text(
-                    '₹$discountedPrice',
-                    style: TextStyle(
-                      color: Colors.green,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Free Delivery by Sept 18',
-                    style: TextStyle(color: Colors.green, fontSize: 12),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      _cartButton('Remove', Colors.red, () {}),
-                      SizedBox(width: 8),
-                      _cartButton('Save', Colors.grey, () {}),
-                      SizedBox(width: 8),
-                      _cartButton('Buy Now', Colors.pink, () {}),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                    SizedBox(height: 4),
 
-  Widget _cartButton(String text, Color color, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(text),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        minimumSize: Size(80, 35),
+                    // Star Rating
+                    Row(
+                      children: List.generate(
+                        5,
+                        (index) => Icon(
+                          index < rating ? Icons.star : Icons.star_border,
+                          color: Colors.lightBlueAccent, // Light blue stars
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    // Price Information
+                    Row(
+                      children: [
+                        Text(
+                          '₹$actualPrice',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            decoration: TextDecoration.lineThrough,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          '₹$discountedPrice',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+
+                    Row(
+                      children: [
+                        Text(
+                          'Delivery by Sept 18',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Free Delivery',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _cartActionButton(
+                icon: Icons.delete_outline,
+                label: 'Remove',
+                color: Colors.red,
+                onPressed: () {},
+              ),
+              _cartActionButton(
+                icon: Icons.flash_on,
+                label: 'Buy this now',
+                color: Colors.blueAccent,
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+Widget _cartActionButton({
+  required IconData icon,
+  required String label,
+  required Color color,
+  required VoidCallback onPressed,
+}) {
+  return Expanded(
+    child: TextButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, color: color, size: 20),
+      label: Text(
+        label,
+        style:
+            TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500),
+      ),
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+    ),
+  );
 }
 
 Widget _emptyUI() {
@@ -281,4 +475,3 @@ Widget _emptyUI() {
     ),
   );
 }
-//extra branch add akkua manjima 0.1//pull nu mumb extra branch create aakua // pazhebranch kerit pull.....

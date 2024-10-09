@@ -7,11 +7,9 @@ import 'package:http/http.dart' as http;
 class GetAllNewArrivalsApi {
   final client = AuthHttpClient(http.Client());
   Future<List<Product>> fetchNewArrivals() async {
+    print('object is on fire');
     final response = await client.get(
         Uri.parse('${AppConstants.BASE_URL}/customerApp/product/new-arrivals'));
-
-    // final response = await http.get(Uri.parse(
-    //     'https://hak-server-side.onrender.com/productAdmin/product/new-arrivals'));
 
     if (response.statusCode == 200) {
       print(response.body);

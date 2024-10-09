@@ -7,6 +7,8 @@ sealed class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AppStarted extends AuthEvent {}
+
 class SendOtpEvent extends AuthEvent {
   final String mobileNumber;
 
@@ -18,9 +20,11 @@ class SendOtpEvent extends AuthEvent {
 
 class SubmitOtpEvent extends AuthEvent {
   final String otp;
+  //final String userId;
 
   const SubmitOtpEvent({
     required this.otp,
+    // required this.userId,
   });
   @override
   List<Object> get props => [otp];

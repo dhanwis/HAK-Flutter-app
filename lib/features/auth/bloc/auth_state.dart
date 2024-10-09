@@ -45,3 +45,14 @@ class OtpValidatedState extends AuthState {
   @override
   List<Object> get props => [token];
 }
+
+class AuthAuthenticated extends AuthState {
+  final String userId;
+
+  const AuthAuthenticated({required this.userId});
+
+  @override
+  List<Object> get props => [userId];
+}
+
+class AuthUnauthenticated extends AuthState {}

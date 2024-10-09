@@ -10,6 +10,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc(this.repository) : super(ProfileInitial()) {
     on<CreateUser>((event, emit) async {
+      print('calling dreate user ');
       emit(ProfileLoading());
       try {
         // Save profile using repository
@@ -25,6 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         // Emit ProfileCreated with the saved profile
         emit(ProfileCreated(profile));
       } catch (e) {
+        print('error have for create $e');
         emit(ProfileError(e.toString()));
       }
     });
@@ -32,9 +34,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<FetchProfile>((event, emit) async {
       emit(ProfileLoading());
       try {
-        final user = await repository.getProfileData(event.userId);
+        print('user evetn here $event');
+        final user = await repository.getProfileData(event);
+        print('user data here $user');
         emit(ProfileLoaded(user));
       } catch (e) {
+        print('error have for get $e');
         emit(ProfileError(e.toString()));
       }
     });

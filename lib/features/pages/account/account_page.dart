@@ -1,26 +1,53 @@
+import 'package:dil_hack_e_commerce/Components/ListTileWidget.dart';
+import 'package:dil_hack_e_commerce/Components/SectionHeader.dart';
+import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/login_page/login_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/All_orders/my_order.dart';
 import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/account/bank_upidetails.dart/bank_upi.dart';
-import 'package:dil_hack_e_commerce/features/pages/account/profile_avatar.dart';
+import 'package:dil_hack_e_commerce/features/pages/account/userprofile.dart';
+import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CreateProfilePage extends StatefulWidget {
-  const CreateProfilePage({super.key});
-
+class AccountPage extends StatefulWidget {
   @override
-  State<CreateProfilePage> createState() => _CreateProfilePageState();
+  _AccountPageState createState() => _AccountPageState();
 }
 
-class _CreateProfilePageState extends State<CreateProfilePage> {
+class _AccountPageState extends State<AccountPage> {
+  // Assuming userId is fetched and stored in this state variable
+  String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize userId here by calling an API or checking local storage.
+    // For demonstration, I'll set it as null.
+    fetchUserData();
+  }
+
+  // Function to simulate fetching user data or check user session
+  void fetchUserData() async {
+    // Simulate fetching user data
+    try {
+      // Decode the token and get userId
+      Map<String, dynamic> decodedToken = await decodeJwt();
+      setState(() {
+        userId = decodedToken[
+            'userId']; // Assuming 'userId' is the key in your token
+      });
+    } catch (e) {
+      print("Error decoding token: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        // Color(0xFFFAAAB1),
         title: Text(
           'Account',
           style: GoogleFonts.aBeeZee(fontWeight: FontWeight.w600, fontSize: 18),
@@ -33,36 +60,80 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               padding: EdgeInsets.all(16),
               child: Row(
                 children: [
-                  ProfileAvatar(),
-                  SizedBox(width: 30),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color(0xFFFAAAB1),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 16.0),
-                    ),
-                    child: Text(
-                      'Sign up',
-                      style: GoogleFonts.aBeeZee(color: Colors.black),
+                  // Dynamic profile image handling
+
+                  // userProfileImageUrl != null && userProfileImageUrl!.isNotEmpty
+                  //     ? CircleAvatar(
+                  //         radius:
+                  //             30, // Adjust the radius as per your requirement
+                  //         backgroundImage: NetworkImage(userProfileImageUrl!),
+                  //         backgroundColor: Colors.transparent,
+                  //       )
+                  //     : CircleAvatar(
+                  //         radius: 30,
+                  //         backgroundImage:
+                  //             AssetImage('assets/images/default_avatar.png'),
+                  //         backgroundColor: Colors.transparent,
+                  //       ),
+                  const SizedBox(width: 30),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (userId != null)
+                          Text(
+                            'Welcome back!',
+                            style: GoogleFonts.aBeeZee(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
+                  userId != null
+                      ? TextButton(
+                          onPressed: () {
+                            // Navigate to Profile Page if userId is available
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfilePage(userId: userId!)),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color(0xFFFAAAB1),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 16.0),
+                          ),
+                          child: Text(
+                            'View Profile',
+                            style: GoogleFonts.aBeeZee(color: Colors.black),
+                          ),
+                        )
+                      : TextButton(
+                          onPressed: () {
+                            // Navigate to Signup Page if userId is not available
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color(0xFFFAAAB1),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 16.0),
+                          ),
+                          child: Text(
+                            'Sign Up',
+                            style: GoogleFonts.aBeeZee(color: Colors.black),
+                          ),
+                        ),
                 ],
               ),
             ),
-            // Column(
-            //   children: [
-            //     Text(
-            //       'View and Update Your Profile Details',
-            //       style: GoogleFonts.aBeeZee(),
-            //     )
-            //   ],
-            // ),
             Divider(),
             SectionHeader(
               title: 'My Payments',
@@ -83,10 +154,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               iconColor: Colors.black,
               label: 'Payment & Refund',
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MyOrdersPage()
-                // ),
+                // Your navigation code
               },
             ),
             Divider(),
@@ -96,8 +164,21 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               iconColor: Colors.black,
               label: 'My Orders',
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyOrdersPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyOrdersPage()),
+                );
+              },
+            ),
+            ListTileWidget(
+              icon: Icons.shopping_bag,
+              iconColor: Colors.black,
+              label: 'My Cart',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CartPage()),
+                );
               },
             ),
             ListTileWidget(
@@ -105,129 +186,73 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
               iconColor: Colors.black,
               label: 'Wishlisted Products',
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => WishlistPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WishlistPage()),
+                );
               },
             ),
-            // ListTileWidget(
-            //   icon: Icons.share,
-            //   iconColor: Colors.black,
-            //   label: 'Shared Products',
-            //   onTap: () {},
-            // ),
-
             ListTileWidget(
-                icon: Icons.logout_outlined,
-                iconColor: Colors.black,
-                label: 'Logout',
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          titlePadding: EdgeInsets.all(0),
-                          contentPadding: EdgeInsets.all(16),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              icon: Icons.logout_outlined,
+              iconColor: Colors.black,
+              label: 'Logout',
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      titlePadding: EdgeInsets.all(0),
+                      contentPadding: EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Are you sure you want to logout?',
+                            style: GoogleFonts.aBeeZee(),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                'Are you sure you want to logout?',
-                                style: GoogleFonts.aBeeZee(),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'Cancel',
+                                  style: GoogleFonts.aBeeZee(),
+                                ),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                ),
                               ),
-                              SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'Cancel',
-                                      style: GoogleFonts.aBeeZee(),
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'Logout',
-                                      style: GoogleFonts.aBeeZee(
-                                          color: Colors.black),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFFFAAAB1),
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'Logout',
+                                  style:
+                                      GoogleFonts.aBeeZee(color: Colors.black),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFFFAAAB1),
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      });
-                }),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ListTileWidget extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Widget? trailing;
-  final VoidCallback onTap;
-  final Color iconColor;
-
-  const ListTileWidget(
-      {required this.icon,
-      required this.label,
-      this.trailing,
-      required this.onTap,
-      required this.iconColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: iconColor,
-      ),
-      title: Text(
-        label,
-        style: GoogleFonts.aBeeZee(),
-      ),
-      trailing: trailing,
-      onTap: onTap,
-    );
-  }
-}
-
-class SectionHeader extends StatelessWidget {
-  final String title;
-
-  const SectionHeader({
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          title,
-          style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
         ),
       ),
     );

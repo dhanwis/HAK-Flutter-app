@@ -3,16 +3,20 @@ import 'dart:developer';
 import 'package:dil_hack_e_commerce/api/category_api.dart';
 import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/constants/userId.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_event.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/newArrival_widget.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productPage.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +29,7 @@ import 'package:dil_hack_e_commerce/features/auth/model/categories.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/BannerOffers/offer_carousel.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/search.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/top_row.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../api/products_api.dart';
@@ -53,8 +58,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     futureProducts = GetAllNewArrivalsApi().fetchNewArrivals();
+
     _fetchProducts();
     _initializeUser();
+    //context.read<ProfileBloc>().add(FetchProfile(userId));
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -70,9 +78,12 @@ class _HomePageState extends State<HomePage> {
       Map<String, dynamic> decodedToken = await decodeJwt();
       setState(() {
         userId = decodedToken[
-        'userId']; // Assuming 'userId' is the key in your token
-        // Initialize pages after userId is obtained
+            'userId']; // Assuming 'userId' is the key in your token
       });
+
+      if (userId.isNotEmpty) {
+        context.read<ProfileBloc>().add(FetchProfile(userId));
+      }
     } catch (e) {
       print("Error decoding token: $e");
     }
@@ -87,7 +98,7 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final newProducts =
-      await GetAllProductApi().fetchProducts(page: currentPage);
+          await GetAllProductApi().fetchProducts(page: currentPage);
       if (newProducts.isEmpty) {
         setState(() {
           hasMoreProducts = false;
@@ -108,7 +119,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -116,14 +126,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: CustomScrollView(
-controller: _scrollController,
+        controller: _scrollController,
         slivers: [
           // Top Bar with Search and AppBar
           SliverAppBar(
             surfaceTintColor: Colors.white,
             pinned: true,
             title: TopRow(),
-
             backgroundColor: Colors.white,
           ),
           SliverPersistentHeader(
@@ -147,7 +156,6 @@ controller: _scrollController,
           ),
 
           // Search Bar Widget
-
 
           // Display Search Results if the searchTerm is not empty
           if (searchTerm.isNotEmpty)
@@ -249,11 +257,172 @@ controller: _scrollController,
             ),
           ),
 
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: NewArrivalsWidget(),
-            ),
+          // SliverToBoxAdapter(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(top: 10),
+          //     child: NewArrivalsWidget(),
+          //   ),
+          // ),
+
+          FutureBuilder<List<Product>>(
+            future: futureProducts,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SliverToBoxAdapter(
+                  child: Skeletonizer(
+                    enabled: true,
+                    child: SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 150,
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return SliverToBoxAdapter(
+                  child: Center(child: Text('Error: ${snapshot.error}')),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Center(),
+                );
+              } else {
+                List<Product> products = snapshot.data!;
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'New Arrivals',
+                                style: GoogleFonts.aBeeZee(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ViewAllButton(products: products),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'View All',
+                                  style: GoogleFonts.aBeeZee(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 240,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              String imageUrl =
+                                  products[index].variations[0].images[0];
+                              String formattedPrice = NumberFormat('#,##0')
+                                  .format(products[index]
+                                      .variations[0]
+                                      .skus[0]
+                                      .actualPrice);
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                          productId: products[index].id),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  // child: Container(
+                                  //   margin: const EdgeInsets.symmetric(
+                                  //       horizontal: 1),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 4),
+                                        child: Text(
+                                          products[index].productBrand,
+                                          style: GoogleFonts.aBeeZee(
+                                            color: Colors.grey,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 1),
+                                        child: Text(
+                                          products[index]
+                                              .productName
+                                              .toUpperCase(),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.aBeeZee(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '₹ $formattedPrice',
+                                        style: GoogleFonts.aBeeZee(
+                                          color: Colors.green,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
           ),
 
           // Offer Carousel Widget
@@ -291,11 +460,7 @@ controller: _scrollController,
       ),
     );
   }
-
 }
-
-
-
 
 class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
@@ -317,9 +482,7 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-        color: Colors.white,
-        child: SizedBox.expand(child: child));
+    return Container(color: Colors.white, child: SizedBox.expand(child: child));
   }
 
   @override
