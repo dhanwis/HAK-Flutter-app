@@ -1,5 +1,6 @@
 import 'package:dil_hack_e_commerce/api/addtocart_api.dart';
 import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';
+import 'package:dil_hack_e_commerce/api/order_api.dart';
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
@@ -9,6 +10,7 @@ import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/NewArrivals/new_arrivals_event.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
@@ -77,6 +79,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               WishlistBloc(WishlistService())..add(FetchWishlistItems()),
+        ),
+
+        BlocProvider(
+          create: (context) => OrderBloc(orderRepository: OrderRepository()),
         ),
       ],
       child: MaterialApp(

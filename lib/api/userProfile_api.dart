@@ -37,6 +37,7 @@ class ApiService {
     // Add the authorization header with the Bearer token
     //request.headers['Authorization'] = 'Bearer $accessToken';
 
+    print('making request');
     if (userImgPath != null) {
       request.files
           .add(await http.MultipartFile.fromPath('userImg', userImgPath));
@@ -44,6 +45,7 @@ class ApiService {
 
     var response = await client.send(request);
     var responseBody = await response.stream.bytesToString();
+    print('resbod body, $responseBody');
 
     if (response.statusCode == 201) {
       return CustomerProfile.fromJson(jsonDecode(responseBody)['profile']);

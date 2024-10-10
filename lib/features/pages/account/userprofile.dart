@@ -1,5 +1,3 @@
-import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
-
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_state.dart';
@@ -68,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //final _stateController = TextEditingController();
   String? _selectedState;
   //XFile? _image;
-  final List<String> _stateController = [
+  List<String> states = [
     'Andhra Pradesh',
     'Arunachal Pradesh',
     'Assam',
@@ -291,13 +289,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
           if (state is ProfileLoaded) {
             print('Profile successfully loaded');
-            // Populate the controllers with profile data
             _nameController.text = state.profile.username;
             _phoneController.text = state.profile.phoneNumber;
             _emailController.text = state.profile.email;
             _pincodeController.text = state.profile.pincode;
             _cityController.text = state.profile.city;
-            _selectedState = state.profile.state;
+
+            // Check if the server-provided state exists in the dropdown list
+            if (states.contains(state.profile.state)) {
+              _selectedState = state.profile.state;
+            } else {
+              _selectedState = states.isNotEmpty
+                  ? states.first
+                  : null; // Set to first item or null if list is empty
+            }
 
             return _buildProfileForm(context);
           }
@@ -376,8 +381,8 @@ class _ProfilePageState extends State<ProfilePage> {
         _buildDropdownField(
           context: context,
           selectedState: _selectedState,
-          items: _stateController.isNotEmpty
-              ? _stateController
+          items: states.isNotEmpty
+              ? states
               : ['Select a state'], // Safeguard for empty list
           onChanged: (newValue) {
             setState(() {
@@ -401,6 +406,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
+              print('create function start');
               BlocProvider.of<ProfileBloc>(context).add(
                 CreateUser(
                   username: _nameController.text,
