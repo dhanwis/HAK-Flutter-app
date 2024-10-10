@@ -20,6 +20,43 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Future<String?> getUserIdFromJwt() async {
+    try {
+      Map<String, dynamic> decodedToken = await decodeJwt();
+      return decodedToken[
+          'userId']; // Assuming 'userId' is a key in the token payload
+    } catch (error) {
+      return null; // Handle error appropriately
+    }
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserId();
+  // }
+
+  late ProfileBloc _profileBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserId();
+
+    _profileBloc = BlocProvider.of<ProfileBloc>(context);
+    _profileBloc
+        .add(FetchProfile('66d8248f4b26f2406ef5c49b')); // Dispatch event here
+  }
+
+  Future<void> getUserId() async {
+    final fetchedUserId = await getUserIdFromJwt();
+    print('Fetched User ID: $fetchedUserId'); // Debugging
+
+    setState(() {
+      userId = fetchedUserId;
+    });
+  }
+
   String? userId;
   final _formKey = GlobalKey<FormState>();
   File? _image; // For image selection
@@ -62,37 +99,12 @@ class _ProfilePageState extends State<ProfilePage> {
     'West Bengal',
     'Andaman and Nicobar Islands',
     'Chandigarh',
-    'Dadra and Nagar Haveli and Daman and Diu',
     'Lakshadweep',
     'Delhi',
     'Puducherry',
     'Ladakh',
     'Jammu and Kashmir',
   ];
-
-  Future<String?> getUserIdFromJwt() async {
-    try {
-      Map<String, dynamic> decodedToken = await decodeJwt();
-      return decodedToken[
-          'userId']; // Assuming 'userId' is a key in the token payload
-    } catch (error) {
-      return null; // Handle error appropriately
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getUserId();
-  }
-
-  Future<void> getUserId() async {
-    final fetchedUserId = await getUserIdFromJwt();
-    setState(() {
-      userId = fetchedUserId;
-      BlocProvider.of<ProfileBloc>(context).add(FetchProfile(userId!));
-    });
-  }
 
   Future<void> _getImageFromGallery() async {
     try {
@@ -250,110 +262,53 @@ class _ProfilePageState extends State<ProfilePage> {
     return null;
   }
 
-  // Future<void> _saveProfile() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     try {
-  //       // Gather data from form fields
-  //       String username = _nameController.text;
-  //       String email = _emailController.text;
-  //       String phoneNumber = _phoneController.text;
-  //       String pincode = _pincodeController.text;
-  //       String city = _cityController.text;
-  //       String state = _selectedState ?? '';
-
-  //       // Convert image to path or handle it if necessary
-  //       String userImgPath = _image != null ? _image!.path : '';
-
-  //       // Call createCustomerProfile function
-  //       CustomerProfile profile = await ApiService().createCustomerProfile(
-  //         username: username,
-  //         email: email,
-  //         phoneNumber: phoneNumber,
-  //         pincode: pincode,
-  //         city: city,
-  //         state: state,
-  //         userImgPath: userImgPath,
-  //       );
-
-  //       // Show success message
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           backgroundColor: Colors.green,
-  //           // Color.fromARGB(255, 249, 231, 233),
-  //           content: Text('Data saved successfully! Profile ID: ${profile.id}',
-  //               style: GoogleFonts.aBeeZee(color: Colors.black)),
-  //           duration: Duration(seconds: 2),
-  //         ),
-  //       );
-  //     } catch (e) {
-  //       // Show error message
-  //       print('Error: $e'); // Log the error
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           backgroundColor: Colors.red,
-  //           content: Text('Error saving data: $e',
-  //               style: TextStyle(color: Colors.white)),
-  //           duration: Duration(seconds: 2),
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileBloc(ApiService()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "My Profile",
-            style: GoogleFonts.aBeeZee(
-              color: Color.fromARGB(255, 4, 4, 4),
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "My Profile",
+          style: GoogleFonts.aBeeZee(
+            color: Color.fromARGB(255, 4, 4, 4),
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
           ),
-          backgroundColor: const Color(0xFFFAAAB1),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, state) {
-                  if (state is ProfileLoading) {
-                    return const Center(
-                        child: SpinKitFadingCircle(
-                      color: Color(0xFFFAAAB1),
-                      size: 50.0, // Adjust the size as needed
-                    ));
-                  }
+        backgroundColor: const Color(0xFFFAAAB1),
+      ),
+      body: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          print('Current state: $state');
 
-                  if (state is ProfileLoaded) {
-                    // Populate the controllers with profile data
-                    _nameController.text = state.profile
-                        .username; // Adjust according to your profile model
-                    _phoneController.text = state.profile.phoneNumber;
-                    _emailController.text = state.profile.email;
-                    _pincodeController.text = state.profile.pincode;
-                    _cityController.text = state.profile.city;
-                    _selectedState = state.profile.state;
-
-                    return _buildProfileForm(context);
-                  }
-
-                  if (state is ProfileError) {
-                    return Text('Error: ${state.error}');
-                  }
-
-                  // Default to showing the form
-                  return _buildProfileForm(context);
-                },
+          if (state is ProfileLoading) {
+            return const Center(
+              child: SpinKitFadingCircle(
+                color: Color(0xFFFAAAB1),
+                size: 50.0,
               ),
-            ),
-          ),
-        ),
+            );
+          }
+
+          if (state is ProfileLoaded) {
+            print('Profile successfully loaded');
+            // Populate the controllers with profile data
+            _nameController.text = state.profile.username;
+            _phoneController.text = state.profile.phoneNumber;
+            _emailController.text = state.profile.email;
+            _pincodeController.text = state.profile.pincode;
+            _cityController.text = state.profile.city;
+            _selectedState = state.profile.state;
+
+            return _buildProfileForm(context);
+          }
+
+          if (state is ProfileError) {
+            return Text('Error: ${state.error}');
+          }
+
+          // Default to showing the form
+          return _buildProfileForm(context);
+        },
       ),
     );
   }

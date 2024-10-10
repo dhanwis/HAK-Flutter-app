@@ -102,12 +102,17 @@ class ApiService {
           '${AppConstants.BASE_URL}/auth_customer/customer/ProfileDataXYZ/$id'),
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+    // Log the status code and body for debugging
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-      return CustomerProfile.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      print('Data has been passed from server');
+      return CustomerProfile.fromJson(
+          json.decode(response.body)); // Assuming you have a fromJson method
     } else {
-      throw Exception();
+      throw Exception(
+          'Failed to load profile data'); // Add a message to the exception
     }
   }
 }

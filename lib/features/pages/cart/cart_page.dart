@@ -11,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class CartView extends StatefulWidget {
+  const CartView({super.key});
+
   @override
   CartPageState createState() => CartPageState();
 }
@@ -25,11 +27,13 @@ class CartPageState extends State<CartView> {
 
   @override
   Widget build(BuildContext context) {
-    return CartPage();
+    return const CartPage();
   }
 }
 
 class CartPage extends StatelessWidget {
+  const CartPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +51,9 @@ class CartPage extends StatelessWidget {
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
+          print('state is in cart $state');
           if (state is CartLoading) {
-            return Center(
+            return const Center(
                 child: SpinKitFadingCircle(
               color: Color(0xFFFAAAB1),
               size: 50.0, // Adjust the size as needed
@@ -72,9 +77,11 @@ class CartPage extends StatelessWidget {
               ],
             );
           } else if (state is CartError) {
-            return _emptyUI();
+            print('empty is error now');
+            print(state.message);
+            // return _emptyUI();
           }
-          return Center(child: Text("Something went wrong"));
+          return const Center(child: Text("Something went wrong"));
         },
       ),
     );
@@ -259,11 +266,11 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
 
   return Card(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20), // More rounded corners
+      borderRadius: BorderRadius.circular(20),
     ),
     elevation: 5,
-    margin:
-        EdgeInsets.symmetric(vertical: 10, horizontal: 15), // Adjusted margin
+    margin: const EdgeInsets.symmetric(
+        vertical: 10, horizontal: 15), // Adjusted margin
     child: Padding(
       padding: EdgeInsets.all(15), // Adequate padding for card content
       child: Column(
@@ -295,7 +302,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ), // Placeholder icon for missing image
                 ),
               ),
-              SizedBox(width: 15), // Spacing between image and details
+              const SizedBox(width: 15), // Spacing between image and details
 
               // Product Details Section
               Expanded(
@@ -305,13 +312,13 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                     // Product Name
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
 
                     // Star Rating
                     Row(
@@ -324,23 +331,23 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
                     // Price Information
                     Row(
                       children: [
                         Text(
                           '₹$actualPrice',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black54,
                             decoration: TextDecoration.lineThrough,
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           '₹$discountedPrice',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -348,9 +355,9 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           'Delivery by Sept 18',
@@ -376,7 +383,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
