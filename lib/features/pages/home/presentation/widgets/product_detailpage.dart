@@ -139,7 +139,7 @@ class ProductDetailPage extends StatelessWidget {
                                   state.product.productDescription),
                               style: GoogleFonts.aBeeZee(
                                 fontWeight: FontWeight.w300,
-                                fontSize: 14,
+                                fontSize: 13,
                               ),
                             ),
                           ),
@@ -164,7 +164,7 @@ class ProductDetailPage extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: GoogleFonts.aBeeZee(
-                                fontSize: 16.0,
+                                fontSize: 15.0,
                                 color: Colors.green,
                               ),
                             ),

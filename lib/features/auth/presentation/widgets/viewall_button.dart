@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
-import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
 
 class ViewAllButton extends StatefulWidget {
   final List<Product> products;

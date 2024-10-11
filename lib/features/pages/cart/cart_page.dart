@@ -1,6 +1,8 @@
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,11 +30,20 @@ class _CartPageState extends State<CartPage> {
           ),
         ),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.favorite, color: Colors.black),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WishlistPage()));
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
-            return Center(
+            return const Center(
                 child: SpinKitFadingCircle(
               color: Color(0xFFFAAAB1),
               size: 50.0, // Adjust the size as needed
@@ -58,7 +69,7 @@ class _CartPageState extends State<CartPage> {
           } else if (state is CartError) {
             return _emptyUI();
           }
-          return Center(child: Text("Something went wrong"));
+          return const Center(child: Text("Something went wrong"));
         },
       ),
     );
@@ -89,18 +100,18 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(15),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 3), // changes position of shadow
-        ),
-      ],
+      // boxShadow: [
+      //   BoxShadow(
+      //     color: Colors.grey.withOpacity(0.2),
+      //     //     spreadRadius: 2,
+      //     //     blurRadius: 5,
+      //     //     offset: Offset(0, 3),
+      //   ),
+      // ],
     ),
-    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
     child: Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Row(
@@ -317,26 +328,6 @@ Widget _emptyUI() {
         SizedBox(
           height: 20,
         ),
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 100, right: 100),
-        //   child: ElevatedButton(
-        //     child: const Text(
-        //       'Shop Now',
-        //       style: TextStyle(color: Colors.black),
-        //     ),
-        //     onPressed: () {
-        //       Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => AccountPage(),
-        //           ));
-        //     },
-        //     style: ElevatedButton.styleFrom(
-        //       backgroundColor: const Color(0xFFFAAAB1),
-        //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        //     ),
-        //   ),
-        // ),
       ],
     ),
   );
