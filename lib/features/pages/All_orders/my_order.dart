@@ -3,6 +3,7 @@ import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_state.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/order.dart';
 import 'package:dil_hack_e_commerce/features/pages/All_orders/Order_detail.dart';
 
 import 'package:flutter/material.dart';
@@ -136,14 +137,41 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             if (state is OrderLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is OrdersLoaded) {
-              return ListView.builder(
-                itemCount: state.orders.length,
-                itemBuilder: (context, index) {
-                  final order = state.orders[index];
-                  return ListTile(
-                    title: Text('Order #${order.id}'),
-                  );
-                },
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStatusTabs(), // Status tabs
+                    SizedBox(height: 18),
+                    Divider(),
+                    // OrderDetails(
+                    //   customerName: 'Manjima C',
+                    //   orderId: '54688978954',
+                    //   supplier: 'Kidbea',
+                    // ),
+                    Divider(),
+                    ListView.builder(
+                      shrinkWrap:
+                          true, // Ensures the list can scroll within the SingleChildScrollView
+                      physics:
+                          NeverScrollableScrollPhysics(), // Prevents ListView from scrolling
+                      itemCount: state.orders.length,
+                      itemBuilder: (context, index) {
+                        final order = state.orders[index];
+                        return Column(
+                          children: [
+                            _buildSearchBar(screenWidth, order), // Search bar
+                            SizedBox(height: 10),
+                            _buildOrderCard(screenWidth,
+                                order), // Order card for each order
+                            Divider(),
+                            _buildRatingDropdown(), // Rating dropdown for each order
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               );
             } else if (state is OrderError) {
               return Center(child: Text(state.message));
@@ -155,7 +183,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     );
   }
 
-  Widget _buildSearchBar(double screenWidth) {
+  Widget _buildSearchBar(double screenWidth, Order order) {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.01, vertical: screenWidth * 0.001),
@@ -170,7 +198,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search....',
+                hintText:
+                    'Search order #${order.id}', // You can use the order details here
                 hintStyle: TextStyle(fontSize: 10),
                 border: InputBorder.none,
               ),
@@ -215,7 +244,16 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     );
   }
 
-  Widget _buildOrderCard(double screenWidth) {
+  Widget _buildOrderCard(double screenWidth, Order order) {
+    // You can access the first OrderItem if you want to display its details
+    final OrderItem? firstItem = order.items.isNotEmpty ? order.items[0] : null;
+    final Product product = firstItem!.product;
+    final Variation firstVariation = product.variations.isNotEmpty
+        ? product.variations.first
+        : Variation(color: 'Unknown', images: [], skus: []);
+    final String productImage =
+        firstVariation.images.isNotEmpty ? firstVariation.images[0] : '';
+
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
       child: Column(
@@ -231,7 +269,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: AssetImage('assets/products/pr9.jpeg'),
+                    // Use the first image from the variation or a placeholder
+                    image: productImage.isNotEmpty
+                        ? NetworkImage(productImage)
+                        : const AssetImage('assets/placeholder.png')
+                            as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -243,24 +285,29 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Product Name
                     Text(
-                      'Women white cotton blend trouser',
+                      product?.productName ?? 'Unknown Product',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
                       ),
                     ),
                     SizedBox(height: 8),
+
+                    // Delivery Status (if available)
                     Row(
                       children: [
                         Icon(
                           Icons.circle,
-                          color: Colors.red,
+                          color: firstItem.quantity > 0
+                              ? Colors.green
+                              : Colors.red, // Show based on stock/quantity
                           size: 10,
                         ),
                         SizedBox(width: 6),
                         Text(
-                          'Delivery  21 Sept 2024',
+                          'Quantity: ${firstItem?.quantity ?? 0}', // Quantity from OrderItem
                           style: GoogleFonts.aBeeZee(
                             color: Colors.grey[600],
                             fontSize: 13,
@@ -268,9 +315,24 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                         ),
                       ],
                     ),
+
+                    // Product Price (showing the first SKU’s price)
+                    SizedBox(height: 8),
+                    Text(
+                      firstVariation.skus.isNotEmpty
+                          ? '\$${firstVariation.skus[0].discountedPrice}'
+                          : 'Price not available', // Use discounted price or a default
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
+
+              // Navigate to order details
               IconButton(
                 icon: Icon(
                   Icons.arrow_forward_ios,
@@ -279,9 +341,12 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OrderDetailPage()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          OrderDetailPage(), // Pass the whole order
+                    ),
+                  );
                 },
               ),
             ],
