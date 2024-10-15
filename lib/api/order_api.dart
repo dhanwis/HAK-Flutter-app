@@ -8,19 +8,20 @@ class OrderRepository {
   final String baseUrl = AppConstants.BASE_URL;
   final client = AuthHttpClient(http.Client());
 
-  Future<Order> fetchOrders(String userId) async {
+  Future<List<Order>> fetchOrders(String userId) async {
     final response =
         await http.get(Uri.parse('$baseUrl/customerApp/order/get_all/$userId'));
 
-    if (response.statusCode == 200) {
-      // Decode the response body
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+    print(response.body);
 
-      // Ensure that you are working with a map
-      return Order.fromJson(
-          jsonResponse); // Pass the whole JSON object to the Order.fromJson
+    if (response.statusCode == 200) {
+      // Decode the response body as a List of orders
+      final List<dynamic> jsonResponse = json.decode(response.body);
+
+      // Map each item in the list to an Order object
+      return jsonResponse.map((order) => Order.fromJson(order)).toList();
     } else {
-      throw Exception('Failed to load order');
+      throw Exception('Failed to load orders');
     }
   }
 

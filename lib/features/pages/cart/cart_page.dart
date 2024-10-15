@@ -2,7 +2,6 @@ import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
 import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,18 +95,17 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
 
   int quantity = cartItem['quantity'] ?? 1;
 
+  // Helper function to update the quantity
+  void updateQuantity(int newQuantity) {
+    if (newQuantity >= 1) {
+      cartItem['quantity'] = newQuantity;
+    }
+  }
+
   return Container(
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(15),
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.grey.withOpacity(0.2),
-      //     //     spreadRadius: 2,
-      //     //     blurRadius: 5,
-      //     //     offset: Offset(0, 3),
-      //   ),
-      // ],
     ),
     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
     child: Padding(
@@ -153,18 +151,6 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    // SizedBox(height: 4),
-                    // Row(
-                    //   children: [
-                    //     Icon(Icons.star, color: Colors.blue, size: 16),
-                    //     Icon(Icons.star, color: Colors.blue, size: 16),
-                    //     Icon(Icons.star, color: Colors.blue, size: 16),
-                    //     Icon(Icons.star, color: Colors.blue, size: 16),
-                    //     Icon(Icons.star_border, color: Colors.blue, size: 16),
-                    //     SizedBox(width: 5),
-                    //     Text('(4.5)', style: TextStyle(fontSize: 12)),
-                    //   ],
-                    // ),
                     SizedBox(height: 4),
                     Row(
                       children: [
@@ -172,15 +158,13 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                           child: Text(
                             'Beautiful kurta in nylon material',
                             maxLines: 1,
-                            overflow: TextOverflow
-                                .ellipsis, // This handles the overflow
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.aBeeZee(
                                 color: Colors.grey, fontSize: 12),
                           ),
                         ),
                       ],
                     ),
-
                     SizedBox(height: 8),
                     Row(
                       children: [
@@ -228,12 +212,46 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Qty:',
+                          style: GoogleFonts.aBeeZee(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (quantity > 1) {
+                              updateQuantity(quantity - 1);
+                            }
+                          },
+                          icon:
+                              Icon(Icons.remove, size: 17, color: Colors.black),
+                        ),
+                        Text(
+                          '$quantity',
+                          style: GoogleFonts.aBeeZee(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            updateQuantity(quantity + 1);
+                          },
+                          icon: Icon(Icons.add, size: 17, color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -248,7 +266,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                     ),
                     SizedBox(width: 3),
                     Text('Remove',
-                        style: TextStyle(
+                        style: GoogleFonts.aBeeZee(
                           color: Colors.black,
                         )),
                   ],
@@ -267,7 +285,8 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                       size: 18,
                     ),
                     SizedBox(width: 3),
-                    Text('Buy now', style: TextStyle(color: Colors.black)),
+                    Text('Buy now',
+                        style: GoogleFonts.aBeeZee(color: Colors.black)),
                   ],
                 ),
               ),
@@ -291,7 +310,7 @@ Widget _cartActionButton({
       icon: Icon(icon, color: color, size: 20),
       label: Text(
         label,
-        style: TextStyle(
+        style: GoogleFonts.aBeeZee(
           color: color,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -319,7 +338,7 @@ Widget _emptyUI() {
         Center(
           child: Text(
             "Your Cart Is Empty !",
-            style: TextStyle(
+            style: GoogleFonts.aBeeZee(
                 fontWeight: FontWeight.w200,
                 color: Colors.grey.shade500,
                 fontSize: 15),

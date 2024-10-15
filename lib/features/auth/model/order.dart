@@ -11,10 +11,10 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      id: json['_id'],
-      customerId: json['customer'],
+      id: json['_id'] ?? '', // Use an empty string if null
+      customerId: json['customer'] ?? '', // Use an empty string if null
       items: List<OrderItem>.from(
-        json['items'].map((item) => OrderItem.fromJson(item)),
+        (json['products'] ?? []).map((item) => OrderItem.fromJson(item)),
       ),
     );
   }
@@ -34,8 +34,8 @@ class OrderItem {
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
       product: Product.fromJson(json['product']),
-      quantity: json['quantity'],
-      id: json['_id'],
+      quantity: json['quantity'] ?? 0, // Use 0 if null
+      id: json['_id'] ?? '', // Use an empty string if null
     );
   }
 }
@@ -65,16 +65,23 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['_id'],
-      productId: json['product_id'],
-      productName: json['product_name'],
-      productDescription: json['product_description'],
-      productCategory: json['product_category'],
-      productType: json['product_type'],
-      productWeight: json['product_weight'].toDouble(),
-      createdAt: DateTime.parse(json['createdAt']),
+      id: json['_id'] ?? '', // Use empty string if null
+      productId: json['product_id'] ?? '', // Use empty string if null
+      productName:
+          json['product_name'] ?? 'Unknown Product', // Default product name
+      productDescription: json['product_description'] ??
+          'No description available', // Default description
+      productCategory:
+          json['product_category'] ?? '', // Use empty string if null
+      productType: json['product_type'] ?? '', // Use empty string if null
+      productWeight:
+          (json['product_weight'] ?? 0).toDouble(), // Use 0.0 if null
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(), // Use current time if null
       variations: List<Variation>.from(
-        json['variations'].map((variation) => Variation.fromJson(variation)),
+        (json['variations'] ?? [])
+            .map((variation) => Variation.fromJson(variation)),
       ),
     );
   }
@@ -93,9 +100,11 @@ class Variation {
 
   factory Variation.fromJson(Map<String, dynamic> json) {
     return Variation(
-      color: json['color'],
-      images: List<String>.from(json['images']),
-      skus: List<Sku>.from(json['skus'].map((sku) => Sku.fromJson(sku))),
+      color: json['color'] ?? 'Unknown color', // Default color
+      images: List<String>.from(json['images'] ?? []), // Empty list if null
+      skus: List<Sku>.from(
+        (json['skus'] ?? []).map((sku) => Sku.fromJson(sku)),
+      ), // Empty list if null
     );
   }
 }
@@ -121,13 +130,14 @@ class Sku {
 
   factory Sku.fromJson(Map<String, dynamic> json) {
     return Sku(
-      size: json['size'],
-      discount: json['discount'].toDouble(),
-      inStock: json['in_stock'],
-      quantity: json['quantity'],
-      actualPrice: json['actualPrice'].toDouble(),
-      discountedPrice: json['discountedPrice'].toDouble(),
-      id: json['_id'],
+      size: json['size'] ?? 'Unknown size', // Default size
+      discount: (json['discount'] ?? 0).toDouble(), // Use 0.0 if null
+      inStock: json['in_stock'] ?? false, // Use false if null
+      quantity: json['quantity'] ?? 0, // Use 0 if null
+      actualPrice: (json['actualPrice'] ?? 0).toDouble(), // Use 0.0 if null
+      discountedPrice:
+          (json['discountedPrice'] ?? 0).toDouble(), // Use 0.0 if null
+      id: json['_id'] ?? '', // Use empty string if null
     );
   }
 }
