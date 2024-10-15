@@ -1,7 +1,6 @@
 import 'package:dil_hack_e_commerce/api/order_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_state.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/order.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
@@ -13,8 +12,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
       try {
         final orders = await orderRepository.fetchOrders(event.userId);
-        print('orders $orders');
-        emit(OrdersLoaded(orders as List<Order>));
+        print('orders here result: $orders');
+        emit(OrdersLoaded(orders)); // Remove the cast to List<Order>
       } catch (e) {
         emit(OrderError(e.toString()));
       }

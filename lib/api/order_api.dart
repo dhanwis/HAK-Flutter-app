@@ -16,10 +16,10 @@ class OrderRepository {
 
     if (response.statusCode == 200) {
       // Decode the response body as a List of orders
-      final List<dynamic> jsonResponse = json.decode(response.body);
+      List<dynamic> data = json.decode(response.body)['orders'];
 
       // Map each item in the list to an Order object
-      return jsonResponse.map((order) => Order.fromJson(order)).toList();
+      return data.map((order) => Order.fromJson(order)).toList();
     } else {
       throw Exception('Failed to load orders');
     }

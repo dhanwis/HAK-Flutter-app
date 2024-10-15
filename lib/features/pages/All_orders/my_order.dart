@@ -245,20 +245,20 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
   }
 
   Widget _buildOrderCard(double screenWidth, Order order) {
-    // You can access the first OrderItem if you want to display its details
-    final OrderItem? firstItem = order.items.isNotEmpty ? order.items[0] : null;
-    final Product product = firstItem!.product;
-    final Variation firstVariation = product.variations.isNotEmpty
-        ? product.variations.first
-        : Variation(color: 'Unknown', images: [], skus: []);
-    final String productImage =
-        firstVariation.images.isNotEmpty ? firstVariation.images[0] : '';
+    final Product firstProduct = order.products[0];
 
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            order.id,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -269,16 +269,16 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    // Use the first image from the variation or a placeholder
-                    image: productImage.isNotEmpty
-                        ? NetworkImage(productImage)
+                    image: firstProduct.variant.images.isNotEmpty
+                        ? NetworkImage(
+                            'http://192.168.1.12:8000/ProductImg/${firstProduct.productId}/${firstProduct.variant.images[0]}')
                         : const AssetImage('assets/placeholder.png')
-                            as ImageProvider,
+                            as ImageProvider, // Placeholder image
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(width: 18),
+              const SizedBox(width: 18),
 
               // Product Details
               Expanded(
@@ -287,28 +287,28 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   children: [
                     // Product Name
                     Text(
-                      product?.productName ?? 'Unknown Product',
-                      style: TextStyle(
+                      firstProduct.productName,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                    // Delivery Status (if available)
+                    // Delivery Status (using quantity here as a status example)
                     Row(
                       children: [
                         Icon(
                           Icons.circle,
-                          color: firstItem.quantity > 0
+                          color: firstProduct.quantity > 0
                               ? Colors.green
-                              : Colors.red, // Show based on stock/quantity
+                              : Colors.red,
                           size: 10,
                         ),
-                        SizedBox(width: 6),
+                        const SizedBox(width: 6),
                         Text(
-                          'Quantity: ${firstItem?.quantity ?? 0}', // Quantity from OrderItem
-                          style: GoogleFonts.aBeeZee(
+                          'Quantity: ${firstProduct.quantity}',
+                          style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 13,
                           ),
@@ -316,12 +316,10 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       ],
                     ),
 
-                    // Product Price (showing the first SKU’s price)
-                    SizedBox(height: 8),
+                    // Product Price
+                    const SizedBox(height: 8),
                     Text(
-                      firstVariation.skus.isNotEmpty
-                          ? '\$${firstVariation.skus[0].discountedPrice}'
-                          : 'Price not available', // Use discounted price or a default
+                      '\$${firstProduct.price.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: Colors.grey[800],
                         fontSize: 14,
@@ -343,8 +341,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          OrderDetailPage(), // Pass the whole order
+                      builder: (context) => OrderDetailPage(order: order),
                     ),
                   );
                 },
@@ -364,7 +361,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold, fontSize: 14),
       ),
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Column(
           children: [
             RatingBar.builder(
@@ -373,8 +370,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               direction: Axis.horizontal,
               allowHalfRating: true,
               itemCount: 4,
-              itemPadding: EdgeInsets.symmetric(horizontal: 19.0),
-              itemBuilder: (context, _) => Icon(
+              itemPadding: const EdgeInsets.symmetric(horizontal: 19.0),
+              itemBuilder: (context, _) => const Icon(
                 Icons.star,
                 color: Colors.amber,
               ),
@@ -384,11 +381,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 });
               },
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildRatingLabels(),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
