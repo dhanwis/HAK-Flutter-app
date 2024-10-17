@@ -58,21 +58,6 @@ class _AccountPageState extends State<AccountPage> {
               padding: EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Dynamic profile image handling
-
-                  // userProfileImageUrl != null && userProfileImageUrl!.isNotEmpty
-                  //     ? CircleAvatar(
-                  //         radius:
-                  //             30, // Adjust the radius as per your requirement
-                  //         backgroundImage: NetworkImage(userProfileImageUrl!),
-                  //         backgroundColor: Colors.transparent,
-                  //       )
-                  //     : CircleAvatar(
-                  //         radius: 30,
-                  //         backgroundImage:
-                  //             AssetImage('assets/images/default_avatar.png'),
-                  //         backgroundColor: Colors.transparent,
-                  //       ),
                   const SizedBox(width: 30),
                   Expanded(
                     child: Column(
@@ -143,7 +128,7 @@ class _AccountPageState extends State<AccountPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BankUPIDetails()),
+                  MaterialPageRoute(builder: (context) => BankDetailsPage()),
                 );
               },
             ),

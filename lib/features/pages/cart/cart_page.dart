@@ -3,6 +3,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart'
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
 import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -15,6 +16,13 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  int quantity = 1;
+  void updateQuantity(int newQuantity) {
+    setState(() {
+      quantity = newQuantity; // Update the quantity state
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,6 +97,8 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
 
   final productId = product['product_id'] ?? 'Unknown Product';
   final productName = product['product_name'] ?? 'Unknown Product';
+  final productDesc = product['product_description'] ?? 'Unknown Product';
+  final size = sku?['size'] ?? 'Unknown Size';
   final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
   final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
   final rating = product['rating'] ?? 0;
@@ -136,6 +146,34 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                 ),
               ),
+
+              // GestureDetector(
+              //   onTap: () {
+              //     // Navigate to the product detail page
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => ProductDetailPage(
+              //             productId:
+              //                 productId), // Pass the productId to the detail page
+              //       ),
+              //     );
+              //   },
+              //   child: ClipRRect(
+              //     borderRadius: BorderRadius.circular(8),
+              //     child: firstImage != null
+              //         ? Image.network(
+              //             '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
+              //             fit: BoxFit.cover,
+              //           )
+              //         : Icon(
+              //             Icons.image,
+              //             color: Colors.grey.shade400,
+              //             size: 60,
+              //           ),
+              //   ),
+              // ),
+
               SizedBox(width: 15),
               Expanded(
                 child: Column(
@@ -156,7 +194,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                       children: [
                         Expanded(
                           child: Text(
-                            'Beautiful kurta in nylon material',
+                            productDesc,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.aBeeZee(
@@ -187,7 +225,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          'Size : L',
+                          'Size : $size',
                           style: GoogleFonts.aBeeZee(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
@@ -226,7 +264,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         IconButton(
                           onPressed: () {
                             if (quantity > 1) {
-                              updateQuantity(quantity - 1);
+                              updateQuantity(quantity - 1); // Decrement
                             }
                           },
                           icon:
