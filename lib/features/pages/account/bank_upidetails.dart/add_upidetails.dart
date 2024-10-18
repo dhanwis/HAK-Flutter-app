@@ -170,56 +170,83 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
     }
   }
 
+  // void _addOrUpdateBankDetail() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     _formKey.currentState!.save();
+
+  //     if (widget.isUpdate && widget.bankDetail != null) {
+  //       // Update bank details
+  //       widget.bankDetail!.accountNumber = accountNumber;
+  //       widget.bankDetail!.bankName = bankName;
+  //       widget.bankDetail!.ifscCode = ifscCode;
+  //       widget.bankDetail!.accountHolderName = accountHolderName;
+
+  //       print('widget.bankDetail ${widget.bankDetail!.accountHolderName}');
+
+  //       try {
+  //         BankDetail? updatedDetail =
+  //             await bankDetailService.updateBankDetail(widget.bankDetail!);
+  //         if (updatedDetail != null) {
+  //           // Handle success (e.g., show a success message or update the UI)
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             SnackBar(content: Text('Bank details updated successfully')),
+  //           );
+  //         }
+  //       } catch (error) {
+  //         // Handle error (e.g., show an error message)
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Failed to update bank details')),
+  //         );
+  //       }
+  //     } else {
+  //       // Add new bank details
+  //       try {
+  //         BankDetail? addedDetail = await bankDetailService.addBankDetail(
+  //           accountNumber: accountNumber,
+  //           bankName: bankName,
+  //           ifscCode: ifscCode,
+  //           accountHolderName: accountHolderName,
+  //         );
+
+  //         if (addedDetail != null) {
+  //           // Handle success (e.g., show a success message or update the UI)
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             SnackBar(content: Text('Bank details added successfully')),
+  //           );
+  //         }
+  //       } catch (error) {
+  //         // Handle error (e.g., show an error message)
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Failed to add bank details')),
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
+
   void _addOrUpdateBankDetail() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      if (widget.isUpdate && widget.bankDetail != null) {
-        // Update bank details
-        widget.bankDetail!.accountNumber = accountNumber;
-        widget.bankDetail!.bankName = bankName;
-        widget.bankDetail!.ifscCode = ifscCode;
-        widget.bankDetail!.accountHolderName = accountHolderName;
+      try {
+        BankDetail? addedDetail = await bankDetailService.addBankDetail(
+          accountNumber: accountNumber,
+          bankName: bankName,
+          ifscCode: ifscCode,
+          accountHolderName: accountHolderName,
+        );
 
-        print('widget.bankDetail ${widget.bankDetail!.accountHolderName}');
-
-        try {
-          BankDetail? updatedDetail =
-              await bankDetailService.updateBankDetail(widget.bankDetail!);
-          if (updatedDetail != null) {
-            // Handle success (e.g., show a success message or update the UI)
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Bank details updated successfully')),
-            );
-          }
-        } catch (error) {
-          // Handle error (e.g., show an error message)
+        if (addedDetail != null) {
+          // Handle success (e.g., show a success message or update the UI)
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to update bank details')),
+            SnackBar(content: Text('Bank details added successfully')),
           );
         }
-      } else {
-        // Add new bank details
-        try {
-          BankDetail? addedDetail = await bankDetailService.addBankDetail(
-            accountNumber: accountNumber,
-            bankName: bankName,
-            ifscCode: ifscCode,
-            accountHolderName: accountHolderName,
-          );
-
-          if (addedDetail != null) {
-            // Handle success (e.g., show a success message or update the UI)
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Bank details added successfully')),
-            );
-          }
-        } catch (error) {
-          // Handle error (e.g., show an error message)
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to add bank details')),
-          );
-        }
+      } catch (error) {
+        // Handle error (e.g., show an error message)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add bank details')),
+        );
       }
     }
   }

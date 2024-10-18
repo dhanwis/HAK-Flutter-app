@@ -42,8 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserId();
 
     _profileBloc = BlocProvider.of<ProfileBloc>(context);
-    _profileBloc
-        .add(FetchProfile('66d8248f4b26f2406ef5c49b')); // Dispatch event here
+    _profileBloc.add(FetchProfile(userId!)); // Dispatch event here
   }
 
   Future<void> getUserId() async {
@@ -405,7 +404,8 @@ class _ProfilePageState extends State<ProfilePage> {
             style: GoogleFonts.aBeeZee(color: Colors.black),
           ),
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
+            if (_formKey.currentState != null &&
+                _formKey.currentState!.validate()) {
               print('create function start');
               BlocProvider.of<ProfileBloc>(context).add(
                 CreateUser(

@@ -90,30 +90,38 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchProducts() async {
     if (isLoadingMore || !hasMoreProducts) return;
 
-    setState(() {
-      isLoadingMore = true;
-    });
+    // Ensure setState is only called if mounted
+    if (mounted) {
+      setState(() {
+        isLoadingMore = true;
+      });
+    }
 
     try {
       final newProducts =
           await GetAllProductApi().fetchProducts(page: currentPage);
-      if (newProducts.isEmpty) {
-        setState(() {
-          hasMoreProducts = false;
-        });
-      } else {
-        setState(() {
-          products.addAll(newProducts);
-          currentPage++;
-        });
+
+      if (mounted) {
+        if (newProducts.isEmpty) {
+          setState(() {
+            hasMoreProducts = false;
+          });
+        } else {
+          setState(() {
+            products.addAll(newProducts);
+            currentPage++;
+          });
+        }
       }
     } catch (e) {
       // Handle error (e.g., show an error message)
     } finally {
-      setState(() {
-        isLoadingMore = false;
-        isLoading = false; // Stop loading after fetching products
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingMore = false;
+          isLoading = false; // Stop loading after fetching products
+        });
+      }
     }
   }
 
@@ -446,6 +454,7 @@ class _HomePageState extends State<HomePage> {
 
           BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
+              print('context state us this $state');
               if (state is ProductsLoaded) {
                 return ProductGrid();
               }

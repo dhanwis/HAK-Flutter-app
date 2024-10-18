@@ -61,7 +61,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
       ),
       body: Column(
         children: [
-          // FilterSection(),
+          FilterSection(),
           Expanded(
             child: FutureBuilder<List<Product>>(
               future: futureProducts,

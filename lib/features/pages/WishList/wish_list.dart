@@ -3,6 +3,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.d
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/skeltonContainer.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productPage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class WishlistView extends StatefulWidget {
   @override
@@ -50,7 +52,8 @@ class WishlistPage extends StatelessWidget {
         builder: (context, state) {
           if (state is WishlistLoading) {
             // Show the loading indicator while the wishlist is being fetched
-            return _buildSkeletonLoader(context);
+            return _buildProductCardSkeleton(
+                context, MediaQuery.of(context).size.height);
           } else if (state is WishlistLoaded) {
             // Show the wishlist items when they are loaded
             if (state.wishlist.isEmpty) {
@@ -82,58 +85,70 @@ class WishlistPage extends StatelessWidget {
   }
 
   // Skeleton loader widget
-  Widget _buildSkeletonLoader(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: GridView.builder(
-        itemCount: 6,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.55,
-        ),
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+  Widget _buildProductCardSkeleton(BuildContext context, double screenHeight) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Skeletonizer(
+        enabled:
+            true, // Set this to 'true' while loading and 'false' when data is available
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image section
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+              child: SkeletonContainer(
+                height: screenHeight * 0.28,
+                width: double.infinity,
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.28,
-                  width: double.infinity,
-                  color: Colors.grey[300],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            // Padding for text and details
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Name Skeleton
+                  SkeletonContainer(
+                    height: 12.0,
+                    width: 150.0,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  const SizedBox(height: 6),
+                  // Price Skeleton
+                  SkeletonContainer(
+                    height: 12.0,
+                    width: 80.0,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  const SizedBox(height: 6),
+                  // Discount Price Skeleton
+                  SkeletonContainer(
+                    height: 12.0,
+                    width: 120.0,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  const SizedBox(height: 10),
+                  // Rating Row Skeleton
+                  Row(
                     children: [
-                      Container(
-                        height: 16.0,
-                        width: 100.0,
-                        color: Colors.grey[300],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Container(
-                        height: 16.0,
-                        width: 50.0,
-                        color: Colors.grey[300],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Container(
-                        height: 16.0,
-                        width: 80.0,
-                        color: Colors.grey[300],
+                      SkeletonContainer(
+                        height: 12.0,
+                        width: 40.0,
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
