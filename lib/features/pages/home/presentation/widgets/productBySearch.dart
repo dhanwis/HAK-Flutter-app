@@ -51,13 +51,13 @@ class _ProductGridPageState extends State<ProductGridPage> {
       body: Column(
         children: [
           // Add the FilterSection at the top
-          FilterSection(
-            onFilterApplied: () {
-              setState(() {
-                // Implement the logic to filter the products list
-              });
-            },
-          ),
+          // FilterSection(
+          //   onFilterApplied: () {
+          //     setState(() {
+          //       // Implement the logic to filter the products list
+          //     });
+          //   },
+          // ),
           Expanded(
             child: products.isEmpty
                 ? Center(
