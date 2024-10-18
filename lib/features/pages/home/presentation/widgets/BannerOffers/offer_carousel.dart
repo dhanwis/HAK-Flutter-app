@@ -28,14 +28,18 @@ class _OfferCarouselState extends State<OfferCarousel> {
   Future<void> _fetchBanners() async {
     try {
       final banners = await _bannerService.fetchBanners();
-      setState(() {
-        _banners = banners;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _banners = banners;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
