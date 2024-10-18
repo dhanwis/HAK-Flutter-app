@@ -310,24 +310,24 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                   ],
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => OrderScreen()));
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.shopping_bag_outlined,
-                      color: Colors.black,
-                      size: 18,
-                    ),
-                    SizedBox(width: 3),
-                    Text('Buy now',
-                        style: GoogleFonts.aBeeZee(color: Colors.black)),
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.push(context,
+              //         MaterialPageRoute(builder: (context) => OrderScreen(address: null,)));
+              //   },
+              //   child: Row(
+              //     children: [
+              //       Icon(
+              //         Icons.shopping_bag_outlined,
+              //         color: Colors.black,
+              //         size: 18,
+              //       ),
+              //       SizedBox(width: 3),
+              //       Text('Buy now',
+              //           style: GoogleFonts.aBeeZee(color: Colors.black)),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ],

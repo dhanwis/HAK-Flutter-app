@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserId();
 
     _profileBloc = BlocProvider.of<ProfileBloc>(context);
-    _profileBloc.add(FetchProfile(userId!)); // Dispatch event here
+    // _profileBloc.add(FetchProfile(userId!)); // Dispatch event here
   }
 
   Future<void> getUserId() async {
@@ -275,8 +275,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
-          print('Current state: $state');
-
           if (state is ProfileLoading) {
             return const Center(
               child: SpinKitFadingCircle(
@@ -307,7 +305,13 @@ class _ProfilePageState extends State<ProfilePage> {
           }
 
           if (state is ProfileError) {
-            return Text('Error: ${state.error}');
+            return const Center(
+              child: SpinKitFadingCircle(
+                color: Color(0xFFFAAAB1),
+                size: 50.0,
+              ),
+            );
+            //return Text('Error: ${state.error}');
           }
 
           // Default to showing the form
@@ -404,21 +408,18 @@ class _ProfilePageState extends State<ProfilePage> {
             style: GoogleFonts.aBeeZee(color: Colors.black),
           ),
           onPressed: () {
-            if (_formKey.currentState != null &&
-                _formKey.currentState!.validate()) {
-              print('create function start');
-              BlocProvider.of<ProfileBloc>(context).add(
-                CreateUser(
-                  username: _nameController.text,
-                  email: _emailController.text,
-                  phoneNumber: _phoneController.text,
-                  pincode: _pincodeController.text,
-                  city: _cityController.text,
-                  state: _selectedState ?? '',
-                  userImgPath: _image != null ? _image!.path : '',
-                ),
-              );
-            }
+            print('create function start');
+            BlocProvider.of<ProfileBloc>(context).add(
+              CreateUser(
+                username: _nameController.text,
+                email: _emailController.text,
+                phoneNumber: _phoneController.text,
+                pincode: _pincodeController.text,
+                city: _cityController.text,
+                state: _selectedState ?? '',
+                userImgPath: _image != null ? _image!.path : '',
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFAAAB1),

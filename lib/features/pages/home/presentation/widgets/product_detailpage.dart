@@ -5,6 +5,7 @@ import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_butt
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:dil_hack_e_commerce/features/pages/user_review/ratingreview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -341,7 +342,7 @@ class ProductDetailPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => OrderScreen()),
+                                      builder: (context) => AddressFormPage()),
                                 );
                               },
                               child: Text(

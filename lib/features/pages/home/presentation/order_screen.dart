@@ -1,16 +1,30 @@
+import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/Paymentpage.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OrderScreen extends StatefulWidget {
   @override
   _OrderScreenState createState() => _OrderScreenState();
+
+  final Address address;
+
+  OrderScreen({required this.address});
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  String _selectedAddress =
-      "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965";
+  // String _selectedAddress =
+  //     "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965";
   String? _tempAddress;
+
+  late String _selectedAddress;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _selectedAddress = widget.address; // Initialize with passed address
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +38,6 @@ class _OrderScreenState extends State<OrderScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {},
-        // ),
       ),
       body: Column(
         children: [
@@ -122,10 +132,9 @@ class _OrderScreenState extends State<OrderScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
-                ),
+                )
               ],
             ),
-            // SizedBox(height: 12),
             Text(
               _selectedAddress,
               style: GoogleFonts.aBeeZee(height: 1.9),
@@ -193,6 +202,22 @@ class _OrderScreenState extends State<OrderScreen> {
                     },
                     child: Text(
                       "Confirm",
+                      style: GoogleFonts.aBeeZee(color: Colors.black),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFAAAB1),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddressFormPage()),
+                      );
+                    },
+                    child: Text(
+                      "Add New Address",
                       style: GoogleFonts.aBeeZee(color: Colors.black),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -358,3 +383,37 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 }
+
+// class AddressScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("Select Address"),
+//       ),
+//       body: ListView(
+//         children: [
+//           ListTile(
+//             title: Text("Home: Akshya Nagar, Bangalore"),
+//             onTap: () {
+//               _selectAddress(context,
+//                   "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965");
+//             },
+//           ),
+//           ListTile(
+//             title: Text("Work: MG Road, Bangalore"),
+//             onTap: () {
+//               _selectAddress(context,
+//                   "Manjima C\nMG Road,\nBangalore-560001\n75062487965");
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   void _selectAddress(BuildContext context, String address) {
+//     Navigator.pop(
+//         context, address); // Pass the selected address back to OrderScreen
+//   }
+// }

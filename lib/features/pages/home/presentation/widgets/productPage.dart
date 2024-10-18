@@ -75,11 +75,6 @@ class _ProductGridState extends State<ProductGrid> {
       }
     } catch (e) {
       // Handle error (e.g., show an error message)
-    } finally {
-      setState(() {
-        isLoadingMore = false;
-        isLoading = false; // Stop loading after fetching products
-      });
     }
   }
 
