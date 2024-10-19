@@ -25,7 +25,7 @@ class _CartPageState extends State<CartPage> {
   int quantity = 1;
   void updateQuantity(int newQuantity) {
     setState(() {
-      quantity = newQuantity; // Update the quantity state
+      quantity = newQuantity;
     });
   }
 
@@ -59,7 +59,7 @@ class _CartPageState extends State<CartPage> {
             return const Center(
                 child: SpinKitFadingCircle(
               color: Color(0xFFFAAAB1),
-              size: 50.0, // Adjust the size as needed
+              size: 50.0,
             ));
           } else if (state is CartLoaded) {
             // if (state.cartItems.isEmpty) {
@@ -71,7 +71,6 @@ class _CartPageState extends State<CartPage> {
                   child: ListView.builder(
                     itemCount: state.cartItems.length,
                     itemBuilder: (context, index) {
-                      // Use actual cart item count
                       final product = state.cartItems[index];
                       return _cartUI(context, product);
                     },
@@ -90,8 +89,7 @@ class _CartPageState extends State<CartPage> {
 }
 
 Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
-  final ApiService apiService =
-      ApiService(); // Create an instance of ApiService
+  final ApiService apiService = ApiService();
 
   Future<String> getUserId() async {
     try {
@@ -103,12 +101,11 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
       }
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
-      String userId =
-          decodedToken['userId']; // Adjust based on your JWT structure
-      return userId; // Return the user ID
+      String userId = decodedToken['userId'];
+      return userId;
     } catch (e) {
       print('Failed to decode JWT: $e');
-      return ""; // Return an empty string or handle as needed
+      return "";
     }
   }
 
@@ -133,7 +130,6 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
 
   int quantity = cartItem['quantity'] ?? 1;
 
-  // Helper function to update the quantity
   void updateQuantity(int newQuantity) {
     if (newQuantity >= 1) {
       cartItem['quantity'] = newQuantity;
@@ -174,33 +170,6 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         ),
                 ),
               ),
-
-              // GestureDetector(
-              //   onTap: () {
-              //     // Navigate to the product detail page
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => ProductDetailPage(
-              //             productId:
-              //                 productId), // Pass the productId to the detail page
-              //       ),
-              //     );
-              //   },
-              //   child: ClipRRect(
-              //     borderRadius: BorderRadius.circular(8),
-              //     child: firstImage != null
-              //         ? Image.network(
-              //             '${AppConstants.BASE_URL}/ProductImg/$productId/$firstImage',
-              //             fit: BoxFit.cover,
-              //           )
-              //         : Icon(
-              //             Icons.image,
-              //             color: Colors.grey.shade400,
-              //             size: 60,
-              //           ),
-              //   ),
-              // ),
 
               SizedBox(width: 15),
               Expanded(
@@ -292,7 +261,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         IconButton(
                           onPressed: () {
                             if (quantity > 1) {
-                              updateQuantity(quantity - 1); // Decrement
+                              updateQuantity(quantity - 1);
                             }
                           },
                           icon:
@@ -319,7 +288,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
                 onPressed: () {},
@@ -338,96 +307,64 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                   ],
                 ),
               ),
-              // TextButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => OrderScreen(
-              //                   address: null,
-              //                 )));
-              //   },
-              //   child: Row(
-              //     children: [
-              //       Icon(
-              //         Icons.shopping_bag_outlined,
-              //         color: Colors.black,
-              //         size: 18,
-              //       ),
-              //       SizedBox(width: 3),
-              //       Text('Buy now',
-              //           style: GoogleFonts.aBeeZee(color: Colors.black)),
-              //     ],
-              //   ),
-              // ),
-
+              SizedBox(
+                width: 100,
+              ),
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      // Get user ID from the JWT
-                      String userId =
-                          await getUserId(); // Ensure you have this method available
+                  child: TextButton(
+                onPressed: () async {
+                  try {
+                    String userId = await getUserId();
 
-                      if (userId.isEmpty) {
-                        throw Exception("User ID not found.");
-                      }
+                    if (userId.isEmpty) {
+                      throw Exception("User ID not found.");
+                    }
 
-                      // Fetch the user profile data using the user ID
-                      CustomerProfile loggedInUser =
-                          await apiService.getProfileData(userId);
+                    CustomerProfile loggedInUser =
+                        await apiService.getProfileData(userId);
 
-                      // Extract addresses from the user profile
-                      List<Address> addresses = loggedInUser.addresses!
-                          .map<Address>((address) => Address.fromJson(address))
-                          .toList();
+                    List<Address> addresses = loggedInUser.addresses!
+                        .map<Address>((address) => Address.fromJson(address))
+                        .toList();
 
-                      // Navigate based on addresses availability
-                      if (addresses.isNotEmpty) {
-                        // Navigate to OrderScreen if addresses are available
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OrderScreen(
-                              address: addresses
-                                  .first, // Select the first address or implement a selection logic
-                            ),
+                    if (addresses.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderScreen(
+                            address: addresses.first,
                           ),
-                        );
-                      } else {
-                        // Navigate to AddressFormPage if no addresses are available
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddressFormPage(),
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      // Handle errors (e.g., show a snackbar or log the error)
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Failed to retrieve user data: $e'),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddressFormPage(),
                         ),
                       );
                     }
-                  },
-                  child: Text(
-                    'Buy Now',
-                    style: GoogleFonts.aBeeZee(
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Failed to retrieve user data: $e'),
+                      ),
+                    );
+                  }
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.shopping_bag_outlined,
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      size: 18,
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFAAAB1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
+                    SizedBox(width: 3),
+                    Text('Buy now',
+                        style: GoogleFonts.aBeeZee(color: Colors.black)),
+                  ],
                 ),
-              )
+              )),
             ],
           ),
         ],

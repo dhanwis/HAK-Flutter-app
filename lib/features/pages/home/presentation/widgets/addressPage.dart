@@ -24,20 +24,22 @@ class _AddressFormPageState extends State<AddressFormPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize the deliveryAddressService
+
     deliveryAddressService = DeliveryAddressService();
   }
 
-  // Step Circle Widget
   Widget _buildStepCircle(int stepNumber, String title, bool isActive) {
     return Column(
       children: [
         CircleAvatar(
           radius: 20,
-          backgroundColor: isActive ? Color(0xFFFAAAB1) : Colors.grey,
+          backgroundColor: isActive ? Color(0xFFFAAAB1) : Colors.grey[300],
           child: Text(
             stepNumber.toString(),
-            style: GoogleFonts.aBeeZee(color: Colors.white),
+            style: TextStyle(
+              color: isActive ? Color.fromARGB(255, 45, 59, 3) : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         SizedBox(height: 8),
@@ -60,17 +62,15 @@ class _AddressFormPageState extends State<AddressFormPage> {
         );
 
         if (addedDetail != null) {
-          // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Delivery Address Saved successfully'),
               backgroundColor: Color(0xFFFAAAB1),
             ),
           );
-          return addedDetail; // Return the added address
+          return addedDetail;
         }
       } catch (error) {
-        // Handle error (e.g., show an error message)
         print('Failed to add Delivery Address $error');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -81,14 +81,17 @@ class _AddressFormPageState extends State<AddressFormPage> {
       }
     }
 
-    return null; // Return null if adding address fails
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Address', style: GoogleFonts.aBeeZee(fontSize: 16)),
+        title: Text(
+          'Add Address',
+          style: GoogleFonts.aBeeZee(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -96,18 +99,15 @@ class _AddressFormPageState extends State<AddressFormPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Stepper Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStepCircle(1, "Address", true), // Address step active
-                _buildStepCircle(2, "Order summary", false), // Inactive
-                _buildStepCircle(3, "Payment", false), // Inactive
+                _buildStepCircle(1, "Address", true),
+                _buildStepCircle(2, "Order summary", false),
+                _buildStepCircle(3, "Payment", false),
               ],
             ),
             SizedBox(height: 40),
-
-            // Address Form Container
             Container(
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -168,14 +168,11 @@ class _AddressFormPageState extends State<AddressFormPage> {
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () async {
-                        // Validate the form first
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
 
-                          // Try adding the delivery address
                           Address? addedAddress = await _addDeliveryAddress();
 
-                          // If address is added successfully, navigate to the OrderScreen
                           if (addedAddress != null) {
                             Future.delayed(const Duration(milliseconds: 300),
                                 () {

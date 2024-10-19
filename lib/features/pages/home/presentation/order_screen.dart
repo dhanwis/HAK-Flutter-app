@@ -18,25 +18,22 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  // String _selectedAddress =
-  //     "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965";
   String? _tempAddress;
 
   late String _selectedAddress;
 
-  final ApiService apiService =
-      ApiService(); // Create an instance of ApiService
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    // Concatenate address fields into a single string
+
     _selectedAddress = '''
 ${widget.address.name}
 ${widget.address.street}
 ${widget.address.city}
 ${widget.address.pinCode}
-${widget.address.phone}'''; // You can format this as per your requirement
+${widget.address.phone}''';
   }
 
   Future<String> getUserId() async {
@@ -49,12 +46,11 @@ ${widget.address.phone}'''; // You can format this as per your requirement
       }
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
-      String userId =
-          decodedToken['userId']; // Adjust based on your JWT structure
-      return userId; // Return the user ID
+      String userId = decodedToken['userId'];
+      return userId;
     } catch (e) {
       print('Failed to decode JWT: $e');
-      return ""; // Return an empty string or handle as needed
+      return "";
     }
   }
 
@@ -180,14 +176,10 @@ ${widget.address.phone}'''; // You can format this as per your requirement
 
   void _showAddressBottomSheet(BuildContext context) async {
     try {
-      // Get user ID from the JWT
-      String userId =
-          await getUserId(); // Ensure you have this method available
+      String userId = await getUserId();
 
-      // Fetch the user profile data
       CustomerProfile loggedInUser = await apiService.getProfileData(userId);
 
-      // Extract addresses from the user profile
       List<Address> addresses = loggedInUser.addresses!
           .map<Address>((address) => Address.fromJson(address))
           .toList();
@@ -202,7 +194,7 @@ ${widget.address.phone}'''; // You can format this as per your requirement
             builder: (BuildContext context, StateSetter setModalState) {
               return Container(
                 padding: EdgeInsets.all(16),
-                height: 400, // Adjust the height as needed
+                height: 400,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -219,23 +211,23 @@ ${widget.address.phone}'''; // You can format this as per your requirement
                           final address = addresses[index];
                           return RadioListTile<String>(
                             title: Column(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .start, // Align text to the start
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   address.name,
                                   style: GoogleFonts.aBeeZee(
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   address.phone,
-                                  style: GoogleFonts.aBeeZee(),
+                                  style: GoogleFonts.aBeeZee(fontSize: 14),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   "${address.pinCode}, ${address.street}, ${address.city}",
-                                  style: GoogleFonts.aBeeZee(),
+                                  style: GoogleFonts.aBeeZee(fontSize: 14),
                                 ),
                               ],
                             ),
@@ -251,36 +243,40 @@ ${widget.address.phone}'''; // You can format this as per your requirement
                         },
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedAddress = _tempAddress ?? _selectedAddress;
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Confirm",
-                        style: GoogleFonts.aBeeZee(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFFAAAB1),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddressFormPage()),
-                        );
-                      },
-                      child: Text(
-                        "Add New Address",
-                        style: GoogleFonts.aBeeZee(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFFAAAB1),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedAddress =
+                                  _tempAddress ?? _selectedAddress;
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Confirm",
+                            style: GoogleFonts.aBeeZee(color: Colors.black),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFFAAAB1),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddressFormPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Add New Address!?",
+                            style: GoogleFonts.aBeeZee(color: Colors.green),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -290,7 +286,6 @@ ${widget.address.phone}'''; // You can format this as per your requirement
         },
       );
     } catch (e) {
-      // Handle errors (e.g., show a snackbar or log the error)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to retrieve addresses: $e'),
