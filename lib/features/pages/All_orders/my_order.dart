@@ -228,7 +228,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               cursorHeight: 20,
               decoration: InputDecoration(
                 hintText: 'Search orders...',
-                hintStyle: TextStyle(fontSize: 10),
+                hintStyle:
+                    GoogleFonts.aBeeZee(fontSize: 14, color: Colors.grey),
                 border: InputBorder.none,
               ),
             ),

@@ -445,37 +445,3 @@ ${widget.address.phone}''';
     );
   }
 }
-
-// class AddressScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Select Address"),
-//       ),
-//       body: ListView(
-//         children: [
-//           ListTile(
-//             title: Text("Home: Akshya Nagar, Bangalore"),
-//             onTap: () {
-//               _selectAddress(context,
-//                   "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965");
-//             },
-//           ),
-//           ListTile(
-//             title: Text("Work: MG Road, Bangalore"),
-//             onTap: () {
-//               _selectAddress(context,
-//                   "Manjima C\nMG Road,\nBangalore-560001\n75062487965");
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   void _selectAddress(BuildContext context, String address) {
-//     Navigator.pop(
-//         context, address); // Pass the selected address back to OrderScreen
-//   }
-// }

@@ -133,8 +133,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BankDetailScreen extends StatefulWidget {
-  final BankDetail? bankDetail; // Optional bank detail
-  final bool isUpdate; // Flag to determine add or update mode
+  final BankDetail? bankDetail;
+  final bool isUpdate;
 
   BankDetailScreen({this.bankDetail, this.isUpdate = false});
 
@@ -155,14 +155,12 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
     super.initState();
     bankDetailService = BankDetailService();
 
-    // If updating, pre-fill the form with existing details
     if (widget.isUpdate && widget.bankDetail != null) {
       accountNumber = widget.bankDetail!.accountNumber;
       bankName = widget.bankDetail!.bankName;
       ifscCode = widget.bankDetail!.ifscCode;
       accountHolderName = widget.bankDetail!.accountHolderName;
     } else {
-      // Initialize empty values for adding new details
       accountNumber = '';
       bankName = '';
       ifscCode = '';
@@ -183,15 +181,23 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
         );
 
         if (addedDetail != null) {
-          // Handle success (e.g., show a success message or update the UI)
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Bank details added successfully')),
+            SnackBar(
+              content: Text(
+                'Bank details added successfully',
+                style: GoogleFonts.aBeeZee(),
+              ),
+              backgroundColor: Colors.green,
+            ),
           );
         }
       } catch (error) {
         // Handle error (e.g., show an error message)
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add bank details')),
+          SnackBar(
+            content: Text('Failed to add bank details'),
+            backgroundColor: Color(0xFFFAAAB1),
+          ),
         );
       }
     }
@@ -204,7 +210,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
         backgroundColor: Colors.white,
         title: Text(
           widget.isUpdate ? 'Update Bank Details' : 'Add Bank Details',
-          style: GoogleFonts.aBeeZee(fontSize: 14),
+          style: GoogleFonts.aBeeZee(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -215,12 +221,12 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
             children: <Widget>[
               TextFormField(
                 initialValue: accountNumber,
+                style: GoogleFonts.aBeeZee(),
                 decoration: InputDecoration(
                   labelText: 'Account Number',
-                  hintStyle: GoogleFonts.lato(
+                  hintStyle: GoogleFonts.aBeeZee(
                     color: Colors.grey,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 validator: (value) {
@@ -235,12 +241,12 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
               ),
               TextFormField(
                 initialValue: bankName,
+                style: GoogleFonts.aBeeZee(),
                 decoration: InputDecoration(
                   labelText: 'Bank Name',
-                  hintStyle: GoogleFonts.lato(
+                  hintStyle: GoogleFonts.aBeeZee(
                     color: Colors.grey,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 validator: (value) {
@@ -255,12 +261,12 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
               ),
               TextFormField(
                 initialValue: ifscCode,
+                style: GoogleFonts.aBeeZee(),
                 decoration: InputDecoration(
                   labelText: 'IFSC Code',
-                  hintStyle: GoogleFonts.lato(
+                  hintStyle: GoogleFonts.aBeeZee(
                     color: Colors.grey,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 validator: (value) {
@@ -275,12 +281,12 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
               ),
               TextFormField(
                 initialValue: accountHolderName,
+                style: GoogleFonts.aBeeZee(),
                 decoration: InputDecoration(
                   labelText: 'Account Holder Name',
-                  hintStyle: GoogleFonts.lato(
+                  hintStyle: GoogleFonts.aBeeZee(
                     color: Colors.grey,
                     fontSize: 14,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 validator: (value) {
@@ -297,8 +303,11 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
               ElevatedButton(
                 onPressed: _addOrUpdateBankDetail,
                 child: Text(
-                  widget.isUpdate ? 'Update Bank Detail' : 'Add Bank Detail',
-                  style: GoogleFonts.aBeeZee(),
+                  widget.isUpdate ? 'Update ' : 'Add ',
+                  style: GoogleFonts.aBeeZee(color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFFAAAB1),
                 ),
               ),
             ],

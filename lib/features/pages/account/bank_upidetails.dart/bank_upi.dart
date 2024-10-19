@@ -29,7 +29,7 @@ class _BankDetailsPageState extends State<BankDetailsPage> {
         backgroundColor: Colors.white,
         title: Text(
           'My Bank & UPI Details',
-          style: GoogleFonts.aBeeZee(fontSize: 16, fontWeight: FontWeight.w500),
+          style: GoogleFonts.aBeeZee(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         automaticallyImplyLeading: false,
       ),
