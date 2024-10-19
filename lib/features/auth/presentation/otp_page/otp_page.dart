@@ -26,16 +26,6 @@ class EnterOtpPage extends StatefulWidget {
 class _EnterOtpPageState extends State<EnterOtpPage> {
   String otp = '';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Retrieve tokens from Hive
-  //   var tokenBox = Hive.box<Token>('tokenBox');
-  //   Token tokens = tokenBox.get('tokens') ?? Token("", "");
-  //   accessToken = tokens.accessToken;
-  //   refreshToken = tokens.refreshToken;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -50,12 +40,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           });
           Future.delayed(Duration.zero, () {
             ScaffoldMessenger.of(context).showSnackBar(
-              // SnackBar(
-              //   // ignore: use_build_context_synchronously
-              //   content: IconSnackBar.show(context,
-              //       label: 'OTP validated SuccessFully',
-              //       snackBarType: SnackBarType.success),
-              // ),
               SnackBar(
                 content: Text('OTP validated SuccessFully'),
                 backgroundColor: Palette.appTheme,
@@ -64,16 +48,38 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
             );
           });
         }
+
+        if (state is OtpInvalidateErrorState) {
+          Future.delayed(Duration.zero, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Invalid Otp Detected'),
+                backgroundColor: const Color.fromARGB(255, 179, 0, 15),
+                duration: Duration(seconds: 1), // Set the duration to 1 second
+              ),
+            );
+          });
+        }
+
         if (state is OtpValidatingErrorState) {
-          Navigator.push(
-            context,
-            createRoute(
-              const LoginPage(),
+          // Show SnackBar first
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Something Went Wrong'),
+              backgroundColor: const Color.fromARGB(255, 179, 0, 15),
+              duration: Duration(seconds: 1), // Set the duration to 1 second
             ),
           );
-        }
-        if (state is WrongMobileNumberState) {
-          Navigator.pop(context);
+
+          // Then navigate after a short delay
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            Navigator.push(
+              context,
+              createRoute(
+                const LoginPage(),
+              ),
+            );
+          });
         }
       },
       builder: (context, state) {
@@ -130,30 +136,6 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                           },
                         ),
                         const H50(),
-                        // LoginButton(
-                        //   width: width,
-                        //   callback: () {
-                        //     // Save Tokens to Hive
-                        //     // var tokenBox = Hive.box<Token>('tokenBox');
-                        //     // tokenBox.put(
-                        //     //     'tokens', Token(accessToken, refreshToken));
-
-                        //     context
-                        //         .read<AuthBloc>()
-                        //         .add(SubmitOtpEvent(otp: otp));
-
-                        //     () {
-                        //       Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //             builder: (context) =>
-                        //                 DilHackBottomNavBar()),
-                        //       );
-                        //     };
-                        //   },
-                        //   label: 'Submit OTP',
-                        // ),
-
                         LoginButton(
                           width: width,
                           callback: () {
@@ -163,15 +145,14 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                           },
                           label: 'Submit OTP',
                         ),
-
                         const H30(),
                         TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DilHackBottomNavBar()),
-                            );
+                            context.read<AuthBloc>().add(
+                                  ResendOtpEvent(
+                                      mobileNumber: widget
+                                          .mobileNumber), // Pass the mobile number
+                                );
                           },
                           child: const Text('Resend OTP'),
                         ),

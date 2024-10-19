@@ -7,6 +7,8 @@ class CustomerProfile {
   final String city;
   final String state;
   final String? userImg; // Nullable field for user image
+  final List<Map<String, dynamic>>?
+      addresses; // Assuming addresses are stored as maps
 
   CustomerProfile({
     required this.id,
@@ -17,6 +19,7 @@ class CustomerProfile {
     required this.city,
     required this.state,
     this.userImg,
+    this.addresses,
   });
 
   factory CustomerProfile.fromJson(Map<String, dynamic> json) {
@@ -29,6 +32,7 @@ class CustomerProfile {
       city: json['city'] ?? "", // Use empty string if null
       state: json['state'] ?? "", // Use empty string if null
       userImg: json['userImg'], // Nullable, so no need to provide default value
+      addresses: List<Map<String, dynamic>>.from(json['addresses']),
     );
   }
 

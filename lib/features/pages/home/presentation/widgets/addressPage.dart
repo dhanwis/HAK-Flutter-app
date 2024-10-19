@@ -1,6 +1,9 @@
+import 'package:dil_hack_e_commerce/api/deliveryAddress_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
+import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddressFormPage extends StatefulWidget {
   @override
@@ -15,7 +18,15 @@ class _AddressFormPageState extends State<AddressFormPage> {
   String city = '';
   String pinCode = '';
   String country = '';
-  //late BankDetailService bankDetailService;
+
+  late DeliveryAddressService deliveryAddressService;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the deliveryAddressService
+    deliveryAddressService = DeliveryAddressService();
+  }
 
   // Step Circle Widget
   Widget _buildStepCircle(int stepNumber, String title, bool isActive) {
@@ -23,50 +34,62 @@ class _AddressFormPageState extends State<AddressFormPage> {
       children: [
         CircleAvatar(
           radius: 20,
-          backgroundColor: isActive ? Colors.green : Colors.grey,
+          backgroundColor: isActive ? Color(0xFFFAAAB1) : Colors.grey,
           child: Text(
             stepNumber.toString(),
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.aBeeZee(color: Colors.white),
           ),
         ),
         SizedBox(height: 8),
-        Text(title, style: TextStyle(fontSize: 12)),
+        Text(title, style: GoogleFonts.aBeeZee(fontSize: 12)),
       ],
     );
   }
 
-  // void _addOrUpdateBankDetail() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     _formKey.currentState!.save();
+  Future<Address?> _addDeliveryAddress() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-  //     try {
-  //       Address? addedDetail = await bankDetailService.addBankDetail(
-  //         accountNumber: accountNumber,
-  //         bankName: bankName,
-  //         ifscCode: ifscCode,
-  //         accountHolderName: accountHolderName,
-  //       );
+      try {
+        Address? addedDetail = await deliveryAddressService.addDeliveryAddress(
+          name: name,
+          phone: phone,
+          street: street,
+          city: city,
+          pinCode: pinCode,
+        );
 
-  //       if (addedDetail != null) {
-  //         // Handle success (e.g., show a success message or update the UI)
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text('Bank details added successfully')),
-  //         );
-  //       }
-  //     } catch (error) {
-  //       // Handle error (e.g., show an error message)
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Failed to add bank details')),
-  //       );
-  //     }
-  //   }
-  // }
+        if (addedDetail != null) {
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Delivery Address Saved successfully'),
+              backgroundColor: Color(0xFFFAAAB1),
+            ),
+          );
+          return addedDetail; // Return the added address
+        }
+      } catch (error) {
+        // Handle error (e.g., show an error message)
+        print('Failed to add Delivery Address $error');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add Delivery Address $error'),
+            backgroundColor: Color(0xFFFAAAB1),
+          ),
+        );
+      }
+    }
+
+    return null; // Return null if adding address fails
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Address'),
+        title: Text('Add Address', style: GoogleFonts.aBeeZee(fontSize: 16)),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -102,69 +125,73 @@ class _AddressFormPageState extends State<AddressFormPage> {
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Full Name'),
+                      decoration: InputDecoration(
+                          labelText: 'Full Name',
+                          labelStyle: GoogleFonts.aBeeZee()),
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter name' : null,
                       onSaved: (value) => name = value!,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Phone Number'),
+                      decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          labelStyle: GoogleFonts.aBeeZee()),
                       keyboardType: TextInputType.phone,
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter phone number' : null,
                       onSaved: (value) => phone = value!,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Street Address'),
+                      decoration: InputDecoration(
+                          labelText: 'Street Address',
+                          labelStyle: GoogleFonts.aBeeZee()),
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter street address' : null,
                       onSaved: (value) => street = value!,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'City'),
+                      decoration: InputDecoration(
+                          labelText: 'City', labelStyle: GoogleFonts.aBeeZee()),
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter city' : null,
                       onSaved: (value) => city = value!,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'pinCode'),
+                      decoration: InputDecoration(
+                          labelText: 'pinCode',
+                          labelStyle: GoogleFonts.aBeeZee()),
                       keyboardType: TextInputType.number,
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter pinCode' : null,
                       onSaved: (value) => pinCode = value!,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Country'),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter country' : null,
-                      onSaved: (value) => country = value!,
-                    ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        // _addOrUpdateBankDetail;
+                      onPressed: () async {
+                        // Validate the form first
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
 
-                          // Navigate to the Order Summary Page with the saved address
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OrderScreen(
-                                address: Address(
-                                  name: name,
-                                  phone: phone,
-                                  street: street,
-                                  city: city,
-                                  pinCode: pinCode,
-                                  // country: country,
-                                ),
-                              ),
-                            ),
-                          );
+                          // Try adding the delivery address
+                          Address? addedAddress = await _addDeliveryAddress();
+
+                          // If address is added successfully, navigate to the OrderScreen
+                          if (addedAddress != null) {
+                            Future.delayed(const Duration(milliseconds: 300),
+                                () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  createRoute(
+                                      OrderScreen(address: addedAddress)),
+                                  (route) => false);
+                            });
+                          }
                         }
                       },
-                      child: Text('Save Address'),
+                      child: Text(
+                        'Save Address',
+                        style: GoogleFonts.aBeeZee(),
+                      ),
                     ),
                   ],
                 ),

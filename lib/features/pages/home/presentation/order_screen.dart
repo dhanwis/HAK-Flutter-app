@@ -1,8 +1,12 @@
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/Paymentpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class OrderScreen extends StatefulWidget {
   @override
@@ -20,14 +24,43 @@ class _OrderScreenState extends State<OrderScreen> {
 
   late String _selectedAddress;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _selectedAddress = widget.address; // Initialize with passed address
-  // }
+  final ApiService apiService =
+      ApiService(); // Create an instance of ApiService
+
+  @override
+  void initState() {
+    super.initState();
+    // Concatenate address fields into a single string
+    _selectedAddress = '''
+${widget.address.name}
+${widget.address.street}
+${widget.address.city}
+${widget.address.pinCode}
+${widget.address.phone}'''; // You can format this as per your requirement
+  }
+
+  Future<String> getUserId() async {
+    try {
+      final TokenStorage tokenStorage = TokenStorage();
+      final accessToken = await tokenStorage.getAccessToken();
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception("Access token not found");
+      }
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+      String userId =
+          decodedToken['userId']; // Adjust based on your JWT structure
+      return userId; // Return the user ID
+    } catch (e) {
+      print('Failed to decode JWT: $e');
+      return ""; // Return an empty string or handle as needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    print('address ${widget.address}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -145,92 +178,126 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  void _showAddressBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setModalState) {
-            return Container(
-              padding: EdgeInsets.all(16),
-              height: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Choose a delivery address",
-                    style: GoogleFonts.aBeeZee(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 16),
-                  RadioListTile<String>(
-                    title: Text(
-                      "Home: Akshya Nagar, Bangalore",
-                      style: GoogleFonts.aBeeZee(),
+  void _showAddressBottomSheet(BuildContext context) async {
+    try {
+      // Get user ID from the JWT
+      String userId =
+          await getUserId(); // Ensure you have this method available
+
+      // Fetch the user profile data
+      CustomerProfile loggedInUser = await apiService.getProfileData(userId);
+
+      // Extract addresses from the user profile
+      List<Address> addresses = loggedInUser.addresses!
+          .map<Address>((address) => Address.fromJson(address))
+          .toList();
+
+      showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              return Container(
+                padding: EdgeInsets.all(16),
+                height: 400, // Adjust the height as needed
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Choose a delivery address",
+                      style: GoogleFonts.aBeeZee(
+                          fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    value:
-                        "Manjima C\nAkshya Nagar 1st Block 1st Cross,\nRamamurthy Nagar, Bangalore-560016\n75062487965",
-                    groupValue: _tempAddress ?? _selectedAddress,
-                    onChanged: (String? value) {
-                      setModalState(() {
-                        _tempAddress = value!;
-                      });
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text(
-                      "Work: MG Road, Bangalore",
-                      style: GoogleFonts.aBeeZee(),
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: addresses.length,
+                        itemBuilder: (context, index) {
+                          final address = addresses[index];
+                          return RadioListTile<String>(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align text to the start
+                              children: [
+                                Text(
+                                  address.name,
+                                  style: GoogleFonts.aBeeZee(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  address.phone,
+                                  style: GoogleFonts.aBeeZee(),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "${address.pinCode}, ${address.street}, ${address.city}",
+                                  style: GoogleFonts.aBeeZee(),
+                                ),
+                              ],
+                            ),
+                            value:
+                                "${address.name}\n${address.phone}\n${address.pinCode}\n${address.street}\n${address.city}",
+                            groupValue: _tempAddress ?? _selectedAddress,
+                            onChanged: (String? value) {
+                              setModalState(() {
+                                _tempAddress = value!;
+                              });
+                            },
+                          );
+                        },
+                      ),
                     ),
-                    value: "Manjima C\nMG Road,\nBangalore-560001\n75062487965",
-                    groupValue: _tempAddress ?? _selectedAddress,
-                    onChanged: (String? value) {
-                      setModalState(() {
-                        _tempAddress = value!;
-                      });
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedAddress = _tempAddress!;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Confirm",
-                      style: GoogleFonts.aBeeZee(color: Colors.black),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedAddress = _tempAddress ?? _selectedAddress;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Confirm",
+                        style: GoogleFonts.aBeeZee(color: Colors.black),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFFAAAB1),
+                      ),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFAAAB1),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddressFormPage()),
+                        );
+                      },
+                      child: Text(
+                        "Add New Address",
+                        style: GoogleFonts.aBeeZee(color: Colors.black),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFFAAAB1),
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddressFormPage()),
-                      );
-                    },
-                    child: Text(
-                      "Add New Address",
-                      style: GoogleFonts.aBeeZee(color: Colors.black),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFAAAB1),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    } catch (e) {
+      // Handle errors (e.g., show a snackbar or log the error)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to retrieve addresses: $e'),
+          backgroundColor: Color(0xFFFAAAB1),
+        ),
+      );
+    }
   }
 
   Widget _buildProductDetails() {

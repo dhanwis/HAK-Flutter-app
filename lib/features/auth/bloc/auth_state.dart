@@ -24,6 +24,8 @@ class OtpSendingErrorState extends AuthState {
 
 class OtpValidatingErrorState extends AuthState {}
 
+class OtpInvalidateErrorState extends AuthState {}
+
 class WrongMobileNumberState extends AuthState {}
 
 class OtpReceivedState extends AuthState {

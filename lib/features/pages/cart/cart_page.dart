@@ -1,13 +1,19 @@
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:lottie/lottie.dart';
 
 class CartPage extends StatefulWidget {
@@ -84,6 +90,28 @@ class _CartPageState extends State<CartPage> {
 }
 
 Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
+  final ApiService apiService =
+      ApiService(); // Create an instance of ApiService
+
+  Future<String> getUserId() async {
+    try {
+      final TokenStorage tokenStorage = TokenStorage();
+      final accessToken = await tokenStorage.getAccessToken();
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception("Access token not found");
+      }
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+      String userId =
+          decodedToken['userId']; // Adjust based on your JWT structure
+      return userId; // Return the user ID
+    } catch (e) {
+      print('Failed to decode JWT: $e');
+      return ""; // Return an empty string or handle as needed
+    }
+  }
+
   final product = cartItem['product'];
   final firstVariation =
       product['variations'].isNotEmpty ? product['variations'][0] : null;
@@ -312,8 +340,12 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
               ),
               // TextButton(
               //   onPressed: () {
-              //     Navigator.push(context,
-              //         MaterialPageRoute(builder: (context) => OrderScreen(address: null,)));
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => OrderScreen(
+              //                   address: null,
+              //                 )));
               //   },
               //   child: Row(
               //     children: [
@@ -328,6 +360,74 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
               //     ],
               //   ),
               // ),
+
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      // Get user ID from the JWT
+                      String userId =
+                          await getUserId(); // Ensure you have this method available
+
+                      if (userId.isEmpty) {
+                        throw Exception("User ID not found.");
+                      }
+
+                      // Fetch the user profile data using the user ID
+                      CustomerProfile loggedInUser =
+                          await apiService.getProfileData(userId);
+
+                      // Extract addresses from the user profile
+                      List<Address> addresses = loggedInUser.addresses!
+                          .map<Address>((address) => Address.fromJson(address))
+                          .toList();
+
+                      // Navigate based on addresses availability
+                      if (addresses.isNotEmpty) {
+                        // Navigate to OrderScreen if addresses are available
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrderScreen(
+                              address: addresses
+                                  .first, // Select the first address or implement a selection logic
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Navigate to AddressFormPage if no addresses are available
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddressFormPage(),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      // Handle errors (e.g., show a snackbar or log the error)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to retrieve user data: $e'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Buy Now',
+                    style: GoogleFonts.aBeeZee(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFAAAB1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                ),
+              )
             ],
           ),
         ],

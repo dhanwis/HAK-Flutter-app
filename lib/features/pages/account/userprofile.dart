@@ -285,7 +285,6 @@ class _ProfilePageState extends State<ProfilePage> {
           }
 
           if (state is ProfileLoaded) {
-            print('Profile successfully loaded');
             _nameController.text = state.profile.username;
             _phoneController.text = state.profile.phoneNumber;
             _emailController.text = state.profile.email;
@@ -408,7 +407,6 @@ class _ProfilePageState extends State<ProfilePage> {
             style: GoogleFonts.aBeeZee(color: Colors.black),
           ),
           onPressed: () {
-            print('create function start');
             BlocProvider.of<ProfileBloc>(context).add(
               CreateUser(
                 username: _nameController.text,

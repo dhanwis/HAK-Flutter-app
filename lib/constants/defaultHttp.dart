@@ -1,21 +1,3 @@
-// import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
-// import 'package:http/http.dart' as http;
-
-// class AuthHttpClient extends http.BaseClient {
-//   AuthHttpClient(http.Client client);
-
-//   @override
-//   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-//     final tokenStorage = TokenStorage();
-//     final accessToken = await tokenStorage.getAccessToken();
-
-//     if (accessToken != null) {
-//       request.headers['Authorization'] = 'Bearer $accessToken';
-//     }
-//     return http.Client().send(request);
-//   }
-// }
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';

@@ -1,6 +1,10 @@
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 
@@ -12,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -21,12 +26,31 @@ class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({Key? key, required this.productId})
       : super(key: key);
 
+  Future<String> getUserId() async {
+    try {
+      final TokenStorage tokenStorage = TokenStorage();
+      final accessToken = await tokenStorage.getAccessToken();
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception("Access token not found");
+      }
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+      String userId =
+          decodedToken['userId']; // Adjust based on your JWT structure
+      return userId; // Return the user ID
+    } catch (e) {
+      print('Failed to decode JWT: $e');
+      return ""; // Return an empty string or handle as needed
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ApiService apiService =
+        ApiService(); // Create an instance of ApiService
+
     final height = MediaQuery.of(context).size.height;
-    // return Scaffold(
-    //   body:
-    // );
 
     return MultiBlocProvider(
         providers: [
@@ -336,14 +360,86 @@ class ProductDetailPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 8),
+                          // Expanded(
+                          //   child: ElevatedButton(
+                          //     onPressed: () {
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) => AddressFormPage()),
+                          //       );
+                          //     },
+                          //     child: Text(
+                          //       'Buy Now',
+                          //       style: GoogleFonts.aBeeZee(
+                          //         color: Colors.black,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     ),
+                          //     style: ElevatedButton.styleFrom(
+                          //       backgroundColor: Color(0xFFFAAAB1),
+                          //       shape: RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.circular(8),
+                          //       ),
+                          //       padding: EdgeInsets.symmetric(
+                          //           horizontal: 24, vertical: 12),
+                          //     ),
+                          //   ),
+                          // ),
+
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddressFormPage()),
-                                );
+                              onPressed: () async {
+                                try {
+                                  // Get user ID from the JWT
+                                  String userId =
+                                      await getUserId(); // Ensure you have this method available
+
+                                  if (userId.isEmpty) {
+                                    throw Exception("User ID not found.");
+                                  }
+
+                                  // Fetch the user profile data using the user ID
+                                  CustomerProfile loggedInUser =
+                                      await apiService.getProfileData(userId);
+
+                                  // Extract addresses from the user profile
+                                  List<Address> addresses = loggedInUser
+                                      .addresses!
+                                      .map<Address>((address) =>
+                                          Address.fromJson(address))
+                                      .toList();
+
+                                  // Navigate based on addresses availability
+                                  if (addresses.isNotEmpty) {
+                                    // Navigate to OrderScreen if addresses are available
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OrderScreen(
+                                          address: addresses
+                                              .first, // Select the first address or implement a selection logic
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Navigate to AddressFormPage if no addresses are available
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddressFormPage(),
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  // Handle errors (e.g., show a snackbar or log the error)
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Failed to retrieve user data: $e'),
+                                    ),
+                                  );
+                                }
                               },
                               child: Text(
                                 'Buy Now',
@@ -361,7 +457,7 @@ class ProductDetailPage extends StatelessWidget {
                                     horizontal: 24, vertical: 12),
                               ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
