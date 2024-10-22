@@ -15,7 +15,7 @@ class CartService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> decodedResponse = json.decode(response.body);
       // Assuming your items are under "cartItems"
-      return decodedResponse['items']; // Adjust this based on your response
+      return decodedResponse['items'];
     } else if (response.statusCode == 400) {
       final decodedResponse = json.decode(response.body);
       if (decodedResponse['message'] == "This product is already in the cart") {

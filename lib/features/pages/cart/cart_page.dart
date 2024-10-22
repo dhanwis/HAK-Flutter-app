@@ -327,23 +327,7 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
                         .map<Address>((address) => Address.fromJson(address))
                         .toList();
 
-                    if (addresses.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrderScreen(
-                            address: addresses.first,
-                          ),
-                        ),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddressFormPage(),
-                        ),
-                      );
-                    }
+                    //
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

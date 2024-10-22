@@ -25,7 +25,3 @@ class GetProductsByCategory {
     }
   }
 }
-
-
-
-//  required Map<String, dynamic> filters

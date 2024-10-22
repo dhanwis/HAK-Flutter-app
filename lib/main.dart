@@ -18,9 +18,9 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.d
 import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/auth_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
-//import 'package:dil_hack_e_commerce/features/pages/home/presentation/bloc/home_bloc.dart';
+
 import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
-//import 'package:dil_hack_e_commerce/features/splash_screen/splash_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'api/category_api.dart';
@@ -29,8 +29,6 @@ import 'features/auth/bloc/Categories/category_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Hive.initFlutter();
-  // await Hive.openBox<Token>('tokenBox');
 
   runApp(const MyApp());
 }
@@ -41,36 +39,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // AuthBloc Provider
         BlocProvider(
           create: (context) => AuthBloc(),
         ),
-
         BlocProvider(
           create: (context) => ProfileBloc(ApiService()),
         ),
-
         BlocProvider(
           create: (context) => SearchBloc(),
         ),
-
         BlocProvider(
           create: (context) => NewArrivalsBloc(GetAllNewArrivalsApi())
             ..add(const FetchNewArrivalsEvent()),
         ),
-
         BlocProvider(
           create: (context) => ProductBloc(productApi: GetAllProductApi())
             ..add(FetchProductsEvent()),
         ),
-
         BlocProvider(
           create: (context) => ProductDetailBloc(
             productApi: ProductbyidApi(),
             similarProductsApi: GetSimilarProductsApi(),
           ),
         ),
-
         BlocProvider(create: (context) => CartBloc(CartService())),
         BlocProvider(
           create: (context) => CategoryBloc(categoryApi: CategoryApi())
@@ -80,7 +71,6 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               WishlistBloc(WishlistService())..add(FetchWishlistItems()),
         ),
-
         BlocProvider(
           create: (context) => OrderBloc(orderRepository: OrderRepository()),
         ),

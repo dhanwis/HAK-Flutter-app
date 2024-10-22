@@ -1,26 +1,20 @@
 import 'dart:developer';
 
-import 'package:dil_hack_e_commerce/api/category_api.dart';
-import 'package:dil_hack_e_commerce/api/wishList_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
-import 'package:dil_hack_e_commerce/constants/userId.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Categories/category_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Products/product_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Searchbar/search_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_bloc.dart';
-import 'package:dil_hack_e_commerce/features/auth/bloc/WishList/wish_list_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/presentation/newArrival_widget.dart';
+
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productPage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/api/new_arrivals_api.dart';

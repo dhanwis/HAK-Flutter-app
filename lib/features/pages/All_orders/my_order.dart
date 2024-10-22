@@ -293,7 +293,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   image: DecorationImage(
                     image: firstProduct.variant.images.isNotEmpty
                         ? NetworkImage(
-                            'http://192.168.1.12:8000/ProductImg/${firstProduct.productId}/${firstProduct.variant.images[0]}')
+                            'http://192.168.1.32:8000/ProductImg/${firstProduct.productId}/${firstProduct.variant.images[0]}')
                         : const AssetImage('assets/placeholder.png')
                             as ImageProvider, // Placeholder image
                     fit: BoxFit.cover,

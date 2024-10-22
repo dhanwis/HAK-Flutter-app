@@ -1,11 +1,16 @@
 import 'package:dil_hack_e_commerce/api/deliveryAddress_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddressFormPage extends StatefulWidget {
+  final Product product; // Add the product field
+
+  AddressFormPage({required this.product}); // Pass product
+
   @override
   _AddressFormPageState createState() => _AddressFormPageState();
 }
@@ -178,8 +183,10 @@ class _AddressFormPageState extends State<AddressFormPage> {
                                 () {
                               Navigator.pushAndRemoveUntil(
                                   context,
-                                  createRoute(
-                                      OrderScreen(address: addedAddress)),
+                                  createRoute(OrderScreen(
+                                    address: addedAddress,
+                                    product: widget.product,
+                                  )),
                                   (route) => false);
                             });
                           }

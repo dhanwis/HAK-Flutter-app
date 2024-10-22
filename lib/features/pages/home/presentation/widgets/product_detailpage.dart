@@ -360,79 +360,49 @@ class ProductDetailPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 8),
-                          // Expanded(
-                          //   child: ElevatedButton(
-                          //     onPressed: () {
-                          //       Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => AddressFormPage()),
-                          //       );
-                          //     },
-                          //     child: Text(
-                          //       'Buy Now',
-                          //       style: GoogleFonts.aBeeZee(
-                          //         color: Colors.black,
-                          //         fontWeight: FontWeight.bold,
-                          //       ),
-                          //     ),
-                          //     style: ElevatedButton.styleFrom(
-                          //       backgroundColor: Color(0xFFFAAAB1),
-                          //       shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(8),
-                          //       ),
-                          //       padding: EdgeInsets.symmetric(
-                          //           horizontal: 24, vertical: 12),
-                          //     ),
-                          //   ),
-                          // ),
-
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () async {
                                 try {
                                   // Get user ID from the JWT
-                                  String userId =
-                                      await getUserId(); // Ensure you have this method available
+                                  String userId = await getUserId();
 
                                   if (userId.isEmpty) {
                                     throw Exception("User ID not found.");
                                   }
 
-                                  // Fetch the user profile data using the user ID
                                   CustomerProfile loggedInUser =
                                       await apiService.getProfileData(userId);
 
-                                  // Extract addresses from the user profile
                                   List<Address> addresses = loggedInUser
                                       .addresses!
                                       .map<Address>((address) =>
                                           Address.fromJson(address))
                                       .toList();
 
-                                  // Navigate based on addresses availability
                                   if (addresses.isNotEmpty) {
-                                    // Navigate to OrderScreen if addresses are available
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => OrderScreen(
                                           address: addresses
-                                              .first, // Select the first address or implement a selection logic
+                                              .first, // Existing address
+                                          product:
+                                              state.product, // Pass the product
                                         ),
                                       ),
                                     );
                                   } else {
-                                    // Navigate to AddressFormPage if no addresses are available
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => AddressFormPage(),
+                                        builder: (context) => AddressFormPage(
+                                          product: state.product,
+                                        ),
                                       ),
                                     );
                                   }
                                 } catch (e) {
-                                  // Handle errors (e.g., show a snackbar or log the error)
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

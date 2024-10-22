@@ -1,20 +1,24 @@
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/Paymentpage.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/PaymentRazor.dart';
+
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class OrderScreen extends StatefulWidget {
+  final Address address;
+  final Product product; // Add the product field
+
+  OrderScreen({required this.address, required this.product}); // Pass product
+
   @override
   _OrderScreenState createState() => _OrderScreenState();
-
-  final Address address;
-
-  OrderScreen({required this.address});
 }
 
 class _OrderScreenState extends State<OrderScreen> {
@@ -56,7 +60,16 @@ ${widget.address.phone}''';
 
   @override
   Widget build(BuildContext context) {
-    print('address ${widget.address}');
+    final double actualPrice = widget.product.variations.first.skus.isNotEmpty
+        ? widget.product.variations.first.skus.first.actualPrice
+        : 0;
+    final double discountedPrice =
+        widget.product.variations.first.skus.isNotEmpty
+            ? widget.product.variations.first.skus.first.discountedPrice
+            : 0;
+
+    final double totalAmount = actualPrice - discountedPrice;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -94,13 +107,17 @@ ${widget.address.phone}''';
                     SizedBox(height: 16),
                     _buildProductDetails(),
                     SizedBox(height: 16),
-                    _buildPriceDetails(),
+                    _buildPriceDetails(
+                      price: actualPrice,
+                      discount: discountedPrice,
+                      totalAmount: totalAmount,
+                    )
                   ],
                 ),
               ),
             ),
           ),
-          _buildBottomBar(),
+          _buildBottomBar(totalAmount: totalAmount),
         ],
       ),
     );
@@ -267,7 +284,9 @@ ${widget.address.phone}''';
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AddressFormPage(),
+                                builder: (context) => AddressFormPage(
+                                  product: widget.product,
+                                ),
                               ),
                             );
                           },
@@ -303,8 +322,9 @@ ${widget.address.phone}''';
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/products/pr3.jpeg',
+            Image.network(
+              widget.product.variations.first.images
+                  .first, // Use the product image
               width: 80,
               height: 118,
               fit: BoxFit.cover,
@@ -315,38 +335,32 @@ ${widget.address.phone}''';
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Boys Printed Cotton Blend Regular T Shirt (Blue)',
+                    widget.product.productName, // Use the product name
                     style: GoogleFonts.aBeeZee(
                         fontWeight: FontWeight.bold, fontSize: 13),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
+                  SizedBox(height: 5),
                   Text(
-                    '₹ 499',
+                    '₹ ${widget.product.variations.first.skus.first.actualPrice}', // Use the price
                     style: GoogleFonts.aBeeZee(fontSize: 13),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
+                  SizedBox(height: 5),
                   Row(
                     children: [
                       Text(
-                        'Qty : 1',
+                        'Qty : 1', // Adjust quantity based on your logic
                         style: GoogleFonts.aBeeZee(fontSize: 13),
                       ),
                       SizedBox(width: 16),
                       Text(
-                        'Size : M',
+                        'Size : ${widget.product.variations.first.skus.first.size}', // Use the size
                         style: GoogleFonts.aBeeZee(fontSize: 13),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
+                  SizedBox(height: 5),
                   Text(
-                    'Delivery by Sep 30, Fri ',
+                    'Delivery by Sep 30, Fri', // Add dynamic delivery date if needed
                     style: GoogleFonts.aBeeZee(
                         color: Color.fromARGB(255, 0, 0, 0), fontSize: 13),
                   ),
@@ -359,7 +373,12 @@ ${widget.address.phone}''';
     );
   }
 
-  Widget _buildPriceDetails() {
+  Widget _buildPriceDetails({
+    required double price,
+    required double discount,
+    required double totalAmount,
+    String deliveryCharges = 'Free delivery',
+  }) {
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -371,14 +390,15 @@ ${widget.address.phone}''';
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPriceRow('Price (1 item)', '₹ 899'),
-            // SizedBox(height: 10),
-            _buildPriceRow('Discount', '- ₹ 400', isDiscount: true),
-            // SizedBox(height: 10),
-            _buildPriceRow('Delivery Charges', 'Free delivery',
+            _buildPriceRow('Price (1 item)', '₹ ${price.toStringAsFixed(2)}'),
+            _buildPriceRow('Discount', '- ₹ ${discount.toStringAsFixed(2)}',
+                isDiscount: true),
+            _buildPriceRow('Delivery Charges', deliveryCharges,
                 isDiscount: true),
             Divider(),
-            _buildPriceRow('Total Amount', '₹ 499', isTotal: true),
+            _buildPriceRow(
+                'Total Amount', '₹ ${totalAmount.toStringAsFixed(2)}',
+                isTotal: true),
           ],
         ),
       ),
@@ -413,23 +433,69 @@ ${widget.address.phone}''';
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar({required double totalAmount}) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '₹ 499',
+            '₹ ${totalAmount.toStringAsFixed(2)}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 22,
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PaymentPage()));
+            onPressed: () async {
+              print('totalAmount is this $totalAmount');
+
+              // Create the Razorpay instance
+              Razorpay razorpay = Razorpay();
+
+              // Define the options for the payment
+              var options = {
+                'key': 'rzp_test_RPif3FxApMvNtv', // Your Razorpay test key
+                'amount':
+                    (totalAmount * 100).toInt(), // Convert amount to paise
+                'name': 'Dilhak',
+                'description': 'Payment for your order',
+                'prefill': {
+                  'contact': '1234567890',
+                  'email': 'test@example.com'
+                },
+                'external': {
+                  'wallets': ['paytm'] // Example for external wallets
+                }
+              };
+
+              // Set up the event listeners
+              razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                  (PaymentSuccessResponse response) {
+                // Handle successful payment here
+                print("Payment Successful: ${response.paymentId}");
+                // Optionally, navigate to a success page or show a success dialog
+              });
+
+              razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                  (PaymentFailureResponse response) {
+                // Handle payment failure here
+                print("Payment Failed: ${response.code} - ${response.message}");
+                // Optionally, show an error dialog
+              });
+
+              razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                  (ExternalWalletResponse response) {
+                // Handle external wallet callback
+                print("External Wallet: ${response.walletName}");
+              });
+
+              // Open the Razorpay payment UI
+              try {
+                razorpay.open(options);
+              } catch (e) {
+                print("Error: $e");
+              }
             },
             child: Text(
               'Continue',
@@ -439,7 +505,7 @@ ${widget.address.phone}''';
               backgroundColor: Color(0xFFFAAAB1),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             ),
-          ),
+          )
         ],
       ),
     );

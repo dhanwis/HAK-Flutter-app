@@ -81,11 +81,11 @@ class TopRow extends StatelessWidget {
 
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        String username = ''; // Default username
+        String username = '';
         String? userImg;
 
         if (state is ProfileLoaded) {
-          username = state.profile.username; // Replace with the actual field
+          username = state.profile.username;
           userImg = state.profile.userImg;
         }
 
@@ -113,7 +113,7 @@ class TopRow extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      username, // Display dynamic username here
+                      username,
                       style: GoogleFonts.aBeeZee(
                         fontSize: screenSize.width * 0.04,
                       ),
@@ -130,7 +130,7 @@ class TopRow extends StatelessWidget {
                     backgroundColor: Palette.appTheme,
                     backgroundImage: userImg != null
                         ? NetworkImage(
-                            'http://192.168.1.12:8000/userImg/$userImg', // Use NetworkImage for URLs
+                            'http://192.168.1.32:8000/userImg/$userImg', // Use NetworkImage for URLs
                           )
                         : const AssetImage(
                             'assets/images/manji.jpeg', // Local asset fallback

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
-import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/product_detailpage.dart';
