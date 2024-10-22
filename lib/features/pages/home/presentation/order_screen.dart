@@ -3,7 +3,6 @@ import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
-import 'package:dil_hack_e_commerce/features/pages/home/PaymentRazor.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
@@ -448,8 +447,6 @@ ${widget.address.phone}''';
           ),
           ElevatedButton(
             onPressed: () async {
-              print('totalAmount is this $totalAmount');
-
               // Create the Razorpay instance
               Razorpay razorpay = Razorpay();
 
@@ -459,6 +456,8 @@ ${widget.address.phone}''';
                 'amount':
                     (totalAmount * 100).toInt(), // Convert amount to paise
                 'name': 'Dilhak',
+                // 'image':
+                //     'assets/icon/app_icon.jpg', // Ensure this path is correct
                 'description': 'Payment for your order',
                 'prefill': {
                   'contact': '1234567890',
@@ -466,7 +465,10 @@ ${widget.address.phone}''';
                 },
                 'external': {
                   'wallets': ['paytm'] // Example for external wallets
-                }
+                },
+                'theme': {
+                  'color': '#000000' // Your preferred color code (Hex format)
+                },
               };
 
               // Set up the event listeners
@@ -474,14 +476,12 @@ ${widget.address.phone}''';
                   (PaymentSuccessResponse response) {
                 // Handle successful payment here
                 print("Payment Successful: ${response.paymentId}");
-                // Optionally, navigate to a success page or show a success dialog
               });
 
               razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
                   (PaymentFailureResponse response) {
                 // Handle payment failure here
                 print("Payment Failed: ${response.code} - ${response.message}");
-                // Optionally, show an error dialog
               });
 
               razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
