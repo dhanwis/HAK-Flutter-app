@@ -14,6 +14,7 @@ import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/pro
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/productsByCategory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
@@ -453,7 +454,11 @@ class _HomePageState extends State<HomePage> {
                 return ProductGrid();
               }
 
-              return SliverToBoxAdapter(child: Text("data"));
+              return SliverToBoxAdapter(
+                  child: SpinKitFadingCircle(
+                color: Color(0xFFFAAAB1),
+                size: 50.0,
+              ));
             },
           )
           // Product Grid Display from ProductBloc

@@ -104,10 +104,6 @@ class ApiService {
           '${AppConstants.BASE_URL}/auth_customer/customer/ProfileDataXYZ/$id'),
     );
 
-    // Log the status code and body for debugging
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     if (response.statusCode == 200) {
       print('Data has been passed from server');
       return CustomerProfile.fromJson(

@@ -385,6 +385,7 @@ class ProductDetailPage extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => OrderScreen(
+                                          profile: loggedInUser,
                                           address: addresses
                                               .first, // Existing address
                                           product:

@@ -1,20 +1,31 @@
+import 'dart:convert';
+
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/constants/defaultHttp.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/PaymentFunction.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class OrderScreen extends StatefulWidget {
+  final CustomerProfile profile;
   final Address address;
-  final Product product; // Add the product field
+  final Product product; // Add the product field;
 
-  OrderScreen({required this.address, required this.product}); // Pass product
+  OrderScreen({
+    required this.address,
+    required this.product,
+    required this.profile, // Pass product
+  });
 
   @override
   _OrderScreenState createState() => _OrderScreenState();
@@ -22,6 +33,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   String? _tempAddress;
+  final client = AuthHttpClient(http.Client());
 
   late String _selectedAddress;
 
@@ -68,6 +80,9 @@ ${widget.address.phone}''';
             : 0;
 
     final double totalAmount = actualPrice - discountedPrice;
+    final num discount = widget.product.variations.first.skus.isEmpty
+        ? widget.product.variations.first.skus.first.discount
+        : 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -108,7 +123,8 @@ ${widget.address.phone}''';
                     SizedBox(height: 16),
                     _buildPriceDetails(
                       price: actualPrice,
-                      discount: discountedPrice,
+                      discount: discount,
+                      discountedPrice: discountedPrice,
                       totalAmount: totalAmount,
                     )
                   ],
@@ -116,7 +132,9 @@ ${widget.address.phone}''';
               ),
             ),
           ),
-          _buildBottomBar(totalAmount: totalAmount),
+          _buildBottomBar(
+            totalAmount: totalAmount,
+          ),
         ],
       ),
     );
@@ -374,9 +392,10 @@ ${widget.address.phone}''';
 
   Widget _buildPriceDetails({
     required double price,
-    required double discount,
+    required num discount,
     required double totalAmount,
     String deliveryCharges = 'Free delivery',
+    required double discountedPrice,
   }) {
     return Container(
       decoration: const BoxDecoration(
@@ -389,9 +408,8 @@ ${widget.address.phone}''';
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPriceRow('Price (1 item)', '₹ ${price.toStringAsFixed(2)}'),
-            _buildPriceRow('Discount', '- ₹ ${discount.toStringAsFixed(2)}',
-                isDiscount: true),
+            _buildPriceRow('Price ', '₹ ${price.toStringAsFixed(2)}'),
+            _buildPriceRow('Discount', '₹ $discount', isDiscount: true),
             _buildPriceRow('Delivery Charges', deliveryCharges,
                 isDiscount: true),
             Divider(),
@@ -432,7 +450,9 @@ ${widget.address.phone}''';
     );
   }
 
-  Widget _buildBottomBar({required double totalAmount}) {
+  Widget _buildBottomBar({
+    required double totalAmount,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -447,35 +467,62 @@ ${widget.address.phone}''';
           ),
           ElevatedButton(
             onPressed: () async {
-              // Create the Razorpay instance
-              Razorpay razorpay = Razorpay();
+              // Call the backend to create a Razorpay order
+              print('totalAmount * 100.toInt() ${totalAmount}');
+              var response = await client.post(
+                Uri.parse(
+                    '${AppConstants.BASE_URL}/customerApp/payment/create'),
+                body: jsonEncode({'amount': totalAmount}),
+                headers: {'Content-Type': 'application/json'},
+              );
 
-              // Define the options for the payment
+              print('abcd efg ${response.body}');
+
+              var orderData = jsonDecode(response.body);
               var options = {
-                'key': 'rzp_test_RPif3FxApMvNtv', // Your Razorpay test key
-                'amount':
-                    (totalAmount * 100).toInt(), // Convert amount to paise
+                'key': 'rzp_test_RPif3FxApMvNtv',
+                'amount': (totalAmount * 100).toInt(), // Convert to paise
                 'name': 'Dilhak',
-                // 'image':
-                //     'assets/icon/app_icon.jpg', // Ensure this path is correct
-                'description': 'Payment for your order',
+                'description': 'Order Payment',
+                'order_id': orderData['id'], // Use the order ID from backend
                 'prefill': {
-                  'contact': '1234567890',
-                  'email': 'test@example.com'
-                },
-                'external': {
-                  'wallets': ['paytm'] // Example for external wallets
+                  'contact': widget.profile.phoneNumber,
+                  'email': widget.profile.email,
                 },
                 'theme': {
-                  'color': '#000000' // Your preferred color code (Hex format)
+                  'color': '#F37254',
                 },
               };
 
+              Razorpay razorpay = Razorpay();
+              razorpay.open(options);
+
               // Set up the event listeners
               razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-                  (PaymentSuccessResponse response) {
-                // Handle successful payment here
-                print("Payment Successful: ${response.paymentId}");
+                  (PaymentSuccessResponse response) async {
+                print('response is this from razorpay $response');
+
+                var verificationData = {
+                  'razorpay_order_id':
+                      'your_order_id', // Use the actual order ID from Razorpay
+                  'razorpay_payment_id': response.paymentId,
+                  'razorpay_signature': response.signature
+                };
+
+                // Call your Node.js server to verify the payment
+                var verifyResponse = await client.post(
+                  Uri.parse('${AppConstants.BASE_URL}/'),
+                  body: jsonEncode(verificationData),
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                );
+
+                if (verifyResponse.statusCode == 200) {
+                  print("Payment verified successfully");
+                } else {
+                  print("Payment verification failed");
+                }
               });
 
               razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,

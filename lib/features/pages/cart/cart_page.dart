@@ -1,6 +1,7 @@
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_bloc.dart';
+import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/AddToCart/cart_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
@@ -120,13 +121,14 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
       ? firstVariation['skus'][0]
       : null;
 
+  final id = product['_id'] ?? 'Unknown ID';
   final productId = product['product_id'] ?? 'Unknown Product';
   final productName = product['product_name'] ?? 'Unknown Product';
   final productDesc = product['product_description'] ?? 'Unknown Product';
   final size = sku?['size'] ?? 'Unknown Size';
   final actualPrice = sku?['actualPrice']?.toString() ?? 'N/A';
   final discountedPrice = sku?['discountedPrice']?.toString() ?? 'N/A';
-  final rating = product['rating'] ?? 0;
+  //final rating = product['rating'] ?? 0;
 
   int quantity = cartItem['quantity'] ?? 1;
 
@@ -290,24 +292,28 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                onPressed: () {},
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.delete,
-                      color: Colors.black,
-                      size: 18,
-                    ),
-                    SizedBox(width: 3),
-                    Text('Remove',
-                        style: GoogleFonts.aBeeZee(
-                          color: Colors.black,
-                        )),
-                  ],
+              Expanded(
+                child: TextButton(
+                  onPressed: () {
+                    BlocProvider.of<CartBloc>(context).add(RemoveFromCart(id));
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                        size: 18,
+                      ),
+                      SizedBox(width: 3),
+                      Text('Remove',
+                          style: GoogleFonts.aBeeZee(
+                            color: Colors.black,
+                          )),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 100,
               ),
               Expanded(

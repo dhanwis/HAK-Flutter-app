@@ -123,7 +123,10 @@ class TopRow extends StatelessWidget {
                 const SizedBox(width: 5),
                 GestureDetector(
                   onTap: () {
-                    // Handle profile click here, if needed
+                    //  Navigator.push(
+                    //                       context,
+                    //                       MaterialPageRoute(
+                    //                           builder: (context) =>
                   },
                   child: CircleAvatar(
                     radius: screenSize.width * 0.05,

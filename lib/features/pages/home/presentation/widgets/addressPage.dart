@@ -1,10 +1,14 @@
 import 'package:dil_hack_e_commerce/api/deliveryAddress_api.dart';
+import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:dil_hack_e_commerce/helpers/animated_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AddressFormPage extends StatefulWidget {
   final Product product; // Add the product field
@@ -25,6 +29,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
   String country = '';
 
   late DeliveryAddressService deliveryAddressService;
+  final ApiService apiService =
+      ApiService(); // Create an instance of ApiService
 
   @override
   void initState() {
@@ -51,6 +57,25 @@ class _AddressFormPageState extends State<AddressFormPage> {
         Text(title, style: GoogleFonts.aBeeZee(fontSize: 12)),
       ],
     );
+  }
+
+  Future<String> getUserId() async {
+    try {
+      final TokenStorage tokenStorage = TokenStorage();
+      final accessToken = await tokenStorage.getAccessToken();
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception("Access token not found");
+      }
+
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+      String userId =
+          decodedToken['userId']; // Adjust based on your JWT structure
+      return userId; // Return the user ID
+    } catch (e) {
+      print('Failed to decode JWT: $e');
+      return ""; // Return an empty string or handle as needed
+    }
   }
 
   Future<Address?> _addDeliveryAddress() async {
@@ -175,8 +200,11 @@ class _AddressFormPageState extends State<AddressFormPage> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
+                          String userId = await getUserId();
 
                           Address? addedAddress = await _addDeliveryAddress();
+                          CustomerProfile loggedInUser =
+                              await apiService.getProfileData(userId);
 
                           if (addedAddress != null) {
                             Future.delayed(const Duration(milliseconds: 300),
@@ -184,6 +212,7 @@ class _AddressFormPageState extends State<AddressFormPage> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   createRoute(OrderScreen(
+                                    profile: loggedInUser,
                                     address: addedAddress,
                                     product: widget.product,
                                   )),

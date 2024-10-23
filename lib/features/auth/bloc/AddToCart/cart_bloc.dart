@@ -7,7 +7,7 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartService cartService;
   String userId = '';
-  List<String> cartItemIds =
+  List<dynamic> cartItemIds =
       []; // This will hold the IDs of products in the cart
 
   CartBloc(this.cartService) : super(CartInitial()) {
@@ -18,7 +18,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         final cartItems = await cartService.fetchCart(userId);
 
-        //cartItemIds = cartItems.map((item) => item['productId']).toList(); // Assuming each item has a productId
+        cartItemIds = cartItems
+            .map((item) => item['productId'])
+            .toList(); // Assuming each item has a productId
         emit(CartLoaded(cartItems));
       } catch (e) {
         emit(CartError('Failed to fetch cart $e'));
@@ -51,11 +53,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _initializeUserId();
 
       try {
+        print('id is this to see ${event.productId}');
         await cartService.removeFromCart(userId, event.productId);
         cartItemIds.remove(
             event.productId); // Remove the product ID from the local list
         final carts = await cartService.fetchCart(userId);
+        print('carts i s rmeove  / not $carts');
 
+        emit(CartLoading());
         emit(CartLoaded(carts));
       } catch (e) {
         emit(CartError(e.toString()));
