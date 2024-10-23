@@ -467,7 +467,6 @@ ${widget.address.phone}''';
           ),
           ElevatedButton(
             onPressed: () async {
-              // Call the backend to create a Razorpay order
               print('totalAmount * 100.toInt() ${totalAmount}');
               var response = await client.post(
                 Uri.parse(
@@ -495,23 +494,42 @@ ${widget.address.phone}''';
               };
 
               Razorpay razorpay = Razorpay();
-              razorpay.open(options);
 
               // Set up the event listeners
               razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
                   (PaymentSuccessResponse response) async {
-                print('response is this from razorpay $response');
+                String userId = await getUserId();
 
-                var verificationData = {
-                  'razorpay_order_id':
-                      'your_order_id', // Use the actual order ID from Razorpay
-                  'razorpay_payment_id': response.paymentId,
-                  'razorpay_signature': response.signature
+                Map<String, String> deliveryAddress = {
+                  'username': widget.address.name,
+                  'city': widget.address.city,
+                  'pinCode': widget.address.pinCode,
+                  'street': widget.address.street, // Corrected typo
+                  'state': "Chennai",
+                  'phone': widget.address.phone,
+                };
+
+                Map<String, dynamic> verificationData = {
+                  'username': widget.profile.username,
+                  'email': widget.profile.email,
+                  'products':
+                      widget.product, // Ensure this is a list of products
+                  'totalAmount': totalAmount,
+                  'paymentInfo': {
+                    'razorpay_order_id':
+                        orderData['id'], // Use this instead of response.orderId
+                    'razorpay_payment_id': response.paymentId,
+                    'razorpay_signature': response.signature,
+                  },
+                  'deliveryAddress': deliveryAddress,
+                  'shippingMethod': 'Standard Delivery',
+                  'shippingCost': 0,
                 };
 
                 // Call your Node.js server to verify the payment
                 var verifyResponse = await client.post(
-                  Uri.parse('${AppConstants.BASE_URL}/'),
+                  Uri.parse(
+                      '${AppConstants.BASE_URL}/customerApp/order/place/$userId'),
                   body: jsonEncode(verificationData),
                   headers: {
                     'Content-Type': 'application/json',
@@ -519,14 +537,15 @@ ${widget.address.phone}''';
                 );
 
                 if (verifyResponse.statusCode == 200) {
-                  print("Payment verified successfully");
+                  print('Order placed successfully');
                 } else {
-                  print("Payment verification failed");
+                  print('Failed to place the order: ${verifyResponse.body}');
                 }
               });
 
               razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
                   (PaymentFailureResponse response) {
+                print('have error');
                 // Handle payment failure here
                 print("Payment Failed: ${response.code} - ${response.message}");
               });
@@ -539,7 +558,7 @@ ${widget.address.phone}''';
 
               // Open the Razorpay payment UI
               try {
-                razorpay.open(options);
+                razorpay.open(options); // Open within try-catch block
               } catch (e) {
                 print("Error: $e");
               }
@@ -552,7 +571,7 @@ ${widget.address.phone}''';
               backgroundColor: Color(0xFFFAAAB1),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             ),
-          )
+          ),
         ],
       ),
     );
