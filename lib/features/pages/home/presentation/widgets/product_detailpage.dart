@@ -3,10 +3,12 @@ import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
+import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
+import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
@@ -20,12 +22,18 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   final String productId;
 
   const ProductDetailPage({Key? key, required this.productId})
       : super(key: key);
 
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  // late Future<List<Product>> futureProducts;
   Future<String> getUserId() async {
     try {
       final TokenStorage tokenStorage = TokenStorage();
@@ -58,7 +66,7 @@ class ProductDetailPage extends StatelessWidget {
               create: (context) => ProductDetailBloc(
                     productApi: ProductbyidApi(),
                     similarProductsApi: GetSimilarProductsApi(),
-                  )..add(FetchProductDetails(productId))),
+                  )..add(FetchProductDetails(widget.productId))),
           //  BlocProvider(create: (context) => CartBloc(CartService())),
         ],
         child: Scaffold(
@@ -67,11 +75,6 @@ class ProductDetailPage extends StatelessWidget {
               if (state is ProductDetailLoading) {
                 return SkeletonLoader();
               } else if (state is ProductDetailLoaded) {
-                // final actualPrice =
-                //     state.product.variations.first.skus.first.actualPrice;
-                // final formattedPrice =
-                //     NumberFormat('#,##0').format(actualPrice);
-
                 final actualPrice =
                     state.product.variations.first.skus.isNotEmpty
                         ? state.product.variations.first.skus.first.actualPrice
@@ -196,19 +199,17 @@ class ProductDetailPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Similar Products',
-                        style: GoogleFonts.aBeeZee(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    if (state.similarProducts.isEmpty)
-                      SimilarProductsSkeletonLoader()
-                    else
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Text(
+                    //     'Similar Products',
+                    //     style: GoogleFonts.aBeeZee(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: 14,
+                    //     ),
+                    //   ),
+                    // ),
+                    if (state.product.variations.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
@@ -216,7 +217,7 @@ class ProductDetailPage extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: List.generate(
-                              state.similarProducts.length,
+                              state.product.variations.length,
                               (index) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
@@ -226,16 +227,15 @@ class ProductDetailPage extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ProductDetailPage(
-                                          productId:
-                                              state.similarProducts[index].id,
+                                          productId: state.product.id,
                                         ),
                                       ),
                                     );
                                   },
                                   child: CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                      state.similarProducts[index].variations
-                                          .first.images.first,
+                                      state.product.variations[index].images
+                                          .first,
                                     ),
                                     backgroundColor: Colors.grey.shade200,
                                     radius: 30,
@@ -315,6 +315,7 @@ class ProductDetailPage extends StatelessWidget {
                         value: state.product.productBrand,
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DetailRow(
@@ -341,6 +342,155 @@ class ProductDetailPage extends StatelessWidget {
                             : 'N/A',
                       ),
                     ),
+
+                    if (state.similarProducts.isEmpty)
+                      Skeletonizer(
+                        enabled: true,
+                        child: SizedBox(
+                          height: 200,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 5,
+                            itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 150,
+                                color: Colors.grey.shade200,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Similar Products',
+                                    style: GoogleFonts.aBeeZee(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ViewAllButton(
+                                              products: state.similarProducts),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'View All',
+                                      style: GoogleFonts.aBeeZee(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 240,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.similarProducts.length,
+                                itemBuilder: (context, index) {
+                                  String imageUrl = state.similarProducts[index]
+                                      .variations[0].images[0];
+                                  String formattedPrice = NumberFormat('#,##0')
+                                      .format(state.similarProducts[index]
+                                          .variations[0].skus[0].actualPrice);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                                  productId: state
+                                                      .similarProducts[index]
+                                                      .id),
+                                        ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      // child: Container(
+                                      //   margin: const EdgeInsets.symmetric(
+                                      //       horizontal: 1),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              child: Image.network(
+                                                imageUrl,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 4),
+                                            child: Text(
+                                              state.similarProducts[index]
+                                                  .productBrand,
+                                              style: GoogleFonts.aBeeZee(
+                                                color: Colors.grey,
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 1),
+                                            child: Text(
+                                              state.similarProducts[index]
+                                                  .productName
+                                                  .toUpperCase(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.aBeeZee(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            '₹ $formattedPrice',
+                                            style: GoogleFonts.aBeeZee(
+                                              color: Colors.green,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RatingAndReviews(),
@@ -356,7 +506,7 @@ class ProductDetailPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: AddToCartButtonState(
-                              productId: productId,
+                              productId: widget.productId,
                             ),
                           ),
                           SizedBox(width: 8),
