@@ -1,3 +1,4 @@
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/order.dart';
 
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   child: Image.network(
                     // Use the first product image from the order with the proper base URL
                     order.products[0].variant.images.isNotEmpty
-                        ? 'http://192.168.1.32:8000/ProductImg/${order.products[0].productId}/${order.products[0].variant.images[0]}'
+                        ? '${AppConstants.BASE_URL}/ProductImg/${order.products[0].productId}/${order.products[0].variant.images[0]}'
                         : 'assets/placeholder.png', // Placeholder image if no images available
                     height: 80,
                     width: 80,

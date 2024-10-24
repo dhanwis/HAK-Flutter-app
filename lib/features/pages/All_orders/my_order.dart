@@ -1,4 +1,5 @@
 import 'package:dil_hack_e_commerce/api/order_api.dart';
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_event.dart';
@@ -293,10 +294,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   image: DecorationImage(
                     image: firstProduct.variant.images.isNotEmpty
                         ? NetworkImage(
-                            'http://192.168.1.32:8000/ProductImg/${firstProduct.productId}/${firstProduct.variant.images[0]}')
+                            '${AppConstants.BASE_URL}/ProductImg/${firstProduct.productId}/${firstProduct.variant.images[0]}')
                         : const AssetImage('assets/placeholder.png')
                             as ImageProvider, // Placeholder image
                     fit: BoxFit.cover,
+                    // Uri.parse('$baseUrl/customerApp/cart/delete/$userId/$productId'),
                   ),
                 ),
               ),
@@ -368,7 +370,6 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
               ),
 
-              // Navigate to order details
               IconButton(
                 icon: Icon(
                   Icons.arrow_forward_ios,

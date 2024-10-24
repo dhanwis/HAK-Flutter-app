@@ -133,7 +133,7 @@ class TopRow extends StatelessWidget {
                     backgroundColor: Palette.appTheme,
                     backgroundImage: userImg != null
                         ? NetworkImage(
-                            'http://192.168.1.32:8000/userImg/$userImg', // Use NetworkImage for URLs
+                            '${AppConstants.BASE_URL}/userImg/$userImg', // Use NetworkImage for URLs
                           )
                         : const AssetImage(
                             'assets/images/manji.jpeg', // Local asset fallback

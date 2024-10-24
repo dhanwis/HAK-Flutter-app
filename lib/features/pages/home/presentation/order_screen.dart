@@ -467,15 +467,12 @@ ${widget.address.phone}''';
           ),
           ElevatedButton(
             onPressed: () async {
-              print('totalAmount * 100.toInt() ${totalAmount}');
               var response = await client.post(
                 Uri.parse(
                     '${AppConstants.BASE_URL}/customerApp/payment/create'),
                 body: jsonEncode({'amount': totalAmount}),
                 headers: {'Content-Type': 'application/json'},
               );
-
-              print('abcd efg ${response.body}');
 
               var orderData = jsonDecode(response.body);
               var options = {
@@ -512,8 +509,13 @@ ${widget.address.phone}''';
                 Map<String, dynamic> verificationData = {
                   'username': widget.profile.username,
                   'email': widget.profile.email,
-                  'products':
-                      widget.product, // Ensure this is a list of products
+                  'product': {
+                    'id': widget.product.id,
+                    'variantId': widget.product.variations,
+                    'skuId': '0',
+                    "quantity": 1,
+                    "price": totalAmount,
+                  }, // Convert each Product to JSON
                   'totalAmount': totalAmount,
                   'paymentInfo': {
                     'razorpay_order_id':
