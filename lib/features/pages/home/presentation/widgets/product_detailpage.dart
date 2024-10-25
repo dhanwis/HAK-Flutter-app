@@ -1,9 +1,10 @@
 import 'package:dil_hack_e_commerce/api/productById_api.dart';
 import 'package:dil_hack_e_commerce/api/similar_product_api.dart';
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
+import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/ProductDetail/product_detail_bloc.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
-import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
+
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
@@ -33,7 +34,8 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  // late Future<List<Product>> futureProducts;
+  int selectedVariationIndex = 0;
+  int selectedSkuIndex = 0;
   Future<String> getUserId() async {
     try {
       final TokenStorage tokenStorage = TokenStorage();
@@ -77,12 +79,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               } else if (state is ProductDetailLoaded) {
                 final actualPrice =
                     state.product.variations.first.skus.isNotEmpty
-                        ? state.product.variations.first.skus.first.actualPrice
+                        ? state.product.variations[selectedVariationIndex]
+                            .skus[0].actualPrice
                         : 0;
-                final discountedPrice = state
-                        .product.variations.first.skus.isNotEmpty
-                    ? state.product.variations.first.skus.first.discountedPrice
-                    : null;
+                final discountedPrice =
+                    state.product.variations.first.skus.isNotEmpty
+                        ? state.product.variations[selectedVariationIndex]
+                            .skus[selectedSkuIndex].discountedPrice
+                        : null;
 
                 final formattedPrice =
                     NumberFormat('#,##0').format(actualPrice);
@@ -91,7 +95,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     : '';
 
                 List<String> sizes = state.product.variations.isNotEmpty
-                    ? state.product.variations.first.skus
+                    ? state.product.variations[selectedVariationIndex].skus
                         .map((sku) => sku.size)
                         .toList()
                     : [];
@@ -102,23 +106,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       height: height * 0.6,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: state.product.variations.first.images.length,
+                        itemCount: state
+                            .product
+                            .variations[selectedVariationIndex]
+                            .images
+                            .length, // Display images from the selected variation
                         itemBuilder: (context, index) {
                           return SizedBox(
                             height: height * 0.6,
                             child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  state.product.variations.first.images[index],
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    // If the image fails to load, display a placeholder image
-                                    return Image.asset(
-                                      'assets/images/logo.png', // Your fallback image asset
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
-                                )),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                state.product.variations[selectedVariationIndex]
+                                        .images[
+                                    index], // Show image from the selected variation
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/logo.png', // Your fallback image asset
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -139,7 +149,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           Row(
                             children: [
-                              // FavoriteButton(),
                               IconButton(
                                 icon: Icon(Icons.share),
                                 onPressed: () {
@@ -199,17 +208,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ],
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Text(
-                    //     'Similar Products',
-                    //     style: GoogleFonts.aBeeZee(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: 14,
-                    //     ),
-                    //   ),
-                    // ),
-                    if (state.product.variations.isNotEmpty)
+
+                    // Horizontal Scroll for Variations (Color/Size, etc.)
+                    if (state.product.variations.length > 1)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
@@ -223,19 +224,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProductDetailPage(
-                                          productId: state.product.id,
-                                        ),
-                                      ),
-                                    );
+                                    setState(() {
+                                      // Update the selected variation index to reflect the chosen variation
+                                      selectedVariationIndex = index;
+                                      selectedSkuIndex = 0;
+                                    });
                                   },
                                   child: CircleAvatar(
                                     backgroundImage: NetworkImage(
                                       state.product.variations[index].images
-                                          .first,
+                                          .first, // Display image of each variation
                                     ),
                                     backgroundColor: Colors.grey.shade200,
                                     radius: 30,
@@ -246,6 +244,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                       ),
+
                     Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 10),
                       child: RatingBar.builder(
@@ -262,6 +261,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         onRatingUpdate: (index) {},
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -275,10 +275,58 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          SizeSelector(sizes: sizes),
+                          Row(
+                            children: List.generate(
+                              sizes.length,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedSkuIndex =
+                                          index; // Update selected SKU index
+                                    });
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: Duration(milliseconds: 200),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 14),
+                                    decoration: BoxDecoration(
+                                      color: selectedSkuIndex == index
+                                          ? Palette.appTheme
+                                          : Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        if (selectedSkuIndex == index)
+                                          BoxShadow(
+                                            color: Palette.appTheme
+                                                .withOpacity(0.4),
+                                            blurRadius: 8,
+                                            offset:
+                                                Offset(0, 4), // Shadow position
+                                          ),
+                                      ],
+                                    ),
+                                    child: Text(
+                                      sizes[index],
+                                      style: TextStyle(
+                                        color: selectedSkuIndex == index
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -295,8 +343,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: DetailRow(
                         label: 'Color',
                         value: state.product.variations.isNotEmpty
-                            ? state.product.variations.first.color
-                                .value // Access only the value
+                            ? state.product.variations[selectedVariationIndex]
+                                .color.value // Access only the value
                             : 'N/A',
                       ),
                     ),
@@ -336,32 +384,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: DetailRow(
                         label: 'Total Stock',
                         value: state.product.variations.isNotEmpty &&
-                                state.product.variations[0].skus.isNotEmpty
-                            ? state.product.variations[0].skus[0].quantity
+                                state.product.variations[selectedVariationIndex]
+                                    .skus.isNotEmpty
+                            ? state.product.variations[selectedVariationIndex]
+                                .skus[0].quantity
                                 .toString()
                             : 'N/A',
                       ),
                     ),
 
-                    if (state.similarProducts.isEmpty)
-                      Skeletonizer(
-                        enabled: true,
-                        child: SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 5,
-                            itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 150,
-                                color: Colors.grey.shade200,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    else
+                    if (state.similarProducts.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Column(
@@ -407,83 +439,97 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: state.similarProducts.length,
                                 itemBuilder: (context, index) {
-                                  String imageUrl = state.similarProducts[index]
-                                      .variations[0].images[0];
-                                  String formattedPrice = NumberFormat('#,##0')
-                                      .format(state.similarProducts[index]
-                                          .variations[0].skus[0].actualPrice);
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailPage(
-                                                  productId: state
-                                                      .similarProducts[index]
-                                                      .id),
-                                        ),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      // child: Container(
-                                      //   margin: const EdgeInsets.symmetric(
-                                      //       horizontal: 1),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              child: Image.network(
-                                                imageUrl,
-                                                fit: BoxFit.cover,
-                                              ),
+                                  print(
+                                      'state.similarProducts.length ${state.similarProducts.length}');
+
+                                  // Ensure we access variations safely
+                                  if (state.similarProducts[index].variations
+                                      .isNotEmpty) {
+                                    String imageUrl = state
+                                            .similarProducts[index]
+                                            .variations[0]
+                                            .images[
+                                        0]; // Access the first variation
+                                    String formattedPrice =
+                                        NumberFormat('#,##0').format(state
+                                            .similarProducts[index]
+                                            .variations[0]
+                                            .skus[0]
+                                            .actualPrice);
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductDetailPage(
+                                              productId: state
+                                                  .similarProducts[index].id,
                                             ),
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4),
-                                            child: Text(
-                                              state.similarProducts[index]
-                                                  .productBrand,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                child: Image.network(
+                                                  imageUrl,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: Text(
+                                                state.similarProducts[index]
+                                                    .productBrand,
+                                                style: GoogleFonts.aBeeZee(
+                                                  color: Colors.grey,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 1),
+                                              child: Text(
+                                                state.similarProducts[index]
+                                                    .productName
+                                                    .toUpperCase(),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.aBeeZee(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              '₹ $formattedPrice',
                                               style: GoogleFonts.aBeeZee(
-                                                color: Colors.grey,
-                                                fontSize: 11,
+                                                color: Colors.green,
+                                                fontSize: 10,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 1),
-                                            child: Text(
-                                              state.similarProducts[index]
-                                                  .productName
-                                                  .toUpperCase(),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.aBeeZee(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            '₹ $formattedPrice',
-                                            style: GoogleFonts.aBeeZee(
-                                              color: Colors.green,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  } else {
+                                    return SizedBox
+                                        .shrink(); // Return an empty widget if no variations
+                                  }
                                 },
                               ),
                             ),
@@ -540,6 +586,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                               .first, // Existing address
                                           product:
                                               state.product, // Pass the product
+
+                                          variantId: state
+                                              .product
+                                              .variations[
+                                                  selectedVariationIndex]
+                                              .id,
+                                          skuId: state
+                                              .product
+                                              .variations[
+                                                  selectedVariationIndex]
+                                              .skus[selectedSkuIndex]
+                                              .id,
                                         ),
                                       ),
                                     );
@@ -549,6 +607,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       MaterialPageRoute(
                                         builder: (context) => AddressFormPage(
                                           product: state.product,
+                                          variantId: state
+                                              .product
+                                              .variations[
+                                                  selectedVariationIndex]
+                                              .id,
+                                          skuId: state
+                                              .product
+                                              .variations[
+                                                  selectedVariationIndex]
+                                              .skus[selectedSkuIndex]
+                                              .id,
                                         ),
                                       ),
                                     );

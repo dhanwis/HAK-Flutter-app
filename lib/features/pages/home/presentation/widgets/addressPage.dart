@@ -12,8 +12,13 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AddressFormPage extends StatefulWidget {
   final Product product; // Add the product field
+  final String variantId;
+  final String skuId;
 
-  AddressFormPage({required this.product}); // Pass product
+  AddressFormPage(
+      {required this.product,
+      required this.variantId,
+      required this.skuId}); // Pass product
 
   @override
   _AddressFormPageState createState() => _AddressFormPageState();
@@ -215,6 +220,8 @@ class _AddressFormPageState extends State<AddressFormPage> {
                                     profile: loggedInUser,
                                     address: addedAddress,
                                     product: widget.product,
+                                    variantId: widget.variantId,
+                                    skuId: widget.skuId,
                                   )),
                                   (route) => false);
                             });

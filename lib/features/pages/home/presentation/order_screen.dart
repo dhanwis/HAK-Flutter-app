@@ -20,11 +20,15 @@ class OrderScreen extends StatefulWidget {
   final CustomerProfile profile;
   final Address address;
   final Product product; // Add the product field;
+  final String variantId;
+  final String skuId;
 
   OrderScreen({
     required this.address,
     required this.product,
     required this.profile, // Pass product
+    required this.variantId,
+    required this.skuId,
   });
 
   @override
@@ -303,6 +307,8 @@ ${widget.address.phone}''';
                               MaterialPageRoute(
                                 builder: (context) => AddressFormPage(
                                   product: widget.product,
+                                  variantId: widget.variantId,
+                                  skuId: widget.skuId,
                                 ),
                               ),
                             );
@@ -495,6 +501,7 @@ ${widget.address.phone}''';
               // Set up the event listeners
               razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
                   (PaymentSuccessResponse response) async {
+                print('response from razropt ${response.data}');
                 String userId = await getUserId();
 
                 Map<String, String> deliveryAddress = {
@@ -511,8 +518,8 @@ ${widget.address.phone}''';
                   'email': widget.profile.email,
                   'product': {
                     'id': widget.product.id,
-                    'variantId': widget.product.variations,
-                    'skuId': '0',
+                    'variantId': widget.variantId,
+                    'skuId': widget.skuId,
                     "quantity": 1,
                     "price": totalAmount,
                   }, // Convert each Product to JSON
@@ -522,6 +529,9 @@ ${widget.address.phone}''';
                         orderData['id'], // Use this instead of response.orderId
                     'razorpay_payment_id': response.paymentId,
                     'razorpay_signature': response.signature,
+                    'method': '',
+                    'transactionId': '123',
+                    'status': 'pending',
                   },
                   'deliveryAddress': deliveryAddress,
                   'shippingMethod': 'Standard Delivery',

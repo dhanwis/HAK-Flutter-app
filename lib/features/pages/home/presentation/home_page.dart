@@ -258,13 +258,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // SliverToBoxAdapter(
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(top: 10),
-          //     child: NewArrivalsWidget(),
-          //   ),
-          // ),
-
           FutureBuilder<List<Product>>(
             future: futureProducts,
             builder: (context, snapshot) {
