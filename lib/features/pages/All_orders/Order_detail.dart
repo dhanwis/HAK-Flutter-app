@@ -108,8 +108,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   _buildTrackingStep(
                     title: "Shipped",
-                    subtitle:
-                        "Expected by ${order.shippingMethod.estimatedDelivery ?? 'N/A'}",
+                    subtitle: "Expected by ",
                     isCompleted: false,
                   ),
                   _buildTrackingStep(

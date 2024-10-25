@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:dil_hack_e_commerce/api/userProfile_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
@@ -7,10 +8,12 @@ import 'package:dil_hack_e_commerce/features/auth/model/address.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/userProfile.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenStorage.dart';
+import 'package:dil_hack_e_commerce/features/pages/All_orders/my_order.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/PaymentFunction.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -36,6 +39,8 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+  bool isLoading = false; // Loading state
+
   String? _tempAddress;
   final client = AuthHttpClient(http.Client());
 
@@ -483,17 +488,15 @@ ${widget.address.phone}''';
               var orderData = jsonDecode(response.body);
               var options = {
                 'key': 'rzp_test_RPif3FxApMvNtv',
-                'amount': (totalAmount * 100).toInt(), // Convert to paise
+                'amount': (totalAmount * 100).toInt(),
                 'name': 'Dilhak',
                 'description': 'Order Payment',
-                'order_id': orderData['id'], // Use the order ID from backend
+                'order_id': orderData['id'],
                 'prefill': {
                   'contact': widget.profile.phoneNumber,
                   'email': widget.profile.email,
                 },
-                'theme': {
-                  'color': '#F37254',
-                },
+                'theme': {'color': '#F37254'},
               };
 
               Razorpay razorpay = Razorpay();
@@ -501,14 +504,14 @@ ${widget.address.phone}''';
               // Set up the event listeners
               razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
                   (PaymentSuccessResponse response) async {
-                print('response from razropt ${response.data}');
-                String userId = await getUserId();
+                setState(() => isLoading = true); // Show loading indicator
 
+                String userId = await getUserId();
                 Map<String, String> deliveryAddress = {
                   'username': widget.address.name,
                   'city': widget.address.city,
                   'pinCode': widget.address.pinCode,
-                  'street': widget.address.street, // Corrected typo
+                  'street': widget.address.street,
                   'state': "Chennai",
                   'phone': widget.address.phone,
                 };
@@ -516,17 +519,18 @@ ${widget.address.phone}''';
                 Map<String, dynamic> verificationData = {
                   'username': widget.profile.username,
                   'email': widget.profile.email,
-                  'product': {
-                    'id': widget.product.id,
-                    'variantId': widget.variantId,
-                    'skuId': widget.skuId,
-                    "quantity": 1,
-                    "price": totalAmount,
-                  }, // Convert each Product to JSON
+                  'products': [
+                    {
+                      'product': widget.product.id,
+                      'variantId': widget.variantId,
+                      'skuId': widget.skuId,
+                      'quantity': 1,
+                      'price': totalAmount,
+                    }
+                  ],
                   'totalAmount': totalAmount,
                   'paymentInfo': {
-                    'razorpay_order_id':
-                        orderData['id'], // Use this instead of response.orderId
+                    'razorpay_order_id': orderData['id'],
                     'razorpay_payment_id': response.paymentId,
                     'razorpay_signature': response.signature,
                     'method': '',
@@ -538,39 +542,42 @@ ${widget.address.phone}''';
                   'shippingCost': 0,
                 };
 
-                // Call your Node.js server to verify the payment
+                // Call your server to verify the payment
                 var verifyResponse = await client.post(
                   Uri.parse(
                       '${AppConstants.BASE_URL}/customerApp/order/place/$userId'),
                   body: jsonEncode(verificationData),
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
+                  headers: {'Content-Type': 'application/json'},
                 );
 
-                if (verifyResponse.statusCode == 200) {
+                if (verifyResponse.statusCode == 201) {
                   print('Order placed successfully');
+                  // Navigate to Orders page after placing order
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyOrdersPage(),
+                    ),
+                  );
                 } else {
                   print('Failed to place the order: ${verifyResponse.body}');
                 }
+
+                setState(() => isLoading = false); // Hide loading indicator
               });
 
               razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
                   (PaymentFailureResponse response) {
-                print('have error');
-                // Handle payment failure here
                 print("Payment Failed: ${response.code} - ${response.message}");
               });
 
               razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
                   (ExternalWalletResponse response) {
-                // Handle external wallet callback
                 print("External Wallet: ${response.walletName}");
               });
 
-              // Open the Razorpay payment UI
               try {
-                razorpay.open(options); // Open within try-catch block
+                razorpay.open(options);
               } catch (e) {
                 print("Error: $e");
               }
@@ -584,6 +591,27 @@ ${widget.address.phone}''';
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             ),
           ),
+          // if (isLoading)
+          //   const SpinKitFadingCircle(
+          //     color: Color(0xFFFAAAB1),
+          //     size: 50.0,
+          //   ),
+
+          if (isLoading)
+            Center(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(
+                  color: Colors.black
+                      .withOpacity(0.3), // Semi-transparent background
+                  alignment: Alignment.center,
+                  child: const SpinKitFadingCircle(
+                    color: Color(0xFFFAAAB1),
+                    size: 50.0,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

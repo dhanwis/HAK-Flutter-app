@@ -173,7 +173,7 @@ class Order {
   final double totalAmount;
   final double shippingCost;
   final PaymentInfo paymentInfo;
-  final ShippingMethod shippingMethod;
+  //final ShippingMethod shippingMethod;
 
   Order({
     required this.id,
@@ -185,7 +185,7 @@ class Order {
     required this.totalAmount,
     required this.shippingCost,
     required this.paymentInfo,
-    required this.shippingMethod,
+    //required this.shippingMethod,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -200,7 +200,7 @@ class Order {
       totalAmount: json['totalAmount'].toDouble(),
       shippingCost: json['shippingCost'].toDouble(),
       paymentInfo: PaymentInfo.fromJson(json['paymentInfo']),
-      shippingMethod: ShippingMethod.fromJson(json['shippingMethod']),
+      //shippingMethod: ShippingMethod.fromJson(json['shippingMethod']),
     );
   }
 }

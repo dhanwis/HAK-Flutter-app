@@ -9,19 +9,14 @@ class OrderRepository {
   final client = AuthHttpClient(http.Client());
 
   Future<List<Order>> fetchOrders(String userId) async {
-    print('user id $userId');
     final response = await client
         .get(Uri.parse('$baseUrl/customerApp/order/get_all/$userId'));
 
-    print('response $response');
-
-    print(response.body);
-
     if (response.statusCode == 200) {
-      print('yes tru');
       // Decode the response body as a List of orders
       List<dynamic> data = json.decode(response.body)['orders'];
 
+      print('repose body ${response.body}');
       // Map each item in the list to an Order object
       return data.map((order) => Order.fromJson(order)).toList();
     } else {
