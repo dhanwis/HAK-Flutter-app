@@ -6,12 +6,12 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_event.dart';
 import 'package:dil_hack_e_commerce/features/auth/bloc/Orders/order_state.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/order.dart';
 import 'package:dil_hack_e_commerce/features/pages/All_orders/Order_detail.dart';
+import 'package:dil_hack_e_commerce/features/pages/All_orders/Review_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
 import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -275,7 +275,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
   }
 
   Widget _buildOrderCard(double screenWidth, Order order) {
-    final Product firstProduct = order.products[0];
+    final ProductData firstProduct = order.products[0];
 
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
@@ -350,20 +350,31 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       ),
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 10),
-                      child: RatingBar.builder(
-                        initialRating: 4,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        itemCount: 5,
-                        itemSize: 20,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 3),
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                        onRatingUpdate: (index) {},
+                    const SizedBox(height: 8),
+                    // Write My Review Section
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WriteReviewPage(product: firstProduct),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit, color: Colors.blue, size: 16),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Write My Review',
+                            style: GoogleFonts.aBeeZee(
+                              color: Colors.blue,
+                              fontSize: 13,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

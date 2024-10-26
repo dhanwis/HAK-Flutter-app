@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
+
 import 'package:skeletonizer/skeletonizer.dart';
 
 class WishlistView extends StatefulWidget {
@@ -37,7 +37,7 @@ class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    //final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -90,65 +90,74 @@ class WishlistPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Skeletonizer(
-        enabled:
-            true, // Set this to 'true' while loading and 'false' when data is available
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image section
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Skeletonizer(
+          enabled:
+              true, // Set this to 'true' while loading and 'false' when data is available
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image section skeleton
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+                child: SkeletonContainer(
+                  height: screenHeight * 0.28,
+                  width: double.infinity,
+                  borderRadius: BorderRadius.circular(10.0),
+                  shape: BoxShape.circle,
+                ),
               ),
-              child: SkeletonContainer(
-                height: screenHeight * 0.28,
-                width: double.infinity,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            // Padding for text and details
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
+              const SizedBox(height: 10),
+              // Skeleton for product details
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name Skeleton
+                  // Product name skeleton
                   SkeletonContainer(
-                    height: 12.0,
-                    width: 150.0,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                      height: 12.0,
+                      width: 150.0,
+                      borderRadius: BorderRadius.circular(4),
+                      shape: BoxShape.circle),
                   const SizedBox(height: 6),
-                  // Price Skeleton
+                  // Actual price skeleton
                   SkeletonContainer(
-                    height: 12.0,
-                    width: 80.0,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                      height: 12.0,
+                      width: 80.0,
+                      borderRadius: BorderRadius.circular(4),
+                      shape: BoxShape.circle),
                   const SizedBox(height: 6),
-                  // Discount Price Skeleton
+                  // Discounted price skeleton
                   SkeletonContainer(
-                    height: 12.0,
-                    width: 120.0,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                      height: 12.0,
+                      width: 120.0,
+                      borderRadius: BorderRadius.circular(4),
+                      shape: BoxShape.circle),
                   const SizedBox(height: 10),
-                  // Rating Row Skeleton
+                  // Rating row skeleton
                   Row(
                     children: [
                       SkeletonContainer(
                         height: 12.0,
                         width: 40.0,
                         borderRadius: BorderRadius.circular(4),
+                        shape: BoxShape.circle,
+                      ),
+                      const SizedBox(width: 4),
+                      SkeletonContainer(
+                        height: 12.0,
+                        width: 12.0,
+                        shape: BoxShape.circle,
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

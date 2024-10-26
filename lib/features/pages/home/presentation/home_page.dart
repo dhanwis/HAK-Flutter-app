@@ -442,7 +442,6 @@ class _HomePageState extends State<HomePage> {
 
           BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
-              print('context state us this $state');
               if (state is ProductsLoaded) {
                 return ProductGrid();
               }
