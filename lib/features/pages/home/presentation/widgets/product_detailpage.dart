@@ -10,6 +10,7 @@ import 'package:dil_hack_e_commerce/features/auth/presentation/otp_page/tokenSto
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/cart_button.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/sizeSelector.dart';
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/viewall_button.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/Customer_ratings.dart';
 
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/order_screen.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/addressPage.dart';
@@ -541,10 +542,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: RatingAndReviews(),
                     ),
-                    // const Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: ReviewPage(),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomerReviews(),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:dil_hack_e_commerce/api/review_api.dart';
 import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
 import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/order.dart';
+import 'package:dil_hack_e_commerce/features/pages/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,18 +39,70 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
     }
   }
 
-  void _submitReview() {
+  void _submitReview() async {
     final reviewText = _reviewController.text;
+
     if (_rating > 0 && reviewText.isNotEmpty) {
-      // Submit review logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Thank you for your review!')),
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator()),
       );
-      setState(() {
-        _rating = 0.0;
-        _reviewController.clear();
-        _reviewImages.clear();
-      });
+
+      // Initialize API service
+      ReviewApi apiService = ReviewApi();
+
+      // Call the add review API
+      try {
+        await apiService.addReview(
+          productId:
+              widget.product.id, // Assume productId is passed to this screen
+          rating: _rating,
+          comment: reviewText,
+          images: _reviewImages,
+        );
+
+        // Hide the loading indicator
+        Navigator.of(context).pop(); // Close the loading dialog
+
+        // Show success alert
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Review Submitted'),
+            content: Text('Thank you for your review!'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the alert dialog
+                  // Navigate back to the home page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const HomePage(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+
+        // Reset fields after submission
+        setState(() {
+          _rating = 0.0;
+          _reviewController.clear();
+          _reviewImages.clear();
+        });
+      } catch (error) {
+        // Hide loading indicator if there's an error
+        Navigator.of(context).pop(); // Close the loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${error.toString()}')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please provide a rating and review.')),

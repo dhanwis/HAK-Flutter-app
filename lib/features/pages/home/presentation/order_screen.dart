@@ -122,7 +122,6 @@ ${widget.address.phone}''';
                           false,
                         ),
                         _buildStepCircle(2, "Order summary", true),
-                        _buildStepCircle(3, "Payment", false),
                       ],
                     ),
                     SizedBox(height: 16),
