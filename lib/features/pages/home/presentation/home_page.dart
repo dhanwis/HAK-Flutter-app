@@ -305,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                                 'New Arrivals',
                                 style: GoogleFonts.aBeeZee(
                                   fontWeight: FontWeight.w800,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                 ),
                               ),
                               GestureDetector(
@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                                   'View All',
                                   style: GoogleFonts.aBeeZee(
                                     fontWeight: FontWeight.w800,
-                                    fontSize: 13,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
@@ -388,8 +388,8 @@ class _HomePageState extends State<HomePage> {
                                           products[index]
                                               .productName
                                               .toUpperCase(),
-                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                           style: GoogleFonts.aBeeZee(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,

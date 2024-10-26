@@ -291,7 +291,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   child: AnimatedContainer(
                                     duration: Duration(milliseconds: 200),
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 14),
+                                        horizontal: 18, vertical: 8),
                                     decoration: BoxDecoration(
                                       color: selectedSkuIndex == index
                                           ? Palette.appTheme

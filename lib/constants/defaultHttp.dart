@@ -11,8 +11,14 @@ class AuthHttpClient extends http.BaseClient {
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final accessToken = await _tokenStorage.getAccessToken();
+    // Check if token is close to expiration and refresh if necessary
+    final shouldRefresh = await _shouldRefreshToken();
+    if (shouldRefresh) {
+      await _refreshToken();
+    }
 
+    // Get the updated access token
+    final accessToken = await _tokenStorage.getAccessToken();
     if (accessToken != null) {
       request.headers['Authorization'] = 'Bearer $accessToken';
     }
@@ -20,7 +26,7 @@ class AuthHttpClient extends http.BaseClient {
     final response = await _inner.send(request);
 
     if (response.statusCode == 401) {
-      // Unauthorized, likely token expired
+      // Retry on token expiration
       bool refreshed = await _refreshToken();
       if (refreshed) {
         // Retry the request with the new token
@@ -55,5 +61,15 @@ class AuthHttpClient extends http.BaseClient {
     } else {
       return false;
     }
+  }
+
+  Future<bool> _shouldRefreshToken() async {
+    final expiryTime = await _tokenStorage.getAccessTokenExpiry();
+    if (expiryTime == null) return false;
+
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    final refreshThreshold = 120000; // Refresh 2 minutes before expiration
+
+    return expiryTime - currentTime <= refreshThreshold;
   }
 }
