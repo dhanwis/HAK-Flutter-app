@@ -47,7 +47,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> getUserId() async {
     final fetchedUserId = await getUserIdFromJwt();
-    print('Fetched User ID: $fetchedUserId'); // Debugging
 
     setState(() {
       userId = fetchedUserId;

@@ -75,9 +75,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       setState(() {
         userId = decodedToken['userId']; // Ensure userId is set properly
       });
-    } catch (e) {
-      print('Error decoding JWT: $e');
-    }
+    } catch (e) {}
   }
 
   @override

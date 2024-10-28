@@ -20,8 +20,7 @@ class ReviewApi {
 
     try {
       var uri = Uri.parse('$_baseUrl/customerApp/products/$productId/reviews');
-      print('URL: $uri');
-      print('User ID: $userId');
+
       var request = http.MultipartRequest('POST', uri);
 
       // Add fields
@@ -42,16 +41,35 @@ class ReviewApi {
       // Send the request
       var response = await client.send(request);
       var responseData = await http.Response.fromStream(response);
-      print("Response Data: ${responseData.body}");
 
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(responseData.body);
-        print("Review added successfully: ${jsonResponse['message']}");
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<List<Map<String, dynamic>>> getReviews(String productId) async {
+    try {
+      var uri = Uri.parse(
+          '$_baseUrl/customerApp/products/$productId/get_all/reviews');
+      var response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        var jsonResponse = json.decode(response.body);
+        // Adjusted to map fields from your data structure
+        return List<Map<String, dynamic>>.from(jsonResponse.map((review) => {
+              "userId": review['user_id']['_id'],
+              "rating": review['rating'],
+              "comment": review['comment'],
+              "image": review['image'],
+              "reviewId": review['_id'],
+              "createdAt": review['createdAt'],
+            }));
       } else {
-        print("Failed to add review: ${response.statusCode}");
+        return [];
       }
     } catch (e) {
-      print("Error occurred: $e");
+      return [];
     }
   }
 

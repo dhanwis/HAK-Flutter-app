@@ -12,7 +12,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
       try {
         final orders = await orderRepository.fetchOrders(event.userId);
-        print('orders here result: $orders');
+
         emit(OrdersLoaded(orders)); // Remove the cast to List<Order>
       } catch (e) {
         emit(OrderError(e.toString()));

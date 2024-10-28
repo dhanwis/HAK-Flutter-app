@@ -78,7 +78,6 @@ class _AddressFormPageState extends State<AddressFormPage> {
           decodedToken['userId']; // Adjust based on your JWT structure
       return userId; // Return the user ID
     } catch (e) {
-      print('Failed to decode JWT: $e');
       return ""; // Return an empty string or handle as needed
     }
   }
@@ -106,7 +105,6 @@ class _AddressFormPageState extends State<AddressFormPage> {
           return addedDetail;
         }
       } catch (error) {
-        print('Failed to add Delivery Address $error');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to add Delivery Address $error'),

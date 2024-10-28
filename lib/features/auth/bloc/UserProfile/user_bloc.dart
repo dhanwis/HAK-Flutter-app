@@ -11,8 +11,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this.repository) : super(ProfileInitial()) {
     on<CreateUser>((event, emit) async {
       emit(ProfileLoading());
-      print('add profile');
-      print(event);
+
       try {
         // Save profile using repository
         final profile = await repository.createCustomerProfile(
@@ -25,7 +24,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           userImgPath: event.userImgPath,
         );
 
-        print('azho $profile');
         // Emit ProfileCreated with the saved profile
         emit(ProfileCreated(profile));
       } catch (e) {
@@ -35,15 +33,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     on<FetchProfile>((event, emit) async {
       emit(ProfileLoading());
-      print('Starting API call...');
+
       try {
         final user = await repository.getProfileData(event.userId);
-        print('Data fetched: $user');
+
         emit(ProfileLoaded(user));
-        print('ProfileLoaded state emitted');
       } catch (e) {
         emit(ProfileError(e.toString()));
-        print('Error: ${e.toString()}');
       }
     });
 

@@ -41,7 +41,6 @@ class BankDetailService {
   }
 
   Future<BankDetail?> updateBankDetail(BankDetail bankDetail) async {
-    print('her ehe id ${bankDetail.id}');
     final response = await client.put(
       Uri.parse('$baseUrl/customerApp/bankdetails/update/${bankDetail.id}'),
       headers: {
@@ -51,7 +50,6 @@ class BankDetailService {
     );
 
     if (response.statusCode == 200) {
-      print('updated data ${response.body}');
       return BankDetail.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to update bank detail');
@@ -61,7 +59,7 @@ class BankDetailService {
   Future<BankDetail?> fetchBankDetails() async {
     final response =
         await client.get(Uri.parse('$baseUrl/customerApp/bankdetails/get'));
-    print(response);
+
     if (response.statusCode == 200) {
       return BankDetail.fromJson(
           json.decode(response.body)); // Parse JSON response

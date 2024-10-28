@@ -16,7 +16,6 @@ class OrderRepository {
       // Decode the response body as a List of orders
       List<dynamic> data = json.decode(response.body)['orders'];
 
-      print('repose body ${response.body}');
       // Map each item in the list to an Order object
       return data.map((order) => Order.fromJson(order)).toList();
     } else {

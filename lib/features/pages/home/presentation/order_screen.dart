@@ -73,7 +73,6 @@ ${widget.address.phone}''';
       String userId = decodedToken['userId'];
       return userId;
     } catch (e) {
-      print('Failed to decode JWT: $e');
       return "";
     }
   }
@@ -550,7 +549,6 @@ ${widget.address.phone}''';
                 );
 
                 if (verifyResponse.statusCode == 201) {
-                  print('Order placed successfully');
                   // Navigate to Orders page after placing order
                   Navigator.push(
                     context,
@@ -558,28 +556,20 @@ ${widget.address.phone}''';
                       builder: (context) => MyOrdersPage(),
                     ),
                   );
-                } else {
-                  print('Failed to place the order: ${verifyResponse.body}');
-                }
+                } else {}
 
                 setState(() => isLoading = false); // Hide loading indicator
               });
 
               razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
-                  (PaymentFailureResponse response) {
-                print("Payment Failed: ${response.code} - ${response.message}");
-              });
+                  (PaymentFailureResponse response) {});
 
               razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-                  (ExternalWalletResponse response) {
-                print("External Wallet: ${response.walletName}");
-              });
+                  (ExternalWalletResponse response) {});
 
               try {
                 razorpay.open(options);
-              } catch (e) {
-                print("Error: $e");
-              }
+              } catch (e) {}
             },
             child: Text(
               'Continue',

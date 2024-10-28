@@ -53,12 +53,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _initializeUserId();
 
       try {
-        print('id is this to see ${event.productId}');
         await cartService.removeFromCart(userId, event.productId);
         cartItemIds.remove(
             event.productId); // Remove the product ID from the local list
         final carts = await cartService.fetchCart(userId);
-        print('carts i s rmeove  / not $carts');
 
         emit(CartLoading());
         emit(CartLoaded(carts));

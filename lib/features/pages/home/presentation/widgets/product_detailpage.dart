@@ -51,7 +51,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           decodedToken['userId']; // Adjust based on your JWT structure
       return userId; // Return the user ID
     } catch (e) {
-      print('Failed to decode JWT: $e');
       return ""; // Return an empty string or handle as needed
     }
   }
@@ -440,9 +439,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: state.similarProducts.length,
                                 itemBuilder: (context, index) {
-                                  print(
-                                      'state.similarProducts.length ${state.similarProducts.length}');
-
                                   // Ensure we access variations safely
                                   if (state.similarProducts[index].variations
                                       .isNotEmpty) {
@@ -544,7 +540,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: CustomerReviews(),
+                      child: ProductReviewsPage(
+                        productId: widget.productId,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

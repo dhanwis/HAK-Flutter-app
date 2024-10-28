@@ -52,14 +52,10 @@ class Paymentfunction {
 
     if (serverResponse.statusCode == 200) {
       // Payment verified and order placed
-      print('Order placed successfully');
-    } else {
-      print('Payment verification failed');
-    }
+    } else {}
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Handle the error
-    print('Payment failed: ${response.message}');
   }
 }

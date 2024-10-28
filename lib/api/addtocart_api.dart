@@ -50,8 +50,6 @@ class CartService {
       Uri.parse('$baseUrl/customerApp/cart/delete/$userId/$productId'),
     );
 
-    print('response ${response.body}');
-
     if (response.statusCode != 200) {
       throw Exception('Failed to remove from cart');
     }

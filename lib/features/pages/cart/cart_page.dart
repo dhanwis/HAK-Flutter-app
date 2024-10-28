@@ -105,7 +105,6 @@ Widget _cartUI(BuildContext context, Map<String, dynamic> cartItem) {
       String userId = decodedToken['userId'];
       return userId;
     } catch (e) {
-      print('Failed to decode JWT: $e');
       return "";
     }
   }

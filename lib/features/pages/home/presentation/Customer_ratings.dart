@@ -1,230 +1,113 @@
-// import 'package:flutter/material.dart';
-
-// class CustomerReviews extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       padding: EdgeInsets.all(16.0),
-//       children: [
-//         Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Real images and videos from customers',
-//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//             ),
-//             SizedBox(height: 8),
-//             Row(
-//               children: List.generate(5, (index) {
-//                 return Padding(
-//                   padding: const EdgeInsets.only(right: 4.0),
-//                   child: Container(
-//                     width: 60,
-//                     height: 60,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(8),
-//                       color: Colors.grey.shade300,
-//                       image: index == 4
-//                           ? null
-//                           : DecorationImage(
-//                               image: AssetImage('assets/products/pr2.jpeg'),
-//                               fit: BoxFit.cover,
-//                             ),
-//                     ),
-//                     child: index == 4
-//                         ? Center(
-//                             child: Text(
-//                               '+345',
-//                               style: TextStyle(color: Colors.black54),
-//                             ),
-//                           )
-//                         : null,
-//                   ),
-//                 );
-//               }),
-//             ),
-//             SizedBox(height: 16),
-//           ],
-//         ),
-
-//         // Individual customer reviews
-//         ReviewCard(
-//           rating: 4,
-//           title: "Good",
-//           date: "22 Oct, 2023",
-//           comment: "Nice design nd nice fabric",
-//           author: "Madhuri Saundade",
-//           helpfulCount: 3,
-//         ),
-//         Divider(),
-//         ReviewCard(
-//           rating: 5,
-//           title: "Very Good",
-//           date: "11 Jul, 2024",
-//           comment:
-//               "Bohut acha dress hey or quality bhi bohut achi hey muz...Read More",
-//           author: "nisha patil",
-//           helpfulCount: 0,
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// class ReviewCard extends StatelessWidget {
-//   final int rating;
-//   final String title;
-//   final String date;
-//   final String comment;
-//   final String author;
-//   final int helpfulCount;
-
-//   const ReviewCard({
-//     Key? key,
-//     required this.rating,
-//     required this.title,
-//     required this.date,
-//     required this.comment,
-//     required this.author,
-//     this.helpfulCount = 0,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Row(
-//           children: [
-//             // Rating badge
-//             Container(
-//               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//               decoration: BoxDecoration(
-//                 color: Colors.green,
-//                 borderRadius: BorderRadius.circular(4),
-//               ),
-//               child: Row(
-//                 children: [
-//                   Text(
-//                     '$rating',
-//                     style: TextStyle(
-//                         color: Colors.white, fontWeight: FontWeight.bold),
-//                   ),
-//                   SizedBox(width: 4),
-//                   Text(
-//                     title,
-//                     style: TextStyle(color: Colors.white),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             SizedBox(width: 8),
-//             Text(
-//               '• Posted on $date',
-//               style: TextStyle(color: Colors.grey, fontSize: 12),
-//             ),
-//           ],
-//         ),
-//         SizedBox(height: 8),
-//         Text(comment),
-//         SizedBox(height: 4),
-//         Text(
-//           '~$author',
-//           style: TextStyle(color: Colors.grey),
-//         ),
-//         SizedBox(height: 8),
-//         Row(
-//           children: [
-//             Icon(Icons.thumb_up_alt_outlined, size: 16, color: Colors.grey),
-//             SizedBox(width: 4),
-//             Text(helpfulCount > 0 ? 'Helpful ($helpfulCount)' : 'Helpful'),
-//           ],
-//         ),
-//         SizedBox(height: 16),
-//       ],
-//     );
-//   }
-// }
-
+import 'package:dil_hack_e_commerce/api/review_api.dart';
+import 'package:dil_hack_e_commerce/constants/baseUrl.dart';
+import 'package:dil_hack_e_commerce/core/theme/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class CustomerReviews extends StatelessWidget {
+class ProductReviewsPage extends StatelessWidget {
+  final String productId;
+
+  ProductReviewsPage({required this.productId});
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Customer images section
-        Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Real images and videos from customers',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: List.generate(5, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.grey.shade300,
-                        image: index == 4
-                            ? null
-                            : DecorationImage(
-                                image:
-                                    AssetImage('assets/image_placeholder.png'),
-                                fit: BoxFit.cover,
-                              ),
+    final reviewApi = ReviewApi();
+
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: reviewApi.getReviews(productId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: SpinKitFadingCircle(
+              color: Color(0xFFFAAAB1),
+              size: 50.0,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error fetching reviews"));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center();
+        } else {
+          var reviews = snapshot.data!;
+
+          // Extracting images from reviews
+          List<String> images = reviews
+              .where((review) => review['image'] != null)
+              .map((review) =>
+                  '${AppConstants.BASE_URL}/reviewImg/${review['image']}')
+              .toList();
+
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Real images and videos from customers',
+                  style: GoogleFonts.aBeeZee(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                SizedBox(height: 10),
+                // Displaying images section
+                Row(
+                  children: [
+                    Expanded(
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: images.length > 4
+                            ? 4
+                            : images.length, // Show only the first 4 images
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            color: Palette.appTheme,
+                            child: Image.network(
+                              images[index],
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(Icons.broken_image,
+                                    color: Colors.grey);
+                              },
+                            ),
+                          );
+                        },
                       ),
-                      child: index == 4
-                          ? Center(
-                              child: Text(
-                                '+345',
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            )
-                          : null,
                     ),
-                  );
-                }),
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        ),
-        // Use Expanded to make ListView take available space
-        Expanded(
-          child: ListView(
-            padding: EdgeInsets.all(16.0),
-            children: [
-              ReviewCard(
-                rating: 4,
-                title: "Good",
-                date: "22 Oct, 2023",
-                comment: "Nice design and nice fabric",
-                author: "Madhuri Saundade",
-                helpfulCount: 3,
-              ),
-              Divider(),
-              ReviewCard(
-                rating: 5,
-                title: "Very Good",
-                date: "11 Jul, 2024",
-                comment:
-                    "Bohut acha dress hey or quality bhi bohut achi hey muz...Read More",
-                author: "nisha patil",
-                helpfulCount: 0,
-              ),
-            ],
-          ),
-        ),
-      ],
+                    if (images.length > 4)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          '+${images.length - 4}',
+                          style: GoogleFonts.aBeeZee(color: Colors.grey),
+                        ),
+                      ),
+                  ],
+                ),
+                Divider(),
+                // Displaying reviews
+                for (var review in reviews)
+                  ReviewCard(
+                    rating: review['rating'],
+                    title: '', // Optional field
+                    date: review['createdAt']
+                        .substring(0, 10), // Format as needed
+                    comment: review['comment'],
+                    user: review['userId'], // Adjust as needed
+                    helpfulCount: 0, // Adjust if you have this data
+                    hasImages: review['image'] != null,
+                    images: [review['image']], // Pass image if available
+                  ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -234,72 +117,89 @@ class ReviewCard extends StatelessWidget {
   final String title;
   final String date;
   final String comment;
-  final String author;
+  final String user;
   final int helpfulCount;
+  final bool hasImages;
+  final List<String> images;
 
-  const ReviewCard({
-    Key? key,
+  ReviewCard({
     required this.rating,
     required this.title,
     required this.date,
     required this.comment,
-    required this.author,
-    this.helpfulCount = 0,
-  }) : super(key: key);
+    required this.user,
+    required this.helpfulCount,
+    required this.hasImages,
+    required this.images,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            // Rating badge
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(4),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Palette.appTheme,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.white, size: 16),
+                    SizedBox(width: 4),
+                    Text(
+                      '$rating Stars',
+                      style: GoogleFonts.aBeeZee(
+                          color: Colors.white, fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
-                children: [
-                  Text(
-                    '$rating',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    title,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+              Spacer(),
+              Text(date,
+                  style: GoogleFonts.aBeeZee(color: Colors.grey, fontSize: 12)),
+            ],
+          ),
+          SizedBox(height: 8),
+          Text(
+            comment,
+            style: GoogleFonts.aBeeZee(),
+          ),
+          SizedBox(height: 8),
+          Text('~$user',
+              style: GoogleFonts.aBeeZee(color: Colors.grey, fontSize: 12)),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.thumb_up_alt_outlined, size: 20),
+                onPressed: () {},
               ),
-            ),
-            SizedBox(width: 8),
-            Text(
-              '• Posted on $date',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
-            ),
-          ],
-        ),
-        SizedBox(height: 8),
-        Text(comment),
-        SizedBox(height: 4),
-        Text(
-          '~$author',
-          style: TextStyle(color: Colors.grey),
-        ),
-        SizedBox(height: 8),
-        Row(
-          children: [
-            Icon(Icons.thumb_up_alt_outlined, size: 16, color: Colors.grey),
-            SizedBox(width: 4),
-            Text(helpfulCount > 0 ? 'Helpful ($helpfulCount)' : 'Helpful'),
-          ],
-        ),
-        SizedBox(height: 16),
-      ],
+              if (helpfulCount > 0) Text('Helpful ($helpfulCount)'),
+              Spacer(),
+              if (hasImages)
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.green[200],
+                  child: Image.network(
+                    '${AppConstants.BASE_URL}/reviewImg/${images.first}',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.broken_image,
+                          color: Colors.grey); // Optional error icon
+                    },
+                  ),
+                ),
+            ],
+          ),
+          Divider(),
+        ],
+      ),
     );
   }
 }
