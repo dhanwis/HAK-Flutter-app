@@ -2,19 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingAndReviews extends StatelessWidget {
-  final double averageRating = 4.3;
-  final int totalRatings = 7;
-  final int totalReviews = 3;
-  final ratingsCount = {
-    'Very Good': 4,
-    'Good': 0,
-    'Ok-Ok': 0,
-    'Bad': 0,
-    'Very Bad': 3,
-  };
+  final double averageRating;
+  final List<dynamic> reviews;
+
+  RatingAndReviews({
+    required this.averageRating,
+    required this.reviews,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Calculate ratings count
+    Map<String, int> ratingsCount = {
+      'Very Good': 0,
+      'Good': 0,
+      'Ok-Ok': 0,
+      'Bad': 0,
+      'Very Bad': 0,
+    };
+
+    for (var review in reviews) {
+      int rating = review['rating'];
+      if (rating >= 4) {
+        ratingsCount['Very Good'] = ratingsCount['Very Good']! + 1;
+      } else if (rating == 3) {
+        ratingsCount['Ok-Ok'] = ratingsCount['Ok-Ok']! + 1;
+      } else if (rating == 2) {
+        ratingsCount['Bad'] = ratingsCount['Bad']! + 1;
+      } else {
+        ratingsCount['Very Bad'] = ratingsCount['Very Bad']! + 1;
+      }
+    }
+
+    int totalRatings = reviews.length;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(

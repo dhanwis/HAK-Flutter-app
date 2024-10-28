@@ -536,7 +536,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: RatingAndReviews(),
+                      child: RatingAndReviews(
+                        averageRating: state.product.productWeight,
+                        reviews: [state.product],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

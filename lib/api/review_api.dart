@@ -54,6 +54,8 @@ class ReviewApi {
           '$_baseUrl/customerApp/products/$productId/get_all/reviews');
       var response = await client.get(uri);
 
+      print('response fron server ${response.body}');
+
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
         // Adjusted to map fields from your data structure

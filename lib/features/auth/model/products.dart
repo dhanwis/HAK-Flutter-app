@@ -14,11 +14,13 @@ class Product {
   final String productType;
   final String productGender;
   final String productBrand;
+  String? averageRating;
+
   final List<Variation> variations;
 
   //this below was demmy
-  final double rating;
-  final int reviewCount;
+  //final double rating;
+  //final int reviewCount;
 
   Product({
     required this.id,
@@ -34,11 +36,12 @@ class Product {
     required this.productType,
     required this.productGender,
     required this.productBrand,
+    this.averageRating,
     required this.variations,
 
     //this below was demmy
-    required this.rating,
-    required this.reviewCount,
+    //required this.rating,
+    //required this.reviewCount,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -74,8 +77,9 @@ class Product {
       productType: json['product_type']?.toString() ?? '',
       productGender: json['product_gender']?.toString() ?? '',
       productBrand: json['product_brand']?.toString() ?? '',
-      rating: 4.0,
-      reviewCount: 1200,
+      averageRating: json['averageRating']?.toString() ?? '',
+      // rating: 4.0,
+      // reviewCount: 1200,
       variations: variationsList,
     );
   }
