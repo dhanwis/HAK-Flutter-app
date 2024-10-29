@@ -31,7 +31,6 @@ class ProductReviewsPage extends StatelessWidget {
         } else {
           var reviews = snapshot.data!;
 
-          // Extracting images from reviews
           List<String> images = reviews
               .where((review) => review['image'] != null)
               .map((review) =>
@@ -49,16 +48,14 @@ class ProductReviewsPage extends StatelessWidget {
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 SizedBox(height: 10),
-                // Displaying images section
+
                 Row(
                   children: [
                     Expanded(
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: images.length > 4
-                            ? 4
-                            : images.length, // Show only the first 4 images
+                        itemCount: images.length > 4 ? 4 : images.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
                           mainAxisSpacing: 4,
@@ -94,14 +91,13 @@ class ProductReviewsPage extends StatelessWidget {
                 for (var review in reviews)
                   ReviewCard(
                     rating: review['rating'],
-                    title: '', // Optional field
-                    date: review['createdAt']
-                        .substring(0, 10), // Format as needed
+                    title: '',
+                    date: review['createdAt'].substring(0, 10),
                     comment: review['comment'],
-                    user: review['userId'], // Adjust as needed
-                    helpfulCount: 0, // Adjust if you have this data
+                    user: review['userId'],
+                    helpfulCount: 0,
                     hasImages: review['image'] != null,
-                    images: [review['image']], // Pass image if available
+                    images: [review['image']],
                   ),
               ],
             ),
@@ -190,8 +186,7 @@ class ReviewCard extends StatelessWidget {
                     '${AppConstants.BASE_URL}/reviewImg/${images.first}',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.broken_image,
-                          color: Colors.grey); // Optional error icon
+                      return Icon(Icons.broken_image, color: Colors.grey);
                     },
                   ),
                 ),

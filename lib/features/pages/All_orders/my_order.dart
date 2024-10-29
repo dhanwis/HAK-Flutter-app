@@ -53,17 +53,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       return orders;
     } else {
       return orders.where((order) {
-        // Check if the order id contains the search query
         bool matchesOrderId =
             order.id.toLowerCase().contains(_searchQuery.toLowerCase());
 
-        // Check if any product in the order matches the search query
         bool matchesProductName = order.products.any((product) => product
             .productName
             .toLowerCase()
             .contains(_searchQuery.toLowerCase()));
 
-        // Return true if either the order ID or any product name matches the query
         return matchesOrderId || matchesProductName;
       }).toList();
     }
@@ -73,7 +70,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     try {
       Map<String, dynamic> decodedToken = await decodeJwt();
       setState(() {
-        userId = decodedToken['userId']; // Ensure userId is set properly
+        userId = decodedToken['userId'];
       });
     } catch (e) {}
   }
@@ -83,7 +80,6 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     if (userId.isEmpty) {
-      // Wait for the userId to be set before rendering the Bloc
       return Scaffold(
         body: Center(
           child: SpinKitFadingCircle(
@@ -148,7 +144,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       Center(
                         child: Text(
                           "Oops, your search not found!",
-                          style: TextStyle(
+                          style: GoogleFonts.aBeeZee(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -310,7 +306,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                     // Product Name
                     Text(
                       firstProduct.productName,
-                      style: const TextStyle(
+                      style: GoogleFonts.aBeeZee(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -344,7 +340,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       style: GoogleFonts.aBeeZee(
                         color: Colors.grey[800],
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
 
@@ -362,12 +358,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       },
                       child: Row(
                         children: [
-                          const Icon(Icons.edit, color: Colors.blue, size: 16),
+                          const Icon(Icons.edit,
+                              color: const Color.fromARGB(255, 114, 4, 4),
+                              size: 16),
                           const SizedBox(width: 8),
                           Text(
                             'Write My Review',
                             style: GoogleFonts.aBeeZee(
-                              color: Colors.blue,
+                              color: const Color.fromARGB(255, 114, 4, 4),
                               fontSize: 13,
                               decoration: TextDecoration.underline,
                             ),

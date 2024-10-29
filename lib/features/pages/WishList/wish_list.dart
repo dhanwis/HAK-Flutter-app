@@ -314,11 +314,20 @@ class WishlistPage extends StatelessWidget {
                     '₹$discountedPrice with 1 Special Offer',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: GoogleFonts.aBeeZee(
                       fontSize: 12.0,
                       color: Colors.green,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                Row(
+                  children: [
+                    Text(
+                      'Free Delivery',
+                      style: GoogleFonts.aBeeZee(fontSize: 12),
+                    )
+                  ],
+                ),
                 Row(
                   children: [
                     Container(

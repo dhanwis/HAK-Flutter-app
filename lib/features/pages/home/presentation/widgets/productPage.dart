@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dil_hack_e_commerce/api/products_api.dart';
 import 'package:dil_hack_e_commerce/constants/decodeJwt.dart';
 import 'package:dil_hack_e_commerce/features/auth/model/products.dart';
@@ -21,9 +20,8 @@ class _ProductGridState extends State<ProductGrid> {
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMoreProducts = true;
-  bool isLoading = true; // Initial loading state
+  bool isLoading = true;
   final ScrollController _scrollController = ScrollController();
-
   String userId = '';
 
   @override
@@ -42,12 +40,9 @@ class _ProductGridState extends State<ProductGrid> {
 
   Future<void> _initializeUser() async {
     try {
-      // Decode the token and get userId
       Map<String, dynamic> decodedToken = await decodeJwt();
       setState(() {
-        userId = decodedToken[
-            'userId']; // Assuming 'userId' is the key in your token
-        // Initialize pages after userId is obtained
+        userId = decodedToken['userId'];
       });
     } catch (e) {}
   }
@@ -82,7 +77,7 @@ class _ProductGridState extends State<ProductGrid> {
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: GridView.builder(
-        itemCount: 6, // Show 6 skeleton items initially
+        itemCount: 6,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.55,
@@ -99,13 +94,7 @@ class _ProductGridState extends State<ProductGrid> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.28,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                  ),
+                  color: Colors.grey[300],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -113,20 +102,22 @@ class _ProductGridState extends State<ProductGrid> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 16.0,
-                        width: 100.0,
+                        height: MediaQuery.of(context).size.height * 0.02,
+                        width: MediaQuery.of(context).size.width * 0.3,
                         color: Colors.grey[300],
                       ),
-                      SizedBox(height: 8.0),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Container(
-                        height: 16.0,
-                        width: 50.0,
+                        height: MediaQuery.of(context).size.height * 0.02,
+                        width: MediaQuery.of(context).size.width * 0.15,
                         color: Colors.grey[300],
                       ),
-                      SizedBox(height: 8.0),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Container(
-                        height: 16.0,
-                        width: 80.0,
+                        height: MediaQuery.of(context).size.height * 0.02,
+                        width: MediaQuery.of(context).size.width * 0.25,
                         color: Colors.grey[300],
                       ),
                     ],
@@ -142,7 +133,8 @@ class _ProductGridState extends State<ProductGrid> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return SliverGrid.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -152,21 +144,12 @@ class _ProductGridState extends State<ProductGrid> {
       itemCount: products.length + (isLoadingMore ? 1 : 0),
       itemBuilder: (BuildContext context, int index) {
         if (index == products.length) {
-          if (isLoadingMore) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // Centers the column vertically
-                children: [
-                  Center(
-                      child: SpinKitFadingCircle(
-                    color: Color(0xFFFAAAB1),
-                    size: 40.0, // Adjust the size as needed
-                  )),
-                ],
-              ),
-            );
-          }
-          return SizedBox.shrink();
+          return Center(
+            child: SpinKitFadingCircle(
+              color: Color(0xFFFAAAB1),
+              size: screenWidth * 0.1,
+            ),
+          );
         }
 
         final product = products[index];
@@ -216,17 +199,14 @@ class _ProductGridState extends State<ProductGrid> {
                           ? Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
-                              height: screenSize.height * 0.25,
+                              height: screenHeight * 0.25,
                               width: double.infinity,
                             )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: screenSize.height * 0.25,
-                                width: double.infinity,
-                                color: Colors.grey[200],
-                                child: Icon(Icons.image),
-                              ),
+                          : Container(
+                              height: screenHeight * 0.25,
+                              width: double.infinity,
+                              color: Colors.grey[200],
+                              child: Icon(Icons.image, size: screenWidth * 0.1),
                             ),
                     ),
                   ),
@@ -235,7 +215,7 @@ class _ProductGridState extends State<ProductGrid> {
                     top: 10.0,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      radius: 16,
+                      radius: screenWidth * 0.04,
                       child: FavoriteButton(
                         productId: product.id,
                       ),
@@ -254,14 +234,14 @@ class _ProductGridState extends State<ProductGrid> {
                       maxLines: 1,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.aBeeZee(
-                        fontSize: 12.0,
+                        fontSize: screenWidth * 0.03,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       '₹$formattedPrice',
-                      style: TextStyle(
-                        fontSize: 12.0,
+                      style: GoogleFonts.aBeeZee(
+                        fontSize: screenWidth * 0.03,
                         color: Colors.black,
                         decoration: TextDecoration.lineThrough,
                       ),
@@ -271,18 +251,29 @@ class _ProductGridState extends State<ProductGrid> {
                         '₹$formattedDiscount with 1 Special Offer',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        style: GoogleFonts.aBeeZee(
+                          fontSize: screenWidth * 0.03,
                           color: Colors.green,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    // SizedBox(height: 3.0),
+                    Row(
+                      children: [
+                        Text(
+                          "Free Delivery",
+                          style: GoogleFonts.aBeeZee(
+                            fontSize: screenWidth * 0.026,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    ),
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2.0,
-                            horizontal: 4.0,
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.003,
+                            horizontal: screenWidth * 0.01,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.green,
@@ -294,13 +285,13 @@ class _ProductGridState extends State<ProductGrid> {
                                 '4.0',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12.0,
+                                  fontSize: screenWidth * 0.03,
                                 ),
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.white,
-                                size: 12.0,
+                                size: screenWidth * 0.03,
                               ),
                             ],
                           ),

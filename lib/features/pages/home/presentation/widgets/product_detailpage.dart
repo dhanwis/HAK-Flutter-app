@@ -106,11 +106,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       height: height * 0.6,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: state
-                            .product
-                            .variations[selectedVariationIndex]
-                            .images
-                            .length, // Display images from the selected variation
+                        itemCount: state.product
+                            .variations[selectedVariationIndex].images.length,
                         itemBuilder: (context, index) {
                           return SizedBox(
                             height: height * 0.6,
@@ -118,12 +115,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Image.network(
                                 state.product.variations[selectedVariationIndex]
-                                        .images[
-                                    index], // Show image from the selected variation
+                                    .images[index],
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
-                                    'assets/images/logo.png', // Your fallback image asset
+                                    'assets/images/logo.png',
                                     fit: BoxFit.cover,
                                   );
                                 },

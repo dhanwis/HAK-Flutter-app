@@ -1,4 +1,6 @@
 import 'package:dil_hack_e_commerce/features/auth/presentation/widgets/wishlist_button.dart';
+import 'package:dil_hack_e_commerce/features/pages/WishList/wish_list.dart';
+import 'package:dil_hack_e_commerce/features/pages/cart/cart_page.dart';
 import 'package:dil_hack_e_commerce/features/pages/home/presentation/widgets/filtering_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +34,8 @@ class _ViewAllButtonState extends State<ViewAllButton> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -40,6 +43,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
           style: GoogleFonts.aBeeZee(
             fontWeight: FontWeight.bold,
             fontSize: 17,
+            backgroundColor: Colors.white,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -48,14 +52,20 @@ class _ViewAllButtonState extends State<ViewAllButton> {
           IconButton(
             icon: Icon(Icons.favorite),
             color: Colors.red,
-            iconSize: 20,
-            onPressed: () {},
+            iconSize: 22,
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WishlistPage()));
+            },
           ),
           IconButton(
             icon: Icon(Icons.shopping_cart),
             color: Colors.black,
-            iconSize: 20,
-            onPressed: () {},
+            iconSize: 22,
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CartPage()));
+            },
           ),
         ],
       ),
@@ -91,7 +101,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final gridWidth = constraints.maxWidth;
-        final crossAxisCount = gridWidth > 600 ? 3 : 2;
+        final crossAxisCount = gridWidth > 400 ? 3 : 2;
         final childAspectRatio = gridWidth > 600 ? 0.6 : 0.55;
 
         return CustomScrollView(
@@ -203,14 +213,16 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                       ? Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.height * 0.28,
+                          height: MediaQuery.of(context).size.height * 0.29,
                           width: double.infinity,
                         )
                       : Container(
                           height: MediaQuery.of(context).size.height * 0.25,
                           width: double.infinity,
                           color: Colors.grey[200],
-                          child: Icon(Icons.image),
+                          child: Icon(
+                            Icons.image,
+                          ),
                         ),
                 ),
               ),
@@ -240,11 +252,11 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                SizedBox(height: 2.0),
                 Text(
                   '₹$formattedPrice',
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 14.0,
+                    fontSize: 13.0,
                     color: Colors.black,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -253,11 +265,13 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 Text(
                   '₹$formattedDiscount with 1 Special Offer',
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 11.0,
-                    color: Colors.green,
-                  ),
+                      fontSize: 12.0,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                // SizedBox(height: 4.0),
+                SizedBox(height: 3.0),
                 Row(
                   children: [
                     Container(

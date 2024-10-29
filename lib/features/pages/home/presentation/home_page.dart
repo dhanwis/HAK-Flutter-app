@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMoreProducts = true;
-  bool isLoading = true; // Initial loading state
+  bool isLoading = true;
   final ScrollController _scrollController = ScrollController();
 
   String userId = '';
@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
 
     _fetchProducts();
     _initializeUser();
-    //context.read<ProfileBloc>().add(FetchProfile(userId));
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -69,11 +68,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initializeUser() async {
     try {
-      // Decode the token and get userId
       Map<String, dynamic> decodedToken = await decodeJwt();
       setState(() {
-        userId = decodedToken[
-            'userId']; // Assuming 'userId' is the key in your token
+        userId = decodedToken['userId'];
       });
 
       if (userId.isNotEmpty) {
@@ -85,7 +82,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchProducts() async {
     if (isLoadingMore || !hasMoreProducts) return;
 
-    // Ensure setState is only called if mounted
     if (mounted) {
       setState(() {
         isLoadingMore = true;
@@ -109,12 +105,11 @@ class _HomePageState extends State<HomePage> {
         }
       }
     } catch (e) {
-      // Handle error (e.g., show an error message)
     } finally {
       if (mounted) {
         setState(() {
           isLoadingMore = false;
-          isLoading = false; // Stop loading after fetching products
+          isLoading = false;
         });
       }
     }
@@ -129,7 +124,6 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          // Top Bar with Search and AppBar
           SliverAppBar(
             surfaceTintColor: Colors.white,
             pinned: true,
@@ -137,7 +131,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.white,
           ),
           SliverPersistentHeader(
-            pinned: true, // Pin the widget
+            pinned: true,
             delegate: _SliverHeaderDelegate(
               minHeight: 69.0,
               maxHeight: 69.0,
@@ -156,9 +150,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Search Bar Widget
-
-          // Display Search Results if the searchTerm is not empty
           if (searchTerm.isNotEmpty)
             SliverToBoxAdapter(
               child: SizedBox(
@@ -166,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                 child: buildSearchResults(),
               ),
             ),
-          // Category List
+
           SliverToBoxAdapter(
             child: BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, state) {
@@ -400,8 +391,8 @@ class _HomePageState extends State<HomePage> {
                                         '₹ $formattedPrice',
                                         style: GoogleFonts.aBeeZee(
                                           color: Colors.green,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ],
@@ -419,7 +410,6 @@ class _HomePageState extends State<HomePage> {
             },
           ),
 
-          // Offer Carousel Widget
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(top: 10),
@@ -434,7 +424,7 @@ class _HomePageState extends State<HomePage> {
                 'All Products',
                 style: GoogleFonts.aBeeZee(
                   fontWeight: FontWeight.w800,
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
               ),
             ),
