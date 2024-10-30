@@ -8,7 +8,8 @@ class CategoryApi {
   final client = AuthHttpClient(http.Client());
   Future<List<Category>> fetchCategories() async {
     final response = await client.get(
-      Uri.parse('${AppConstants.BASE_URL}/customerApp/category/categories'),
+      Uri.parse(
+          '${AppConstants.BASE_URL}/customerApp/category/categoryByProduct'),
     );
 
     print('all ctegorues ${response.body}');

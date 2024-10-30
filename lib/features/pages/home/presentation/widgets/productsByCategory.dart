@@ -615,27 +615,77 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 13),
+                                            fontSize: 12),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      // Row(
+                                      //   children: [
+                                      //     // Discount Percentage
+                                      //     Text(
+                                      //       '↓ 71%',
+                                      //       style: TextStyle(
+                                      //         color: Colors.green,
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.bold,
+                                      //       ),
+                                      //     ),
+                                      //     SizedBox(width: 8),
+
+                                      //     // Original Price with strikethrough
+                                      //     Text(
+                                      //       '₹$formattedPrice',
+                                      //       style: TextStyle(
+                                      //         color: Colors.grey,
+                                      //         fontSize: 13,
+                                      //         decoration:
+                                      //             TextDecoration.lineThrough,
+                                      //       ),
+                                      //     ),
+                                      //     SizedBox(width: 8),
+
+                                      //     // Final Price
+                                      //     Text(
+                                      //       '₹$discountedPriceInt',
+                                      //       style: TextStyle(
+                                      //         color: Colors.black,
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.bold,
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // const SizedBox(height: 4.0),
+
                                       Text(
-                                        '₹$formattedPrice',
+                                        '₹$formattedPrice ',
                                         style: GoogleFonts.aBeeZee(
-                                          fontSize: 15.0,
+                                          fontSize: 10.0,
                                           color: Colors.black,
                                           decoration:
                                               TextDecoration.lineThrough,
                                         ),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      // const SizedBox(height: 4.0),
                                       Text(
                                         '₹$discountedPriceInt with 1 Special Offer',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.aBeeZee(
                                           fontSize: 12.0,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      const SizedBox(height: 4.0),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Free Delivery",
+                                            style: GoogleFonts.aBeeZee(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      // const SizedBox(height: 4.0),
                                       Row(
                                         children: [
                                           Container(
@@ -663,13 +713,6 @@ class _ProductsByCategoryState extends State<ProductsByCategory> {
                                                   size: 12.0,
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                          const SizedBox(width: 5.0),
-                                          const Text(
-                                            '(1200)',
-                                            style: TextStyle(
-                                              fontSize: 12.0,
                                             ),
                                           ),
                                         ],

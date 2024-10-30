@@ -22,7 +22,7 @@ class CategoryWidget extends StatelessWidget {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: 8,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
