@@ -69,6 +69,7 @@ import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_bloc.dar
 import 'package:dil_hack_e_commerce/features/auth/bloc/UserProfile/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TopRow extends StatelessWidget {
@@ -128,17 +129,24 @@ class TopRow extends StatelessWidget {
                     //                       MaterialPageRoute(
                     //                           builder: (context) =>
                   },
-                  child: CircleAvatar(
-                    radius: screenSize.width * 0.05,
-                    backgroundColor: Palette.appTheme,
-                    backgroundImage: userImg != null
-                        ? NetworkImage(
-                            '${AppConstants.BASE_URL}/userImg/$userImg', // Use NetworkImage for URLs
-                          )
-                        : const AssetImage(
-                            'assets/images/manji.jpeg', // Local asset fallback
-                          ) as ImageProvider, // Cast to ImageProvider to avoid type error
-                  ),
+                  child: userImg != null
+                      ? CircleAvatar(
+                          radius: screenSize.width * 0.05,
+                          backgroundColor: Palette.appTheme,
+                          backgroundImage: NetworkImage(
+                            '${AppConstants.BASE_URL}/userImg/$userImg',
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: screenSize.width * 0.05,
+                          backgroundColor: Palette.appTheme,
+                          child: SvgPicture.asset(
+                            'assets/images/welcome.svg',
+                            semanticsLabel: 'My SVG Image',
+                            height: 100,
+                            width: 70,
+                          ),
+                        ),
                 ),
               ],
             ),
