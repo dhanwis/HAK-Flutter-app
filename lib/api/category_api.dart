@@ -11,6 +11,8 @@ class CategoryApi {
       Uri.parse('${AppConstants.BASE_URL}/customerApp/category/categories'),
     );
 
+    print('all ctegorues ${response.body}');
+
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => Category.fromJson(json)).toList();

@@ -64,6 +64,7 @@ ${widget.address.phone}''';
     try {
       final TokenStorage tokenStorage = TokenStorage();
       final accessToken = await tokenStorage.getAccessToken();
+      print('accesToken is this $accessToken');
 
       if (accessToken == null || accessToken.isEmpty) {
         throw Exception("Access token not found");

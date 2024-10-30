@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -132,25 +133,12 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
               if (filteredOrders.isEmpty) {
                 // Show a message if no search results found
-                return Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _buildSearchBar(
-                          screenWidth,
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          "Oops, your search not found!",
-                          style: GoogleFonts.aBeeZee(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                if (filteredOrders.isEmpty) {
+                  // Show the empty UI if there are no orders
+                  return Center(
+                    child: _emptyUI(),
+                  );
+                }
               }
 
               return SingleChildScrollView(
@@ -197,6 +185,38 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _emptyUI() {
+    return Scaffold(
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 180),
+            child: Lottie.asset(
+              'assets/images/Animation - 1717999632927 (1).json',
+              height: 200,
+              width: 200,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              "Your Order is Empty!",
+              style: GoogleFonts.aBeeZee(
+                  fontWeight: FontWeight.w200,
+                  color: Colors.grey.shade500,
+                  fontSize: 15),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
       ),
     );
   }

@@ -315,7 +315,7 @@ class WishlistPage extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: GoogleFonts.aBeeZee(
-                      fontSize: 12.0,
+                      fontSize: 11.0,
                       color: Colors.green,
                       fontWeight: FontWeight.w500,
                     ),
@@ -324,7 +324,7 @@ class WishlistPage extends StatelessWidget {
                   children: [
                     Text(
                       'Free Delivery',
-                      style: GoogleFonts.aBeeZee(fontSize: 12),
+                      style: GoogleFonts.aBeeZee(fontSize: 10),
                     )
                   ],
                 ),

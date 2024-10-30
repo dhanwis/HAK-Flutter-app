@@ -256,7 +256,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                 Text(
                   '₹$formattedPrice',
                   style: GoogleFonts.aBeeZee(
-                    fontSize: 13.0,
+                    fontSize: 11.0,
                     color: Colors.black,
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -271,7 +271,7 @@ class _ViewAllButtonState extends State<ViewAllButton> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(height: 3.0),
+                // SizedBox(height: 3.0),
                 Row(
                   children: [
                     Container(

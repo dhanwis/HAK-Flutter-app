@@ -30,11 +30,11 @@ class _ProductGridState extends State<ProductGrid> {
     _fetchProducts();
     _initializeUser();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        log("end of the line");
-        _fetchProducts();
-      }
+      // if (_scrollController.position.pixels ==
+      //     _scrollController.position.maxScrollExtent) {
+      //   log("end of the line");
+      //   _fetchProducts();
+      // }
     });
   }
 

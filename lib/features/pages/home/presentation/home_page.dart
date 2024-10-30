@@ -60,8 +60,9 @@ class _HomePageState extends State<HomePage> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        log("end of the line");
-        _fetchProducts();
+        // log("end of the line");
+        // _fetchProducts();
+        currentPage++;
       }
     });
   }

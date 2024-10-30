@@ -18,26 +18,27 @@ class Category {
   final String id;
   final String value;
   final String label;
-  final String imageUrl;
-  final List<Type> types;
+  final String? imageUrl; // Make imageUrl nullable
+  List<Type>? types;
 
   Category({
     required this.id,
     required this.value,
     required this.label,
-    required this.imageUrl,
-    required this.types,
+    this.imageUrl,
+    this.types,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    var list = json['types'] as List;
+    var list =
+        json['types'] as List? ?? []; // Handle null 'types' field gracefully
     List<Type> typeList = list.map((i) => Type.fromJson(i)).toList();
 
     return Category(
       id: json['_id'],
       value: json['value'],
       label: json['label'],
-      imageUrl: json['image'],
+      imageUrl: json['image'], // Nullable field now
       types: typeList,
     );
   }
